@@ -65,8 +65,13 @@ public class Controller {
         try {
             HttpResponse<JsonNode> httpResponse = Unirest.get(bank.getURL()).header("Authorization", authorizationHeader).asJson();
 
-            if(httpResponse == null || (httpResponse.getBody().getObject() != null && httpResponse.getBody().getObject().has("message")))
+            if(httpResponse == null)
                 return null;
+
+            if(httpResponse.getBody().getObject() != null && httpResponse.getBody().getObject().has("message")) {
+                System.out.println("You must renew access token");
+                return null;
+            }
 
             response = httpResponse.getBody().toString();
         } catch (UnirestException e) {

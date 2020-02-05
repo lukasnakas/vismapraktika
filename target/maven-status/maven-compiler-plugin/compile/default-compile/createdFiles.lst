@@ -1,2 +1,4 @@
-lt\lukasnakas\Controller.class
+lt\lukasnakas\Model\Bank.class
+lt\lukasnakas\Service\BankService.class
 lt\lukasnakas\Application.class
+lt\lukasnakas\Controller\Controller.class
