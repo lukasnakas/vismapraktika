@@ -25,8 +25,7 @@ public class LuminorAccountService {
     }
 
     public List<LuminorAccount> getAllAccounts(){
-        String tokenType = "Bearer";
-        String authorizationHeader = tokenType + " " + luminorConfig.getAccessToken();
+        String authorizationHeader = luminorConfig.getTokenType() + " " + luminorConfig.getAccessToken();
 
         String accounts = attemptFetchingAccounts(authorizationHeader);
 
@@ -36,7 +35,7 @@ public class LuminorAccountService {
 
         if(accounts == null){
             luminorConfig.setAccessToken(refreshAccessToken());
-            authorizationHeader = tokenType + " " + luminorConfig.getAccessToken();
+            authorizationHeader = luminorConfig.getTokenType() + " " + luminorConfig.getAccessToken();
 
             accounts = attemptFetchingAccounts(authorizationHeader);
             luminorAccountListType = new TypeToken<List<LuminorAccount>>(){}.getType();
@@ -50,7 +49,10 @@ public class LuminorAccountService {
         String response;
 
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.get(luminorConfig.getUrlAccounts()).header("Authorization", authorizationHeader).asJson();
+            HttpResponse<JsonNode> httpResponse = Unirest.get(luminorConfig.getUrlAccounts())
+                    .header("content-type", "application/json")
+                    .header("Authorization", authorizationHeader)
+                    .asJson();
 
             if(httpResponse == null)
                 return null;
@@ -60,8 +62,10 @@ public class LuminorAccountService {
                 return null;
             }
 
-            response = httpResponse.getBody().getObject().get("accounts").toString();
-            return response;
+            if(httpResponse.getBody().getObject().has("accounts")) {
+                response = httpResponse.getBody().getObject().get("accounts").toString();
+                return response;
+            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -70,23 +74,30 @@ public class LuminorAccountService {
     }
 
     public String refreshAccessToken(){
-        String newAccessToken = "";
+        String newAccessToken;
 
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.post(luminorConfig.getUrlAuth())
-                    .field("grant_type", luminorConfig.getGrantType())
-                    .field("client_id", luminorConfig.getClientId())
-                    .field("refresh_token", luminorConfig.getRefreshToken())
-                    .field("client_assertion_type", luminorConfig.getClientAssertionType())
-                    .field("client_assertion", luminorConfig.getClientAssertion())
+            HttpResponse<JsonNode> httpResponse = Unirest.post(luminorConfig.getUrlAuthAccessToken())
+                    .header("content-type", "application/x-www-form-urlencoded")
+                    .field("client_id",     luminorConfig.getClientId())
+                    .field("client_secret", luminorConfig.getClientSecret())
+                    .field("redirect_uri",  luminorConfig.getRedirectUri())
+                    .field("realm",         luminorConfig.getRealm())
+                    .field("grant_type",    luminorConfig.getGrantType())
+                    .field("code",          luminorConfig.getAuthCode())
                     .asJson();
+            System.out.println(httpResponse.getBody());
 
-            newAccessToken = httpResponse.getBody().getObject().getString("access_token");
+            if(httpResponse.getBody().getObject().has("access_token")) {
+                newAccessToken = httpResponse.getBody().getObject().get("access_token").toString();
+                System.out.println("New access token: " + newAccessToken);
+                return newAccessToken;
+            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
 
-        System.out.println("New access token: " + newAccessToken);
-        return newAccessToken;
+        return null;
     }
+
 }

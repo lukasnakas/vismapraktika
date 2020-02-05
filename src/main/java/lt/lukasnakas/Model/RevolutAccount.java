@@ -4,27 +4,27 @@ import java.util.Date;
 
 public class RevolutAccount {
 
+    private String id;
     private String name;
     private double balance;
-    private boolean publicAccount;
-    private Date updatedAt;
-    private Date createdAt;
     private String currency;
-    private String id;
     private String state;
+    private boolean publicAccount;
+    private Date created_at;
+    private Date updated_at;
 
     public RevolutAccount() {
     }
 
-    public RevolutAccount(String name, double balance, boolean publicAccount, Date updatedAt, Date createdAt, String currency, String id, String state) {
+    public RevolutAccount(String name, double balance, boolean publicAccount, Date updated_at, Date created_at, String currency, String id, String state) {
+        this.id = id;
         this.name = name;
         this.balance = balance;
-        this.publicAccount = publicAccount;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
         this.currency = currency;
-        this.id = id;
         this.state = state;
+        this.publicAccount = publicAccount;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
     }
 
     public String getName() {
@@ -51,20 +51,20 @@ public class RevolutAccount {
         this.publicAccount = publicAccount;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public Date getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
     }
 
     public String getCurrency() {

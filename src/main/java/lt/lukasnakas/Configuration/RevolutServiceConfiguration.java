@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class RevolutServiceConfiguration {
 
     @NotNull private String name;
+    @NotNull private String tokenType;
     @NotNull private String urlAuth;
     @NotNull private String urlAccounts;
     @NotNull private String clientId;
@@ -27,6 +28,14 @@ public class RevolutServiceConfiguration {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 
     public String getUrlAuth() {

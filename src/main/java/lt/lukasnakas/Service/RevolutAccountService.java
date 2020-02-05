@@ -24,8 +24,7 @@ public class RevolutAccountService {
     }
 
     public List<RevolutAccount> getAllAccounts(){
-        String tokenType = "Bearer";
-        String authorizationHeader = tokenType + " " + revolutConfig.getAccessToken();
+        String authorizationHeader = revolutConfig.getTokenType() + " " + revolutConfig.getAccessToken();
 
         String accounts = attemptFetchingAccounts(authorizationHeader);
 
@@ -35,7 +34,7 @@ public class RevolutAccountService {
 
         if(accounts == null){
             revolutConfig.setAccessToken(refreshAccessToken());
-            authorizationHeader = tokenType + " " + revolutConfig.getAccessToken();
+            authorizationHeader = revolutConfig.getTokenType() + " " + revolutConfig.getAccessToken();
 
             accounts = attemptFetchingAccounts(authorizationHeader);
             revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
@@ -49,7 +48,10 @@ public class RevolutAccountService {
         String response;
 
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.get(revolutConfig.getUrlAccounts()).header("Authorization", authorizationHeader).asJson();
+            HttpResponse<JsonNode> httpResponse = Unirest.get(revolutConfig.getUrlAccounts())
+                    .header("content-type", "application/json")
+                    .header("Authorization", authorizationHeader)
+                    .asJson();
 
             if(httpResponse == null)
                 return null;

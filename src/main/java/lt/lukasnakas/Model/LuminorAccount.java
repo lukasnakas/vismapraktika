@@ -7,17 +7,19 @@ public class LuminorAccount {
     private String currency;
     private boolean cardAccount;
     private String bic;
+    private String usage;
     private double[] balances;
 
     public LuminorAccount() {
     }
 
-    public LuminorAccount(String accountId, String iban, String currency, boolean cardAccount, String bic, double[] balances) {
+    public LuminorAccount(String accountId, String iban, String currency, boolean cardAccount, String bic, String usage, double[] balances) {
         this.accountId = accountId;
         this.iban = iban;
         this.currency = currency;
         this.cardAccount = cardAccount;
         this.bic = bic;
+        this.usage = usage;
         this.balances = balances;
     }
 
@@ -59,6 +61,14 @@ public class LuminorAccount {
 
     public void setBic(String bic) {
         this.bic = bic;
+    }
+
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
     }
 
     public double[] getBalances() {
