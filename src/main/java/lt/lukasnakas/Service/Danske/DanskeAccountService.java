@@ -55,21 +55,4 @@ public class DanskeAccountService {
         return responseEntity.getBody();
     }
 
-//    private String refreshAccessToken(){
-//         try {
-//            MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
-//            bodyParams.add("ClientId", danskeConfig.getClientId());
-//            bodyParams.add("Secret", danskeConfig.getSecret());
-//
-//            ResponseEntity<AccessToken> response = restTemplate.postForEntity(danskeConfig.getUrlAuth(), bodyParams, AccessToken.class);
-//
-//            System.out.println("New access token: " + response.getBody().getAccessToken());
-//            return response.getBody().getAccessToken();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-
 }

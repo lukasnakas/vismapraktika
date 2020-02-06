@@ -55,24 +55,4 @@ public class RevolutAccountService {
         return responseEntity.getBody();
     }
 
-//    private String refreshAccessToken(){
-//        try {
-//            MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
-//            bodyParams.add("grant_type", revolutConfig.getGrantType());
-//            bodyParams.add("client_id", revolutConfig.getClientId());
-//            bodyParams.add("refresh_token", revolutConfig.getRefreshToken());
-//            bodyParams.add("client_assertion_type", revolutConfig.getClientAssertionType());
-//            bodyParams.add("client_assertion", revolutConfig.getClientAssertion());
-//
-//            ResponseEntity<AccessToken> response = restTemplate.postForEntity(revolutConfig.getUrlAuth(), bodyParams, AccessToken.class);
-//
-//            System.out.println("New access token: " + response.getBody().getAccess_token());
-//            return response.getBody().getAccess_token();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-
 }
