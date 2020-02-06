@@ -1,7 +1,7 @@
 package lt.lukasnakas.Controller;
 
 import lt.lukasnakas.Model.Revolut.RevolutAccount;
-import lt.lukasnakas.Service.RevolutAccountService;
+import lt.lukasnakas.Service.Revolut.RevolutAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
