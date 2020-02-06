@@ -27,9 +27,6 @@ public class RevolutAccountService implements AccountService {
     @Autowired
     private RevolutTokenRenewalService revolutTokenRenewalService;
 
-    @Autowired
-    private Gson gson;
-
     private String accessToken;
 
     @Autowired
@@ -53,6 +50,7 @@ public class RevolutAccountService implements AccountService {
     }
 
     public List<Account> getParsedAccounts(String accounts){
+        Gson gson = new Gson();
         Type revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
         List<Account> revolutAccountList = gson.fromJson(accounts, revolutAccountListType);
         return revolutAccountList;

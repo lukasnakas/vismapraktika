@@ -27,9 +27,6 @@ public class DanskeAccountService implements AccountService {
     @Autowired
     private DanskeTokenRenewalService danskeTokenRenewalService;
 
-    @Autowired
-    private Gson gson;
-
     private String accessToken;
 
     @Autowired
@@ -53,6 +50,7 @@ public class DanskeAccountService implements AccountService {
     }
 
     public List<Account> getParsedAccounts(String accounts){
+        Gson gson = new Gson();
         Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
         List<Account> danskeAccountList = gson.fromJson(accounts, danskeAccountListType);
         return danskeAccountList;
