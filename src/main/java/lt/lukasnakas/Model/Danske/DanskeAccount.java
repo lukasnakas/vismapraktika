@@ -2,7 +2,7 @@ package lt.lukasnakas.Model.Danske;
 
 import lt.lukasnakas.Model.Account;
 
-public class DanskeAccount extends lt.lukasnakas.Model.Account {
+public class DanskeAccount extends Account {
 
     private DanskeAccountDetails[] Account;
 
