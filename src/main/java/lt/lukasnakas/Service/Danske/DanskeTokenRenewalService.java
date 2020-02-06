@@ -2,6 +2,7 @@ package lt.lukasnakas.Service.Danske;
 
 import lt.lukasnakas.Configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.Model.Danske.DanskeAccessToken;
+import lt.lukasnakas.Service.TokenRenewalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class DanskeTokenRenewalService {
+public class DanskeTokenRenewalService implements TokenRenewalService {
 
     @Autowired
     private DanskeServiceConfiguration danskeConfig;
@@ -24,7 +25,7 @@ public class DanskeTokenRenewalService {
         return response.getBody().getAccessToken();
     }
 
-    private MultiValueMap<String, String> getRequestBodyParams(){
+    public MultiValueMap<String, String> getRequestBodyParams(){
         MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
 
         bodyParams.add("ClientId", danskeConfig.getClientId());

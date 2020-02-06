@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import lt.lukasnakas.Configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Revolut.RevolutAccount;
+import lt.lukasnakas.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
-public class RevolutAccountService {
+public class RevolutAccountService implements AccountService {
     private final RevolutServiceConfiguration revolutConfig;
 
     @Autowired
@@ -38,13 +39,12 @@ public class RevolutAccountService {
 
     public List<Account> getAllAccounts(){
         accessToken = revolutTokenRenewalService.generateAccessToken();
-        revolutConfig.setAccessToken(accessToken);
         return getParsedAccounts(retrieveAccounts());
     }
 
-    private String retrieveAccounts(){
+    public String retrieveAccounts(){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setBearerAuth(revolutConfig.getAccessToken());
+        httpHeaders.setBearerAuth(accessToken);
 
         HttpEntity requestEntity = new HttpEntity(httpHeaders);
         ResponseEntity<String> responseEntity = restTemplate.exchange(revolutConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
@@ -52,7 +52,7 @@ public class RevolutAccountService {
         return responseEntity.getBody();
     }
 
-    private List<Account> getParsedAccounts(String accounts){
+    public List<Account> getParsedAccounts(String accounts){
         Type revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
         List<Account> revolutAccountList = gson.fromJson(accounts, revolutAccountListType);
         return revolutAccountList;
