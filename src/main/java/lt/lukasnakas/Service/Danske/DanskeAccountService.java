@@ -3,6 +3,7 @@ package lt.lukasnakas.Service.Danske;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lt.lukasnakas.Configuration.DanskeServiceConfiguration;
+import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Danske.DanskeAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -25,6 +26,9 @@ public class DanskeAccountService {
     @Autowired
     private DanskeTokenRenewalService danskeTokenRenewalService;
 
+    @Autowired
+    private Gson gson;
+
     private String accessToken;
 
     @Autowired
@@ -32,17 +36,10 @@ public class DanskeAccountService {
         this.danskeConfig = danskeConfig;
     }
 
-    public List<DanskeAccount> getAllAccounts(){
+    public List<Account> getAllAccounts(){
         accessToken = danskeTokenRenewalService.generateAccessToken();
         danskeConfig.setAccessToken(accessToken);
-
-        String accounts = retrieveAccounts();
-
-        Gson gsonParser = new Gson();
-        Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
-        List<DanskeAccount> danskeAccountList = gsonParser.fromJson(accounts, danskeAccountListType);
-
-        return danskeAccountList;
+        return getParsedAccounts(retrieveAccounts());
     }
 
     private String retrieveAccounts(){
@@ -53,6 +50,12 @@ public class DanskeAccountService {
         ResponseEntity<String> responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
 
         return responseEntity.getBody();
+    }
+
+    private List<Account> getParsedAccounts(String accounts){
+        Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
+        List<Account> danskeAccountList = gson.fromJson(accounts, danskeAccountListType);
+        return danskeAccountList;
     }
 
 }

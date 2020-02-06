@@ -1,5 +1,6 @@
 package lt.lukasnakas.Controller;
 
+import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Danske.DanskeAccount;
 import lt.lukasnakas.Service.Danske.DanskeAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class DanskeController {
     private DanskeAccountService danskeAccountService;
 
     @GetMapping(value = "/banks/danske/accounts")
-    public ResponseEntity<List<DanskeAccount>> getDanskeAccounts(){
+    public ResponseEntity<List<Account>> getDanskeAccounts(){
         return new ResponseEntity<>(danskeAccountService.getAllAccounts(), HttpStatus.OK);
     }
 }

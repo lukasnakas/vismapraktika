@@ -1,5 +1,6 @@
 package lt.lukasnakas.Controller;
 
+import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Revolut.RevolutAccount;
 import lt.lukasnakas.Service.Revolut.RevolutAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class RevolutController {
     private RevolutAccountService revolutAccountService;
 
     @GetMapping(value = "/banks/revolut/accounts")
-    public ResponseEntity<List<RevolutAccount>> getRevolutAccounts(){
+    public ResponseEntity<List<Account>> getRevolutAccounts(){
         return new ResponseEntity<>(revolutAccountService.getAllAccounts(), HttpStatus.OK);
     }
 }

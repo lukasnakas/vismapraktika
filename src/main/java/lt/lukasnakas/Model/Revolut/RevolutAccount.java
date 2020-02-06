@@ -1,10 +1,10 @@
 package lt.lukasnakas.Model.Revolut;
 
+import lt.lukasnakas.Model.Account;
 import java.util.Date;
 
-public class RevolutAccount {
+public class RevolutAccount extends Account {
 
-    private String id;
     private String name;
     private double balance;
     private String currency;
@@ -16,8 +16,8 @@ public class RevolutAccount {
     public RevolutAccount() {
     }
 
-    public RevolutAccount(String name, double balance, boolean publicAccount, Date updated_at, Date created_at, String currency, String id, String state) {
-        this.id = id;
+    public RevolutAccount(String id, String name, double balance, String currency, String state, boolean publicAccount, Date created_at, Date updated_at) {
+        super(id);
         this.name = name;
         this.balance = balance;
         this.currency = currency;
@@ -73,14 +73,6 @@ public class RevolutAccount {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getState() {

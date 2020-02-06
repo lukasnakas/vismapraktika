@@ -1,32 +1,18 @@
 package lt.lukasnakas.Model.Danske;
 
-public class DanskeAccount {
+import lt.lukasnakas.Model.Account;
 
-    private String id;
+public class DanskeAccount extends lt.lukasnakas.Model.Account {
+
     private DanskeAccountDetails[] Account;
 
-    public DanskeAccount() {
-    }
-
-    public DanskeAccount(String id, DanskeAccountDetails[] account) {
-        this.id = id;
+    public DanskeAccount(DanskeAccountDetails[] account) {
         Account = account;
     }
 
-    @Override
-    public String toString() {
-        return "DanskeCustomer{" +
-                "id='" + id + '\'' +
-                ", Account=" + Account +
-                '}';
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public DanskeAccount(String id, DanskeAccountDetails[] account) {
+        super(id);
+        Account = account;
     }
 
     public DanskeAccountDetails[] getAccount() {
