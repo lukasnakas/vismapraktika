@@ -1,7 +1,6 @@
 package lt.lukasnakas.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -29,7 +28,7 @@ public class DanskeAccountService {
         danskeConfig.setAccessToken(refreshAccessToken());
         String authorizationHeader = danskeConfig.getTokenType() + " " + danskeConfig.getAccessToken();
 
-        String accounts = attemptFetchingAccounts(authorizationHeader);
+        String accounts = retrieveAccounts(authorizationHeader);
 
         Gson gsonParser = new Gson();
         Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
@@ -38,7 +37,7 @@ public class DanskeAccountService {
         return danskeAccountList;
     }
 
-    private String attemptFetchingAccounts(String authorizationHeader){
+    private String retrieveAccounts(String authorizationHeader){
         String response;
 
         try {
@@ -68,7 +67,7 @@ public class DanskeAccountService {
         return null;
     }
 
-    public String refreshAccessToken(){
+    private String refreshAccessToken(){
         String newAccessToken = "";
 
         try {

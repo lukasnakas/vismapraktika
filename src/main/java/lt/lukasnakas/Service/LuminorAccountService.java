@@ -27,7 +27,7 @@ public class LuminorAccountService {
     public List<LuminorAccount> getAllAccounts(){
         String authorizationHeader = luminorConfig.getTokenType() + " " + luminorConfig.getAccessToken();
 
-        String accounts = attemptFetchingAccounts(authorizationHeader);
+        String accounts = retrieveAccounts(authorizationHeader);
 
         Gson gsonParser = new Gson();
         Type luminorAccountListType = new TypeToken<List<LuminorAccount>>(){}.getType();
@@ -37,7 +37,7 @@ public class LuminorAccountService {
             luminorConfig.setAccessToken(refreshAccessToken());
             authorizationHeader = luminorConfig.getTokenType() + " " + luminorConfig.getAccessToken();
 
-            accounts = attemptFetchingAccounts(authorizationHeader);
+            accounts = retrieveAccounts(authorizationHeader);
             luminorAccountListType = new TypeToken<List<LuminorAccount>>(){}.getType();
             luminorAccountList = gsonParser.fromJson(accounts, luminorAccountListType);
         }
@@ -45,7 +45,7 @@ public class LuminorAccountService {
         return luminorAccountList;
     }
 
-    private String attemptFetchingAccounts(String authorizationHeader){
+    private String retrieveAccounts(String authorizationHeader){
         String response;
 
         try {
@@ -73,7 +73,7 @@ public class LuminorAccountService {
         return null;
     }
 
-    public String refreshAccessToken(){
+    private String refreshAccessToken(){
         String newAccessToken;
 
         try {

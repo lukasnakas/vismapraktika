@@ -27,7 +27,7 @@ public class RevolutAccountService {
         revolutConfig.setAccessToken(refreshAccessToken());
         String authorizationHeader = revolutConfig.getTokenType() + " " + revolutConfig.getAccessToken();
 
-        String accounts = attemptFetchingAccounts(authorizationHeader);
+        String accounts = retrieveAccounts(authorizationHeader);
 
         Gson gsonParser = new Gson();
         Type revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
@@ -36,7 +36,7 @@ public class RevolutAccountService {
         return revolutAccountList;
     }
 
-    private String attemptFetchingAccounts(String authorizationHeader){
+    private String retrieveAccounts(String authorizationHeader){
         String response;
 
         try {
@@ -62,7 +62,7 @@ public class RevolutAccountService {
         return null;
     }
 
-    public String refreshAccessToken(){
+    private String refreshAccessToken(){
         String newAccessToken = "";
 
         try {
