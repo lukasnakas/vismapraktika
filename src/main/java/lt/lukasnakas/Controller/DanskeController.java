@@ -1,6 +1,7 @@
 package lt.lukasnakas.Controller;
 
 import lt.lukasnakas.Model.DanskeAccount;
+import lt.lukasnakas.Model.DanskeAccountDetails;
 import lt.lukasnakas.Service.DanskeAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

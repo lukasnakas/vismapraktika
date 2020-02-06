@@ -8,16 +8,28 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lt.lukasnakas.Configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.Model.DanskeAccount;
+import lt.lukasnakas.Model.DanskeAccountDetails;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DanskeAccountService {
     private final DanskeServiceConfiguration danskeConfig;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private HttpHeaders httpHeaders;
 
     @Autowired
     public DanskeAccountService(DanskeServiceConfiguration danskeConfig) {
@@ -26,9 +38,8 @@ public class DanskeAccountService {
 
     public List<DanskeAccount> getAllAccounts(){
         danskeConfig.setAccessToken(refreshAccessToken());
-        String authorizationHeader = danskeConfig.getTokenType() + " " + danskeConfig.getAccessToken();
 
-        String accounts = retrieveAccounts(authorizationHeader);
+        String accounts = retrieveAccounts();
 
         Gson gsonParser = new Gson();
         Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
@@ -37,30 +48,16 @@ public class DanskeAccountService {
         return danskeAccountList;
     }
 
-    private String retrieveAccounts(String authorizationHeader){
-        String response;
-
+    private String retrieveAccounts(){
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.get(danskeConfig.getUrlAccounts())
-                    .header("content-type", "application/json")
-                    .header("Authorization", authorizationHeader)
-                    .asJson();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpHeaders.setBearerAuth(danskeConfig.getAccessToken());
 
-            if(httpResponse == null)
-                return null;
+            HttpEntity requestEntity = new HttpEntity(httpHeaders);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
 
-            if(httpResponse.getBody().getObject() != null && httpResponse.getBody().getObject().has("message")) {
-                System.out.println("You must renew access token");
-                return null;
-            }
-
-            JSONObject httpReponseAsJSON = (JSONObject) httpResponse.getBody().getArray().get(0);
-
-            if(httpReponseAsJSON.has("Account")) {
-                response = httpReponseAsJSON.get("Account").toString();
-                return response;
-            }
-        } catch (UnirestException e) {
+            return responseEntity.getBody();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

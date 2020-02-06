@@ -8,8 +8,13 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lt.lukasnakas.Configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.Model.RevolutAccount;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -19,15 +24,20 @@ public class RevolutAccountService {
     private final RevolutServiceConfiguration revolutConfig;
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private HttpHeaders httpHeaders;
+
+    @Autowired
     public RevolutAccountService(RevolutServiceConfiguration revolutConfig) {
         this.revolutConfig = revolutConfig;
     }
 
     public List<RevolutAccount> getAllAccounts(){
         revolutConfig.setAccessToken(refreshAccessToken());
-        String authorizationHeader = revolutConfig.getTokenType() + " " + revolutConfig.getAccessToken();
 
-        String accounts = retrieveAccounts(authorizationHeader);
+        String accounts = retrieveAccounts();
 
         Gson gsonParser = new Gson();
         Type revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
@@ -36,26 +46,16 @@ public class RevolutAccountService {
         return revolutAccountList;
     }
 
-    private String retrieveAccounts(String authorizationHeader){
-        String response;
-
+    private String retrieveAccounts(){
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.get(revolutConfig.getUrlAccounts())
-                    .header("content-type", "application/json")
-                    .header("Authorization", authorizationHeader)
-                    .asJson();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpHeaders.setBearerAuth(revolutConfig.getAccessToken());
 
-            if(httpResponse == null)
-                return null;
+            HttpEntity requestEntity = new HttpEntity(httpHeaders);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(revolutConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
 
-            if(httpResponse.getBody().getObject() != null && httpResponse.getBody().getObject().has("message")) {
-                System.out.println("You must renew access token");
-                return null;
-            }
-
-            response = httpResponse.getBody().toString();
-            return response;
-        } catch (UnirestException e) {
+            return responseEntity.getBody();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -67,11 +67,11 @@ public class RevolutAccountService {
 
         try {
             HttpResponse<JsonNode> httpResponse = Unirest.post(revolutConfig.getUrlAuth())
-                    .field("grant_type", revolutConfig.getGrantType())
-                    .field("client_id", revolutConfig.getClientId())
-                    .field("refresh_token", revolutConfig.getRefreshToken())
+                    .field("grant_type",            revolutConfig.getGrantType())
+                    .field("client_id",             revolutConfig.getClientId())
+                    .field("refresh_token",         revolutConfig.getRefreshToken())
                     .field("client_assertion_type", revolutConfig.getClientAssertionType())
-                    .field("client_assertion", revolutConfig.getClientAssertion())
+                    .field("client_assertion",      revolutConfig.getClientAssertion())
                     .asJson();
 
             newAccessToken = httpResponse.getBody().getObject().getString("access_token");

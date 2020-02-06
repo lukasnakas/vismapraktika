@@ -1,51 +1,41 @@
 package lt.lukasnakas.Model;
 
+import java.util.List;
+
 public class DanskeAccount {
 
-    private String Identification;
-    private String SchemeName;
-    private String Name;
-    private String SecondaryIdentification;
+    private String id;
+    private DanskeAccountDetails[] Account;
 
     public DanskeAccount() {
     }
 
-    public DanskeAccount(String identification, String schemeName, String name, String secondaryIdentification) {
-        Identification = identification;
-        SchemeName = schemeName;
-        Name = name;
-        SecondaryIdentification = secondaryIdentification;
+    public DanskeAccount(String id, DanskeAccountDetails[] account) {
+        this.id = id;
+        Account = account;
     }
 
-    public String getIdentification() {
-        return Identification;
+    @Override
+    public String toString() {
+        return "DanskeCustomer{" +
+                "id='" + id + '\'' +
+                ", Account=" + Account +
+                '}';
     }
 
-    public void setIdentification(String identification) {
-        Identification = identification;
+    public String getId() {
+        return id;
     }
 
-    public String getSchemeName() {
-        return SchemeName;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setSchemeName(String schemeName) {
-        SchemeName = schemeName;
+    public DanskeAccountDetails[] getAccount() {
+        return Account;
     }
 
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getSecondaryIdentification() {
-        return SecondaryIdentification;
-    }
-
-    public void setSecondaryIdentification(String secondaryIdentification) {
-        SecondaryIdentification = secondaryIdentification;
+    public void setAccount(DanskeAccountDetails[] account) {
+        Account = account;
     }
 }
