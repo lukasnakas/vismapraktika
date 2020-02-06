@@ -2,13 +2,9 @@ package lt.lukasnakas.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import lt.lukasnakas.Configuration.RevolutServiceConfiguration;
-import lt.lukasnakas.Model.RevolutAccount;
-import org.json.JSONObject;
+import lt.lukasnakas.Model.Revolut.RevolutAccessToken;
+import lt.lukasnakas.Model.Revolut.RevolutAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -63,24 +59,23 @@ public class RevolutAccountService {
     }
 
     private String refreshAccessToken(){
-        String newAccessToken = "";
-
         try {
-            HttpResponse<JsonNode> httpResponse = Unirest.post(revolutConfig.getUrlAuth())
-                    .field("grant_type",            revolutConfig.getGrantType())
-                    .field("client_id",             revolutConfig.getClientId())
-                    .field("refresh_token",         revolutConfig.getRefreshToken())
-                    .field("client_assertion_type", revolutConfig.getClientAssertionType())
-                    .field("client_assertion",      revolutConfig.getClientAssertion())
-                    .asJson();
+            MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+            bodyParams.add("grant_type", revolutConfig.getGrantType());
+            bodyParams.add("client_id", revolutConfig.getClientId());
+            bodyParams.add("refresh_token", revolutConfig.getRefreshToken());
+            bodyParams.add("client_assertion_type", revolutConfig.getClientAssertionType());
+            bodyParams.add("client_assertion", revolutConfig.getClientAssertion());
 
-            newAccessToken = httpResponse.getBody().getObject().getString("access_token");
-        } catch (UnirestException e) {
+            ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(revolutConfig.getUrlAuth(), bodyParams, RevolutAccessToken.class);
+
+            System.out.println("New access token: " + response.getBody().getAccess_token());
+            return response.getBody().getAccess_token();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("New access token: " + newAccessToken);
-        return newAccessToken;
+        return null;
     }
 
 }

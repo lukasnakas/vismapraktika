@@ -1,6 +1,4 @@
-package lt.lukasnakas.Model;
-
-import java.util.List;
+package lt.lukasnakas.Model.Danske;
 
 public class DanskeAccount {
 

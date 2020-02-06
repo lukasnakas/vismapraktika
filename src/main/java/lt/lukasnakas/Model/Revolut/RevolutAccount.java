@@ -1,4 +1,4 @@
-package lt.lukasnakas.Model;
+package lt.lukasnakas.Model.Revolut;
 
 import java.util.Date;
 

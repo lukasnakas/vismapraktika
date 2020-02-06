@@ -2,23 +2,19 @@ package lt.lukasnakas.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lt.lukasnakas.Configuration.DanskeServiceConfiguration;
-import lt.lukasnakas.Model.DanskeAccount;
-import lt.lukasnakas.Model.DanskeAccountDetails;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import lt.lukasnakas.Model.Danske.DanskeAccessToken;
+import lt.lukasnakas.Model.Revolut.RevolutAccessToken;
+import lt.lukasnakas.Model.Danske.DanskeAccount;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,21 +61,20 @@ public class DanskeAccountService {
     }
 
     private String refreshAccessToken(){
-        String newAccessToken = "";
+         try {
+            MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+            bodyParams.add("ClientId", danskeConfig.getClientId());
+            bodyParams.add("Secret", danskeConfig.getSecret());
 
-        try {
-            HttpResponse<JsonNode> httpResponse = Unirest.post(danskeConfig.getUrlAuth())
-                    .field("ClientId", danskeConfig.getClientId())
-                    .field("Secret", danskeConfig.getSecret())
-                    .asJson();
+            ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(danskeConfig.getUrlAuth(), bodyParams, DanskeAccessToken.class);
 
-            newAccessToken = httpResponse.getBody().getObject().getString("accessToken");
-        } catch (UnirestException e) {
+            System.out.println("New access token: " + response.getBody().getAccessToken());
+            return response.getBody().getAccessToken();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("New access token: " + newAccessToken);
-        return newAccessToken;
+        return null;
     }
 
 }
