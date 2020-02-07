@@ -1,15 +1,14 @@
 package lt.lukasnakas.model.danske;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Account;
 
 public class DanskeAccount extends Account {
 
-    @SerializedName("Account")
+    @JsonProperty("Account")
     private DanskeAccountDetails[] account;
 
-    public DanskeAccount(DanskeAccountDetails[] account) {
-        this.account = account;
+    public DanskeAccount() {
     }
 
     public DanskeAccount(String id, DanskeAccountDetails[] account) {

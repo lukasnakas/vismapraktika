@@ -12,7 +12,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-
 @Service
 public class DanskeTokenRenewalService implements TokenRenewalService {
     private static final Logger logger = LoggerFactory.getLogger(DanskeTokenRenewalService.class);

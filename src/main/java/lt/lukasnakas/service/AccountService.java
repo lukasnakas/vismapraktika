@@ -5,5 +5,4 @@ import java.util.List;
 
 public interface AccountService {
     List<Account> retrieveAccounts();
-    List<Account> getParsedAccounts(String accounts);
 }

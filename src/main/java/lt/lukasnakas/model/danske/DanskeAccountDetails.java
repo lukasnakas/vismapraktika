@@ -1,16 +1,16 @@
 package lt.lukasnakas.model.danske;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DanskeAccountDetails {
 
-    @SerializedName("Identification")
+    @JsonProperty("Identification")
     private String identification;
-    @SerializedName("SchemeName")
+    @JsonProperty("SchemeName")
     private String schemeName;
-    @SerializedName("Name")
+    @JsonProperty("Name")
     private String name;
-    @SerializedName("SecondaryIdentification")
+    @JsonProperty("SecondaryIdentification")
     private String secondaryIdentification;
 
     public DanskeAccountDetails() {
