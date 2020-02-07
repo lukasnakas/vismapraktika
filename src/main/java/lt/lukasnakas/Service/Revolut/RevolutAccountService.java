@@ -54,7 +54,7 @@ public class RevolutAccountService implements AccountService {
         return revolutAccountList;
     }
 
-    public HttpEntity getRequestEntity(String accessToken){
+    private HttpEntity getRequestEntity(String accessToken){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
 

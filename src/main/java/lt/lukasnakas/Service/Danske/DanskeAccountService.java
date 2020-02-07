@@ -54,7 +54,7 @@ public class DanskeAccountService implements AccountService {
         return danskeAccountList;
     }
 
-    public HttpEntity getRequestEntity(String accessToken){
+    private HttpEntity getRequestEntity(String accessToken){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
 
