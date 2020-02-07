@@ -10,6 +10,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,12 +47,16 @@ public class DanskeAccountService implements AccountService {
                     new ParameterizedTypeReference<List<DanskeAccount>>() {});
         }
 
-        return null; // fix
+        return getParsedAccountList(responseEntity.getBody());
     }
 
     private HttpEntity getRequestEntity(String accessToken){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
         return new HttpEntity(httpHeaders);
+    }
+
+    private List<Account> getParsedAccountList(List<DanskeAccount> unparsedAccoutsList){
+        return new ArrayList<>(unparsedAccoutsList);
     }
 }
