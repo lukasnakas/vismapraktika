@@ -5,7 +5,6 @@ import lt.lukasnakas.Model.Account;
 import java.util.List;
 
 public interface AccountService {
-    List<Account> getAllAccounts();
-    String retrieveAccounts();
+    List<Account> retrieveAccounts() throws Exception;
     List<Account> getParsedAccounts(String accounts);
 }

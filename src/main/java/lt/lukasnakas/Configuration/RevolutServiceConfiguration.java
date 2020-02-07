@@ -21,6 +21,7 @@ public class RevolutServiceConfiguration {
     @NotNull private String refreshToken;
     @NotNull private String clientAssertionType;
     @NotNull private String clientAssertion;
+    @NotNull private String authorizationError;
 
     public String getName() {
         return name;
@@ -100,5 +101,13 @@ public class RevolutServiceConfiguration {
 
     public void setClientAssertion(String clientAssertion) {
         this.clientAssertion = clientAssertion;
+    }
+
+    public String getAuthorizationError() {
+        return authorizationError;
+    }
+
+    public void setAuthorizationError(String authorizationError) {
+        this.authorizationError = authorizationError;
     }
 }

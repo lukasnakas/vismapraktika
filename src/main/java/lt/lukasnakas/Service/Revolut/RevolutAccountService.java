@@ -2,6 +2,7 @@ package lt.lukasnakas.Service.Revolut;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lt.lukasnakas.Configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Revolut.RevolutAccount;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,19 +36,18 @@ public class RevolutAccountService implements AccountService {
         this.revolutConfig = revolutConfig;
     }
 
-    public List<Account> getAllAccounts(){
-        accessToken = revolutTokenRenewalService.generateAccessToken();
-        return getParsedAccounts(retrieveAccounts());
-    }
+    public List<Account> retrieveAccounts() {
+        ResponseEntity<String> responseEntity;
 
-    public String retrieveAccounts(){
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setBearerAuth(accessToken);
+        try {
+            accessToken = revolutConfig.getAccessToken();
+            responseEntity = restTemplate.exchange(revolutConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+        } catch (Exception e){
+            accessToken = revolutTokenRenewalService.generateAccessToken();
+            responseEntity = restTemplate.exchange(revolutConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+        }
 
-        HttpEntity requestEntity = new HttpEntity(httpHeaders);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(revolutConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
-
-        return responseEntity.getBody();
+        return getParsedAccounts(responseEntity.getBody());
     }
 
     public List<Account> getParsedAccounts(String accounts){
@@ -54,6 +55,14 @@ public class RevolutAccountService implements AccountService {
         Type revolutAccountListType = new TypeToken<List<RevolutAccount>>(){}.getType();
         List<Account> revolutAccountList = gson.fromJson(accounts, revolutAccountListType);
         return revolutAccountList;
+    }
+
+    public HttpEntity getRequestEntity(String accessToken){
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setBearerAuth(accessToken);
+
+        HttpEntity requestEntity = new HttpEntity(httpHeaders);
+        return requestEntity;
     }
 
 }

@@ -17,6 +17,6 @@ public class RevolutController {
 
     @GetMapping(value = "/banks/revolut/accounts")
     public ResponseEntity<List<Account>> getRevolutAccounts(){
-        return new ResponseEntity<>(revolutAccountService.getAllAccounts(), HttpStatus.OK);
+        return new ResponseEntity<>(revolutAccountService.retrieveAccounts(), HttpStatus.OK);
     }
 }

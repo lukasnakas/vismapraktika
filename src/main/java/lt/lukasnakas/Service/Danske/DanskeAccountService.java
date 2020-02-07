@@ -34,19 +34,18 @@ public class DanskeAccountService implements AccountService {
         this.danskeConfig = danskeConfig;
     }
 
-    public List<Account> getAllAccounts(){
-        accessToken = danskeTokenRenewalService.generateAccessToken();
-        return getParsedAccounts(retrieveAccounts());
-    }
+    public List<Account> retrieveAccounts(){
+        ResponseEntity<String> responseEntity;
 
-    public String retrieveAccounts(){
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setBearerAuth(accessToken);
+        try {
+            accessToken = danskeConfig.getAccessToken();
+            responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+        } catch (Exception e){
+            accessToken = danskeTokenRenewalService.generateAccessToken();
+            responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+        }
 
-        HttpEntity requestEntity = new HttpEntity(httpHeaders);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, requestEntity, String.class);
-
-        return responseEntity.getBody();
+        return getParsedAccounts(responseEntity.getBody());
     }
 
     public List<Account> getParsedAccounts(String accounts){
@@ -56,4 +55,11 @@ public class DanskeAccountService implements AccountService {
         return danskeAccountList;
     }
 
+    public HttpEntity getRequestEntity(String accessToken){
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setBearerAuth(accessToken);
+
+        HttpEntity requestEntity = new HttpEntity(httpHeaders);
+        return requestEntity;
+    }
 }
