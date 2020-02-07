@@ -16,7 +16,7 @@ public class DanskeController {
     private DanskeAccountService danskeAccountService;
 
     @GetMapping(value = "/banks/danske/accounts")
-    public ResponseEntity<List<? extends Account>> getDanskeAccounts(){
+    public ResponseEntity<List<Account>> getDanskeAccounts(){
         return new ResponseEntity<>(danskeAccountService.retrieveAccounts(), HttpStatus.OK);
     }
 }
