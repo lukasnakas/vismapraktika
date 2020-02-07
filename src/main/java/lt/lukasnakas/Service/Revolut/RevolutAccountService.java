@@ -2,7 +2,6 @@ package lt.lukasnakas.Service.Revolut;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lt.lukasnakas.Configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.Model.Account;
 import lt.lukasnakas.Model.Revolut.RevolutAccount;
@@ -11,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
