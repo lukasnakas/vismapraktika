@@ -1,4 +1,4 @@
-package lt.lukasnakas.Configuration;
+package lt.lukasnakas.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -7,19 +7,16 @@ import javax.validation.constraints.NotNull;
 
 @Component
 @EnableConfigurationProperties
-@ConfigurationProperties(prefix = "revolut-service")
-public class RevolutServiceConfiguration {
+@ConfigurationProperties(prefix = "danske-service")
+public class DanskeServiceConfiguration {
 
     @NotNull private String name;
     @NotNull private String tokenType;
     @NotNull private String urlAuth;
     @NotNull private String urlAccounts;
     @NotNull private String clientId;
-    @NotNull private String grantType;
     @NotNull private String accessToken;
-    @NotNull private String refreshToken;
-    @NotNull private String clientAssertionType;
-    @NotNull private String clientAssertion;
+    @NotNull private String secret;
 
     public String getName() {
         return name;
@@ -61,14 +58,6 @@ public class RevolutServiceConfiguration {
         this.clientId = clientId;
     }
 
-    public String getGrantType() {
-        return grantType;
-    }
-
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }
@@ -77,28 +66,11 @@ public class RevolutServiceConfiguration {
         this.accessToken = accessToken;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getSecret() {
+        return secret;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
-
-    public String getClientAssertionType() {
-        return clientAssertionType;
-    }
-
-    public void setClientAssertionType(String clientAssertionType) {
-        this.clientAssertionType = clientAssertionType;
-    }
-
-    public String getClientAssertion() {
-        return clientAssertion;
-    }
-
-    public void setClientAssertion(String clientAssertion) {
-        this.clientAssertion = clientAssertion;
-    }
-
 }

@@ -1,21 +1,23 @@
-package lt.lukasnakas.Service.Danske;
+package lt.lukasnakas.service.danske;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import lt.lukasnakas.Configuration.DanskeServiceConfiguration;
-import lt.lukasnakas.Model.Account;
-import lt.lukasnakas.Model.Danske.DanskeAccount;
-import lt.lukasnakas.Service.AccountService;
+import lt.lukasnakas.configuration.DanskeServiceConfiguration;
+import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.danske.DanskeAccount;
+import lt.lukasnakas.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
 public class DanskeAccountService implements AccountService {
-    private final DanskeServiceConfiguration danskeConfig;
+    @Autowired
+    private DanskeServiceConfiguration danskeServiceConfiguration;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -26,22 +28,15 @@ public class DanskeAccountService implements AccountService {
     @Autowired
     private DanskeTokenRenewalService danskeTokenRenewalService;
 
-    private String accessToken;
-
-    @Autowired
-    public DanskeAccountService(DanskeServiceConfiguration danskeConfig) {
-        this.danskeConfig = danskeConfig;
-    }
-
     public List<Account> retrieveAccounts(){
         ResponseEntity<String> responseEntity;
 
         try {
-            accessToken = danskeConfig.getAccessToken();
-            responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
-        } catch (Exception e){
-            accessToken = danskeTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(danskeConfig.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+            String accessToken = danskeServiceConfiguration.getAccessToken();
+            responseEntity = restTemplate.exchange(danskeServiceConfiguration.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
+        } catch (HttpClientErrorException.Unauthorized e){
+            String accessToken = danskeTokenRenewalService.generateAccessToken();
+            responseEntity = restTemplate.exchange(danskeServiceConfiguration.getUrlAccounts(), HttpMethod.GET, getRequestEntity(accessToken), String.class);
         }
 
         return getParsedAccounts(responseEntity.getBody());
@@ -50,15 +45,12 @@ public class DanskeAccountService implements AccountService {
     public List<Account> getParsedAccounts(String accounts){
         Gson gson = new Gson();
         Type danskeAccountListType = new TypeToken<List<DanskeAccount>>(){}.getType();
-        List<Account> danskeAccountList = gson.fromJson(accounts, danskeAccountListType);
-        return danskeAccountList;
+        return gson.fromJson(accounts, danskeAccountListType);
     }
 
     private HttpEntity getRequestEntity(String accessToken){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
-
-        HttpEntity requestEntity = new HttpEntity(httpHeaders);
-        return requestEntity;
+        return new HttpEntity(httpHeaders);
     }
 }

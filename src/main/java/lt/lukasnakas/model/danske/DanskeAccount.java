@@ -1,25 +1,27 @@
-package lt.lukasnakas.Model.Danske;
+package lt.lukasnakas.model.danske;
 
-import lt.lukasnakas.Model.Account;
+import com.google.gson.annotations.SerializedName;
+import lt.lukasnakas.model.Account;
 
 public class DanskeAccount extends Account {
 
-    private DanskeAccountDetails[] Account;
+    @SerializedName("Account")
+    private DanskeAccountDetails[] account;
 
     public DanskeAccount(DanskeAccountDetails[] account) {
-        Account = account;
+        this.account = account;
     }
 
     public DanskeAccount(String id, DanskeAccountDetails[] account) {
         super(id);
-        Account = account;
+        this.account = account;
     }
 
     public DanskeAccountDetails[] getAccount() {
-        return Account;
+        return account;
     }
 
     public void setAccount(DanskeAccountDetails[] account) {
-        Account = account;
+        this.account = account;
     }
 }

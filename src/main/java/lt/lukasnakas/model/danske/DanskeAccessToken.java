@@ -1,4 +1,4 @@
-package lt.lukasnakas.Model.Danske;
+package lt.lukasnakas.model.danske;
 
 public class DanskeAccessToken {
 

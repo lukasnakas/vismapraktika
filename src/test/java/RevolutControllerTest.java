@@ -1,4 +1,4 @@
-import lt.lukasnakas.Service.Revolut.RevolutAccountService;
+import lt.lukasnakas.service.revolut.RevolutAccountService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class RevolutControllerTest {
                "    }]";
        String expected = "123456789";
 
-       RevolutAccountService revolutAccountService = new RevolutAccountService(null);
+       RevolutAccountService revolutAccountService = new RevolutAccountService();
        Assert.assertEquals(expected, revolutAccountService.getParsedAccounts(assertion).get(0).getId());
    }
 

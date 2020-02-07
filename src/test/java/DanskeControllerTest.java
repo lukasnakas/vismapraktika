@@ -1,11 +1,11 @@
-import lt.lukasnakas.Service.Danske.DanskeAccountService;
+import lt.lukasnakas.service.danske.DanskeAccountService;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class DanskeControllerTest {
 
    @Test
-    public void TestGetParsedAccounts() throws Exception{
+    public void TestGetParsedAccounts() throws Exception{ // camel case
        String assertion = "[\n" +
                "    {\n" +
                "        \"id\": \"11111\",\n" +
@@ -21,7 +21,7 @@ public class DanskeControllerTest {
                "]";
        String expected = "11111";
 
-       DanskeAccountService danskeAccountService = new DanskeAccountService(null);
+       DanskeAccountService danskeAccountService = new DanskeAccountService();
        Assert.assertEquals(expected, danskeAccountService.getParsedAccounts(assertion).get(0).getId());
    }
 

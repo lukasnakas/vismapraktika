@@ -1,4 +1,4 @@
-package lt.lukasnakas.Model;
+package lt.lukasnakas.model;
 
 public class Account {
 

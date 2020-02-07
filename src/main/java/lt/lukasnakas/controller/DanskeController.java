@@ -1,7 +1,7 @@
-package lt.lukasnakas.Controller;
+package lt.lukasnakas.controller;
 
-import lt.lukasnakas.Model.Account;
-import lt.lukasnakas.Service.Danske.DanskeAccountService;
+import lt.lukasnakas.model.Account;
+import lt.lukasnakas.service.danske.DanskeAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

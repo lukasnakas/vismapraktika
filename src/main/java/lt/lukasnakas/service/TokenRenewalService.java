@@ -1,4 +1,4 @@
-package lt.lukasnakas.Service;
+package lt.lukasnakas.service;
 
 import org.springframework.util.MultiValueMap;
 
