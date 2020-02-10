@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class RevolutTokenRenewalService implements TokenRenewalService {
@@ -29,14 +29,14 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
         return response.getBody().getAccessToken();
     }
 
-    public MultiValueMap<String, String> getRequestBodyParams(){
-        MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+    public Map<String, String> getRequestBodyParams(){
+        Map<String, String> bodyParams = new HashMap<>();
 
-        bodyParams.add("grant_type", revolutServiceConfiguration.getGrantType());
-        bodyParams.add("client_id", revolutServiceConfiguration.getClientId());
-        bodyParams.add("refresh_token", revolutServiceConfiguration.getRefreshToken());
-        bodyParams.add("client_assertion_type", revolutServiceConfiguration.getClientAssertionType());
-        bodyParams.add("client_assertion", revolutServiceConfiguration.getClientAssertion());
+        bodyParams.put("grant_type", revolutServiceConfiguration.getGrantType());
+        bodyParams.put("client_id", revolutServiceConfiguration.getClientId());
+        bodyParams.put("refresh_token", revolutServiceConfiguration.getRefreshToken());
+        bodyParams.put("client_assertion_type", revolutServiceConfiguration.getClientAssertionType());
+        bodyParams.put("client_assertion", revolutServiceConfiguration.getClientAssertion());
 
         return bodyParams;
     }

@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class DanskeTokenRenewalService implements TokenRenewalService {
@@ -28,11 +28,11 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
         return response.getBody().getAccessToken();
     }
 
-    public MultiValueMap<String, String> getRequestBodyParams(){ // kodel multivaluemap
-        MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+    public Map<String, String> getRequestBodyParams(){
+        Map<String, String> bodyParams = new HashMap<>();
 
-        bodyParams.add("ClientId", danskeServiceConfiguration.getClientId());
-        bodyParams.add("Secret", danskeServiceConfiguration.getSecret());
+        bodyParams.put("ClientId", danskeServiceConfiguration.getClientId());
+        bodyParams.put("Secret", danskeServiceConfiguration.getSecret());
 
         return bodyParams;
     }

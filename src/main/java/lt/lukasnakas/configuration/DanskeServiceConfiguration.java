@@ -14,6 +14,7 @@ public class DanskeServiceConfiguration {
     @NotNull private String tokenType;
     @NotNull private String urlAuth;
     @NotNull private String urlAccounts;
+    @NotNull private String urlAccountTransactions;
     @NotNull private String clientId;
     @NotNull private String accessToken;
     @NotNull private String secret;
@@ -48,6 +49,14 @@ public class DanskeServiceConfiguration {
 
     public void setUrlAccounts(String urlAccounts) {
         this.urlAccounts = urlAccounts;
+    }
+
+    public String getUrlAccountTransactions() {
+        return urlAccountTransactions;
+    }
+
+    public void setUrlAccountTransactions(String urlAccountTransactions) {
+        this.urlAccountTransactions = urlAccountTransactions;
     }
 
     public String getClientId() {
