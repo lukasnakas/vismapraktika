@@ -4,7 +4,6 @@ import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.revolut.RevolutAccount;
 import lt.lukasnakas.service.AccountService;
-import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;

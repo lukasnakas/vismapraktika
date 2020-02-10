@@ -4,14 +4,12 @@ import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.danske.DanskeAccount;
 import lt.lukasnakas.service.AccountService;
-import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 
