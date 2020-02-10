@@ -33,18 +33,10 @@ public class DanskeAccountService implements AccountService {
 
         try {
             String accessToken = danskeServiceConfiguration.getAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeAccount>>() {});
+            responseEntity = getResponseEntity(accessToken);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = danskeTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeAccount>>() {});
+            responseEntity = getResponseEntity(accessToken);
         }
 
         return getParsedAccountList(responseEntity.getBody());
@@ -56,7 +48,15 @@ public class DanskeAccountService implements AccountService {
         return new HttpEntity(httpHeaders);
     }
 
-    private List<Account> getParsedAccountList(List<DanskeAccount> unparsedAccoutsList){
+    private ResponseEntity<List<DanskeAccount>> getResponseEntity(String accessToken){
+        return restTemplate.exchange(
+                danskeServiceConfiguration.getUrlAccounts(),
+                HttpMethod.GET,
+                getRequestEntity(accessToken),
+                new ParameterizedTypeReference<List<DanskeAccount>>() {});
+    }
+
+    public List<Account> getParsedAccountList(List<? extends Account> unparsedAccoutsList){
         return new ArrayList<>(unparsedAccoutsList);
     }
 }

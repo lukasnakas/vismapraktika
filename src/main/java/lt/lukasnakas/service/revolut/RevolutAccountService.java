@@ -33,18 +33,10 @@ public class RevolutAccountService implements AccountService {
 
         try {
             String accessToken = revolutServiceConfiguration.getAccessToken();
-            responseEntity = restTemplate.exchange(
-                    revolutServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<RevolutAccount>>() {});
+            responseEntity = getResponseEntity(accessToken);
         } catch (HttpClientErrorException.Unauthorized e) {
             String accessToken = revolutTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(
-                    revolutServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<RevolutAccount>>() {});
+            responseEntity = getResponseEntity(accessToken);
         }
 
         return getParsedAccountList(responseEntity.getBody());
@@ -56,8 +48,15 @@ public class RevolutAccountService implements AccountService {
         return new HttpEntity(httpHeaders);
     }
 
-    private List<Account> getParsedAccountList(List<RevolutAccount> unparsedAccountsList){
-        return new ArrayList<>(unparsedAccountsList);
+    private ResponseEntity<List<RevolutAccount>> getResponseEntity(String accessToken){
+        return restTemplate.exchange(
+                revolutServiceConfiguration.getUrlAccounts(),
+                HttpMethod.GET,
+                getRequestEntity(accessToken),
+                new ParameterizedTypeReference<List<RevolutAccount>>() {});
     }
 
+    public List<Account> getParsedAccountList(List<? extends Account> unparsedAccountsList){
+        return new ArrayList<>(unparsedAccountsList);
+    }
 }
