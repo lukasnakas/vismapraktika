@@ -6,8 +6,11 @@ import lt.lukasnakas.service.TokenRenewalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +31,10 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
         return response.getBody().getAccessToken();
     }
 
-    public Map<String, String> getRequestBodyParams(){
-        Map<String, String> bodyParams = new HashMap<>();
-
-        bodyParams.put("ClientId", danskeServiceConfiguration.getClientId());
-        bodyParams.put("Secret", danskeServiceConfiguration.getSecret());
+    public MultiValueMap<String, String> getRequestBodyParams(){
+        MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+        bodyParams.add("ClientId", danskeServiceConfiguration.getClientId());
+        bodyParams.add("Secret", danskeServiceConfiguration.getSecret());
 
         return bodyParams;
     }
