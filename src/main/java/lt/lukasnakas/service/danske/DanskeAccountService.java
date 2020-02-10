@@ -4,6 +4,7 @@ import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.danske.DanskeAccount;
 import lt.lukasnakas.service.AccountService;
+import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -20,13 +21,13 @@ public class DanskeAccountService implements AccountService {
     private DanskeServiceConfiguration danskeServiceConfiguration;
 
     @Autowired
+    private DanskeTokenRenewalService danskeTokenRenewalService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private HttpHeaders httpHeaders;
-
-    @Autowired
-    private DanskeTokenRenewalService danskeTokenRenewalService;
 
     public List<Account> retrieveAccounts(){
         ResponseEntity<List<DanskeAccount>> responseEntity;

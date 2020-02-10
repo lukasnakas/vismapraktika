@@ -4,6 +4,7 @@ import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.revolut.RevolutAccount;
 import lt.lukasnakas.service.AccountService;
+import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -20,13 +21,13 @@ public class RevolutAccountService implements AccountService {
     private RevolutServiceConfiguration revolutServiceConfiguration;
 
     @Autowired
+    private RevolutTokenRenewalService revolutTokenRenewalService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private HttpHeaders httpHeaders;
-
-    @Autowired
-    private RevolutTokenRenewalService revolutTokenRenewalService;
 
     public List<Account> retrieveAccounts() {
         ResponseEntity<List<RevolutAccount>> responseEntity;

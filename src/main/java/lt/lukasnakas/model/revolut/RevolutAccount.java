@@ -1,5 +1,6 @@
 package lt.lukasnakas.model.revolut;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Account;
 import java.util.Date;
 
@@ -9,7 +10,9 @@ public class RevolutAccount extends Account {
     private String currency;
     private String state;
     private boolean publicAccount;
+    @JsonProperty("created_at")
     private Date createdAt;
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
     public RevolutAccount() {
