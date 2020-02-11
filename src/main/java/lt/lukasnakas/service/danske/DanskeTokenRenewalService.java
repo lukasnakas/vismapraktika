@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class DanskeTokenRenewalService implements TokenRenewalService {
-    private static final Logger logger = LoggerFactory.getLogger(DanskeTokenRenewalService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DanskeTokenRenewalService.class);
 
     @Autowired
     private DanskeServiceConfiguration danskeServiceConfiguration;
@@ -34,10 +34,10 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
             if(response.getBody() != null) {
                 newAccessToken = response.getBody().getAccessToken();
                 danskeServiceConfiguration.setAccessToken(newAccessToken);
-                logger.info("{} new access token: {}", danskeServiceConfiguration.getName(), newAccessToken);
+                LOGGER.info("{} new access token: {}", danskeServiceConfiguration.getName(), newAccessToken);
             }
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return null;
         }
 

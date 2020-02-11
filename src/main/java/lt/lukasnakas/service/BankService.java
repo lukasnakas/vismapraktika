@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class BankService {
 
-	private static final Logger logger = LoggerFactory.getLogger(BankService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
 
 	@Autowired
 	private DanskeService danskeService;
@@ -66,7 +66,7 @@ public class BankService {
 			JsonNode jsonNode = mapper.readTree(paymentBody);
 			return mapper.convertValue(jsonNode, paymentClass);
 		} catch (JsonProcessingException e) {
-			logger.warn(e.getMessage());
+			LOGGER.warn(e.getMessage());
 			return null;
 		}
 	}
@@ -78,7 +78,7 @@ public class BankService {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("bankName").toString();
 		} catch (JsonProcessingException e) {
-			logger.warn(e.getMessage());
+			LOGGER.warn(e.getMessage());
 			return null;
 		}
 	}

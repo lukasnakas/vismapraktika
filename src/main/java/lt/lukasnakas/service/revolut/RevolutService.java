@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 public class RevolutService implements AccountService, TransactionService {
-    private static final Logger logger = LoggerFactory.getLogger(RevolutService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RevolutService.class);
 
     @Autowired
     private RevolutServiceConfiguration revolutServiceConfiguration;
@@ -53,7 +53,7 @@ public class RevolutService implements AccountService, TransactionService {
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<RevolutAccount>>() {});
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return new ArrayList<>();
         }
 
@@ -78,7 +78,7 @@ public class RevolutService implements AccountService, TransactionService {
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<RevolutTransaction>>() {});
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return new ArrayList<>();
         }
 
@@ -103,7 +103,7 @@ public class RevolutService implements AccountService, TransactionService {
                     getRequestEntityWithBodyParams(accessToken, payment),
                     RevolutTransaction.class);
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return null;
         }
 

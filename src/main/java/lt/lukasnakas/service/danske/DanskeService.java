@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 public class DanskeService implements AccountService, TransactionService {
-    private static final Logger logger = LoggerFactory.getLogger(DanskeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DanskeService.class);
 
     @Autowired
     private DanskeServiceConfiguration danskeServiceConfiguration;
@@ -53,7 +53,7 @@ public class DanskeService implements AccountService, TransactionService {
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<DanskeAccount>>() {});
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return new ArrayList<>();
         }
 
@@ -78,7 +78,7 @@ public class DanskeService implements AccountService, TransactionService {
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<DanskeTransaction>>() {});
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return new ArrayList<>();
         }
 
@@ -103,7 +103,7 @@ public class DanskeService implements AccountService, TransactionService {
                     getRequestEntityWithBodyParams(accessToken, payment),
                     DanskeTransaction.class);
         } catch (Exception e){
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return null;
         }
 
