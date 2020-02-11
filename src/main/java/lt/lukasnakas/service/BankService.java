@@ -2,12 +2,15 @@ package lt.lukasnakas.service;
 
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Bank;
+import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.DanskeTransaction;
+import lt.lukasnakas.model.revolut.RevolutTransaction;
 import lt.lukasnakas.service.danske.DanskeService;
-import lt.lukasnakas.service.revolut.RevolutAccountService;
+import lt.lukasnakas.service.revolut.RevolutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,7 +20,7 @@ public class BankService {
 	private DanskeService danskeService;
 
 	@Autowired
-	private RevolutAccountService revolutAccountService;
+	private RevolutService revolutService;
 
 	public AccountService getAccountService(String bankName){
 		if(bankExists(bankName)) {
@@ -26,19 +29,23 @@ public class BankService {
 			if (bank == Bank.DANSKE)
 				return danskeService;
 			else if (bank == Bank.REVOLUT)
-				return revolutAccountService;
+				return revolutService;
 		}
 		return null;
 	}
 
 	public List<Account> getAccounts(){
-		List<Account> accountsList = danskeService.retrieveAccounts();
-		accountsList.addAll(revolutAccountService.retrieveAccounts());
+		List<Account> accountsList = new ArrayList<>();
+		accountsList.addAll(danskeService.retrieveAccounts());
+		accountsList.addAll(revolutService.retrieveAccounts());
 		return accountsList;
 	}
 
-	public List<DanskeTransaction> getDanskeTransactions(){
-		return danskeService.retrieveTransactions();
+	public List<Transaction> getTransactions(){
+		List<Transaction> transactionsList = new ArrayList<>();
+		transactionsList.addAll(danskeService.retrieveTransactions());
+		transactionsList.addAll(revolutService.retrieveTransactions());
+		return transactionsList;
 	}
 
 	public DanskeTransaction postDanskeTransaction(DanskeTransaction danskeTransaction){

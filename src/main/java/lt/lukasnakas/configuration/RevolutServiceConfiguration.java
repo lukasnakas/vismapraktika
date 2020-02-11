@@ -14,6 +14,7 @@ public class RevolutServiceConfiguration {
     @NotNull private String tokenType;
     @NotNull private String urlAuth;
     @NotNull private String urlAccounts;
+    @NotNull private String urlAccountTransactions;
     @NotNull private String clientId;
     @NotNull private String grantType;
     @NotNull private String accessToken;
@@ -51,6 +52,14 @@ public class RevolutServiceConfiguration {
 
     public void setUrlAccounts(String urlAccounts) {
         this.urlAccounts = urlAccounts;
+    }
+
+    public String getUrlAccountTransactions() {
+        return urlAccountTransactions;
+    }
+
+    public void setUrlAccountTransactions(String urlAccountTransactions) {
+        this.urlAccountTransactions = urlAccountTransactions;
     }
 
     public String getClientId() {

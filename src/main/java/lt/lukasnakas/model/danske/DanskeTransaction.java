@@ -1,10 +1,9 @@
 package lt.lukasnakas.model.danske;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lt.lukasnakas.model.Transaction;
 
-public class DanskeTransaction {
-
-	private String id;
+public class DanskeTransaction extends Transaction {
 
 	@JsonProperty("CreditDebitIndicator")
 	private String creditDebitIndicator;
@@ -16,17 +15,9 @@ public class DanskeTransaction {
 	}
 
 	public DanskeTransaction(String id, String creditDebitIncidator, DanskeTransactionAmount transactionAmount) {
-		this.id = id;
+		super(id);
 		this.creditDebitIndicator = creditDebitIncidator;
 		this.transactionAmount = transactionAmount;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getCreditDebitIndicator() {

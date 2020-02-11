@@ -1,7 +1,9 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.DanskeTransaction;
+import lt.lukasnakas.model.revolut.RevolutTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,8 @@ public class BankController {
 	}
 
 	@GetMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<List<DanskeTransaction>> getAllTransactions(){
-		return new ResponseEntity<>(bankService.getDanskeTransactions(), HttpStatus.OK);
+	public ResponseEntity<List<Transaction>> getAllTransactions(){
+		return new ResponseEntity<>(bankService.getTransactions(), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/transactions", consumes = "application/json", produces = "application/json")

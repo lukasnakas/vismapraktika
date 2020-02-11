@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.DanskeAccount;
 import lt.lukasnakas.model.danske.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
@@ -55,7 +56,7 @@ public class DanskeService implements AccountService {
         return getParsedAccountList(responseEntity.getBody());
     }
 
-    public List<DanskeTransaction> retrieveTransactions(){
+    public List<Transaction> retrieveTransactions(){
         ResponseEntity<List<DanskeTransaction>> responseEntity;
 
         try {
@@ -74,7 +75,7 @@ public class DanskeService implements AccountService {
                     new ParameterizedTypeReference<List<DanskeTransaction>>() {});
         }
 
-        return responseEntity.getBody();
+        return getParsedTransactionsList(responseEntity.getBody());
     }
 
     public DanskeTransaction postTransaction(DanskeTransaction danskeTransaction){
@@ -118,5 +119,9 @@ public class DanskeService implements AccountService {
 
     public List<Account> getParsedAccountList(List<? extends Account> unparsedAccoutsList){
         return new ArrayList<>(unparsedAccoutsList);
+    }
+
+    public List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList){
+        return new ArrayList<>(unparsedTransactionsList);
     }
 }
