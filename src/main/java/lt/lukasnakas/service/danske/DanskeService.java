@@ -5,7 +5,6 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.DanskeAccount;
-import lt.lukasnakas.model.danske.DanskePayment;
 import lt.lukasnakas.model.danske.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DanskeService implements AccountService, TransactionService {

@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class RevolutTokenRenewalService implements TokenRenewalService {
-
     private static final Logger logger = LoggerFactory.getLogger(RevolutTokenRenewalService.class);
 
     @Autowired
@@ -28,8 +27,10 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
                 revolutServiceConfiguration.getUrlAuth(),
                 getRequestBodyParams(),
                 RevolutAccessToken.class);
-        logger.info("New access token: {}", response.getBody().getAccessToken());
-        return response.getBody().getAccessToken();
+        String newAccessToken = response.getBody().getAccessToken();
+        revolutServiceConfiguration.setAccessToken(newAccessToken);
+        logger.info("New access token: {}", newAccessToken);
+        return newAccessToken;
     }
 
     public MultiValueMap<String, String> getRequestBodyParams(){

@@ -23,9 +23,14 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
     private RestTemplate restTemplate;
 
     public String generateAccessToken(){
-        ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(danskeServiceConfiguration.getUrlAuth(), getRequestBodyParams(), DanskeAccessToken.class);
-        logger.info("New access token: {}", response.getBody().getAccessToken());
-        return response.getBody().getAccessToken();
+        ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(
+                danskeServiceConfiguration.getUrlAuth(),
+                getRequestBodyParams(),
+                DanskeAccessToken.class);
+        String newAccessToken = response.getBody().getAccessToken();
+        danskeServiceConfiguration.setAccessToken(newAccessToken);
+        logger.info("New access token: {}", newAccessToken);
+        return newAccessToken;
     }
 
     public MultiValueMap<String, String> getRequestBodyParams(){

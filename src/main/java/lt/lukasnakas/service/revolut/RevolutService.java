@@ -5,7 +5,6 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.RevolutAccount;
-import lt.lukasnakas.model.revolut.RevolutPayment;
 import lt.lukasnakas.model.revolut.RevolutTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
