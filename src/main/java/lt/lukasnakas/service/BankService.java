@@ -67,22 +67,20 @@ public class BankService {
 			return mapper.convertValue(jsonNode, paymentClass);
 		} catch (JsonProcessingException e) {
 			logger.warn(e.getMessage());
+			return null;
 		}
-		return null;
 	}
 
 	private String getBankName(String paymentBody){
 		ObjectMapper mapper = new ObjectMapper();
-		String bankName = null;
 
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
-			bankName = node.get("bankName").toString();
+			return node.get("bankName").toString();
 		} catch (JsonProcessingException e) {
 			logger.warn(e.getMessage());
+			return null;
 		}
-
-		return bankName;
 	}
 
 }
