@@ -47,7 +47,7 @@ public class BankService {
 		String bankName = getBankName(paymentBody);
 
 		if(bankName != null)
-			executeTransaction(bankName, paymentBody);
+			return executeTransaction(bankName, paymentBody);
 		return null;
 	}
 
