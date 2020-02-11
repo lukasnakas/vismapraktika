@@ -1,14 +1,14 @@
 package lt.lukasnakas.service.danske;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.DanskeAccount;
+import lt.lukasnakas.model.danske.DanskePayment;
 import lt.lukasnakas.model.danske.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
-import org.springframework.beans.factory.ObjectProvider;
+import lt.lukasnakas.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class DanskeService implements AccountService {
+public class DanskeService implements AccountService, TransactionService {
     @Autowired
     private DanskeServiceConfiguration danskeServiceConfiguration;
 
@@ -78,7 +78,7 @@ public class DanskeService implements AccountService {
         return getParsedTransactionsList(responseEntity.getBody());
     }
 
-    public DanskeTransaction postTransaction(DanskeTransaction danskeTransaction){
+    public Transaction postTransaction(Payment payment){
         ResponseEntity<DanskeTransaction> responseEntity;
 
         try {
@@ -86,14 +86,14 @@ public class DanskeService implements AccountService {
             responseEntity = restTemplate.exchange(
                     danskeServiceConfiguration.getUrlAccountTransactions(),
                     HttpMethod.POST,
-                    getRequestEntityWithBodyParams(accessToken, danskeTransaction),
+                    getRequestEntityWithBodyParams(accessToken, payment),
                     DanskeTransaction.class);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = danskeTokenRenewalService.generateAccessToken();
             responseEntity = restTemplate.exchange(
                     danskeServiceConfiguration.getUrlAccountTransactions(),
                     HttpMethod.POST,
-                    getRequestEntityWithBodyParams(accessToken, danskeTransaction),
+                    getRequestEntityWithBodyParams(accessToken, payment),
                     DanskeTransaction.class);
         }
 
@@ -106,15 +106,10 @@ public class DanskeService implements AccountService {
         return new HttpEntity(httpHeaders);
     }
 
-    public HttpEntity getRequestEntityWithBodyParams(String accessToken, DanskeTransaction danskeTransaction){
+    public HttpEntity getRequestEntityWithBodyParams(String accessToken, Payment payment){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
-
-        Map<String, Object> bodyParams = new HashMap<>();
-        bodyParams.put("template", danskeTransaction.getCreditDebitIndicator().toLowerCase());
-        bodyParams.put("amount", danskeTransaction.getTransactionAmount().getAmount());
-
-        return new HttpEntity(bodyParams, httpHeaders);
+        return new HttpEntity(payment, httpHeaders);
     }
 
     public List<Account> getParsedAccountList(List<? extends Account> unparsedAccoutsList){
@@ -123,5 +118,9 @@ public class DanskeService implements AccountService {
 
     public List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList){
         return new ArrayList<>(unparsedTransactionsList);
+    }
+
+    public String getBankName(){
+        return danskeServiceConfiguration.getName();
     }
 }

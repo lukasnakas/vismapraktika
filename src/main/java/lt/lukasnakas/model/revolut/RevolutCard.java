@@ -2,7 +2,7 @@ package lt.lukasnakas.model.revolut;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RevolutTransactionCard {
+public class RevolutCard {
 
 	@JsonProperty("card_number")
 	private String cardNumber;
@@ -15,10 +15,10 @@ public class RevolutTransactionCard {
 
 	private String phone;
 
-	public RevolutTransactionCard() {
+	public RevolutCard() {
 	}
 
-	public RevolutTransactionCard(String cardNumber, String firstName, String lastName, String phone) {
+	public RevolutCard(String cardNumber, String firstName, String lastName, String phone) {
 		this.cardNumber = cardNumber;
 		this.firstName = firstName;
 		this.lastName = lastName;

@@ -18,17 +18,17 @@ public class RevolutTransaction extends Transaction {
 	@JsonProperty("completed_at")
 	private String completedAt;
 
-	private RevolutTransactionMerchant merchant;
+	private RevolutMerchant merchant;
 	private RevolutTransactionLegs[] legs;
-	private RevolutTransactionCard card;
+	private RevolutCard card;
 
 	public RevolutTransaction() {
 	}
 
 	public RevolutTransaction(String id, String type, String state,
 							  String createdAt, String updatedAt, String completedAt,
-							  RevolutTransactionMerchant merchant, RevolutTransactionLegs[] legs,
-							  RevolutTransactionCard card) {
+							  RevolutMerchant merchant, RevolutTransactionLegs[] legs,
+							  RevolutCard card) {
 		super(id);
 		this.type = type;
 		this.state = state;
@@ -80,11 +80,11 @@ public class RevolutTransaction extends Transaction {
 		this.completedAt = completedAt;
 	}
 
-	public RevolutTransactionMerchant getMerchant() {
+	public RevolutMerchant getMerchant() {
 		return merchant;
 	}
 
-	public void setMerchant(RevolutTransactionMerchant merchant) {
+	public void setMerchant(RevolutMerchant merchant) {
 		this.merchant = merchant;
 	}
 
@@ -96,11 +96,11 @@ public class RevolutTransaction extends Transaction {
 		this.legs = legs;
 	}
 
-	public RevolutTransactionCard getCard() {
+	public RevolutCard getCard() {
 		return card;
 	}
 
-	public void setCard(RevolutTransactionCard card) {
+	public void setCard(RevolutCard card) {
 		this.card = card;
 	}
 }

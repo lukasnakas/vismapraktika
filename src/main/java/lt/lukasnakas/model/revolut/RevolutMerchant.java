@@ -2,7 +2,7 @@ package lt.lukasnakas.model.revolut;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RevolutTransactionMerchant {
+public class RevolutMerchant {
 
 	private String name;
 	private String city;
@@ -12,10 +12,10 @@ public class RevolutTransactionMerchant {
 
 	private String country;
 
-	public RevolutTransactionMerchant() {
+	public RevolutMerchant() {
 	}
 
-	public RevolutTransactionMerchant(String name, String city, String categoryCode, String country) {
+	public RevolutMerchant(String name, String city, String categoryCode, String country) {
 		this.name = name;
 		this.city = city;
 		this.categoryCode = categoryCode;

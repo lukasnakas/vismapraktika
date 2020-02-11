@@ -10,19 +10,24 @@ public class RevolutTransactionLegs {
 	@JsonProperty("account_id")
 	private String accountId;
 
+	private RevolutCounterparty counterparty;
 	private double amount;
 	private String currency;
 	private String description;
+	private double balance;
 
 	public RevolutTransactionLegs() {
 	}
 
-	public RevolutTransactionLegs(String id, String accountId, double amount, String currency, String description) {
+	public RevolutTransactionLegs(String id, String accountId, RevolutCounterparty counterparty,
+								  double amount, String currency, String description, double balance) {
 		this.id = id;
 		this.accountId = accountId;
+		this.counterparty = counterparty;
 		this.amount = amount;
 		this.currency = currency;
 		this.description = description;
+		this.balance = balance;
 	}
 
 	public String getId() {
@@ -39,6 +44,14 @@ public class RevolutTransactionLegs {
 
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
+	}
+
+	public RevolutCounterparty getCounterparty() {
+		return counterparty;
+	}
+
+	public void setCounterparty(RevolutCounterparty counterparty) {
+		this.counterparty = counterparty;
 	}
 
 	public double getAmount() {
@@ -63,5 +76,13 @@ public class RevolutTransactionLegs {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 }

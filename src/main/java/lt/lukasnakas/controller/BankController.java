@@ -2,7 +2,7 @@ package lt.lukasnakas.controller;
 
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.model.danske.DanskeTransaction;
+import lt.lukasnakas.model.revolut.RevolutPayment;
 import lt.lukasnakas.model.revolut.RevolutTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.BankService;
@@ -38,8 +38,8 @@ public class BankController {
 	}
 
 	@PostMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<DanskeTransaction> addTransaction(@RequestBody DanskeTransaction danskeTransaction){
-		return new ResponseEntity<>(bankService.postDanskeTransaction(danskeTransaction), HttpStatus.OK);
+	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody){
+		return new ResponseEntity<>(bankService.postTransaction(paymentBody), HttpStatus.OK);
 	}
 
 }

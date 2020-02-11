@@ -2,22 +2,24 @@ package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.RevolutAccount;
+import lt.lukasnakas.model.revolut.RevolutPayment;
 import lt.lukasnakas.model.revolut.RevolutTransaction;
 import lt.lukasnakas.service.AccountService;
+import lt.lukasnakas.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RevolutService implements AccountService {
+public class RevolutService implements AccountService, TransactionService {
     @Autowired
     private RevolutServiceConfiguration revolutServiceConfiguration;
 
@@ -74,10 +76,38 @@ public class RevolutService implements AccountService {
         return getParsedTransactionsList(responseEntity.getBody());
     }
 
+    public Transaction postTransaction(Payment payment){
+        ResponseEntity<RevolutTransaction> responseEntity;
+
+        try{
+            String accessToken = revolutServiceConfiguration.getAccessToken();
+            responseEntity = restTemplate.exchange(
+                    revolutServiceConfiguration.getUrlAccountPayment(),
+                    HttpMethod.POST,
+                    getRequestEntityWithBodyParams(accessToken, payment),
+                    RevolutTransaction.class);
+        } catch (HttpClientErrorException.Unauthorized e){
+            String accessToken = revolutTokenRenewalService.generateAccessToken();
+            responseEntity = restTemplate.exchange(
+                    revolutServiceConfiguration.getUrlAccountPayment(),
+                    HttpMethod.POST,
+                    getRequestEntityWithBodyParams(accessToken, payment),
+                    RevolutTransaction.class);
+        }
+
+        return responseEntity.getBody();
+    }
+
     private HttpEntity getRequestEntity(String accessToken) {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
         return new HttpEntity(httpHeaders);
+    }
+
+    private HttpEntity getRequestEntityWithBodyParams(String accessToken, Payment payment){
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setBearerAuth(accessToken);
+        return new HttpEntity(payment, httpHeaders);
     }
 
     public List<Account> getParsedAccountList(List<? extends Account> unparsedAccountsList){
@@ -86,5 +116,9 @@ public class RevolutService implements AccountService {
 
     public List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList){
         return new ArrayList<>(unparsedTransactionsList);
+    }
+
+    public String getBankName(){
+        return revolutServiceConfiguration.getName();
     }
 }
