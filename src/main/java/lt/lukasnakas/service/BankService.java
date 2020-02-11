@@ -47,11 +47,11 @@ public class BankService {
 		String bankName = getBankName(paymentBody);
 
 		if(bankName != null)
-			return executeTransaction(bankName, paymentBody);
+			return executeTransactionInSpecificBank(bankName, paymentBody);
 		return null;
 	}
 
-	private Transaction executeTransaction(String bankName, String paymentBody){
+	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody){
 		if (bankName.equalsIgnoreCase(danskeService.getBankName()))
 			return danskeService.postTransaction(convertJsonToPaymentObject(paymentBody, DanskePayment.class));
 		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
@@ -60,11 +60,11 @@ public class BankService {
 			return null;
 	}
 
-	private Payment convertJsonToPaymentObject(String paymentBody, Class paymentClass){
+	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass){
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(paymentBody);
-			return (Payment) mapper.convertValue(jsonNode, paymentClass);
+			return mapper.convertValue(jsonNode, paymentClass);
 		} catch (JsonProcessingException e) {
 			logger.warn(e.getMessage());
 		}

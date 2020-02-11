@@ -23,13 +23,24 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
     private RestTemplate restTemplate;
 
     public String generateAccessToken(){
-        ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(
-                revolutServiceConfiguration.getUrlAuth(),
-                getRequestBodyParams(),
-                RevolutAccessToken.class);
-        String newAccessToken = response.getBody().getAccessToken();
-        revolutServiceConfiguration.setAccessToken(newAccessToken);
-        logger.info("New access token: {}", newAccessToken);
+        String newAccessToken = null;
+
+        try {
+            ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(
+                    revolutServiceConfiguration.getUrlAuth(),
+                    getRequestBodyParams(),
+                    RevolutAccessToken.class);
+
+            if(response.getBody() != null) {
+                newAccessToken = response.getBody().getAccessToken();
+                revolutServiceConfiguration.setAccessToken(newAccessToken);
+                logger.info("{} new access token: {}", revolutServiceConfiguration.getName(), newAccessToken);
+            }
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+
         return newAccessToken;
     }
 

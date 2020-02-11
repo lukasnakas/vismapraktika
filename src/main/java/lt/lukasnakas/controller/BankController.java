@@ -2,7 +2,6 @@ package lt.lukasnakas.controller;
 
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -8,6 +8,8 @@ import lt.lukasnakas.model.danske.DanskeAccount;
 import lt.lukasnakas.model.danske.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -19,6 +21,8 @@ import java.util.List;
 
 @Service
 public class DanskeService implements AccountService, TransactionService {
+    private static final Logger logger = LoggerFactory.getLogger(DanskeService.class);
+
     @Autowired
     private DanskeServiceConfiguration danskeServiceConfiguration;
 
@@ -48,6 +52,9 @@ public class DanskeService implements AccountService, TransactionService {
                     HttpMethod.GET,
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<DanskeAccount>>() {});
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return new ArrayList<>();
         }
 
         return getParsedAccountList(responseEntity.getBody());
@@ -70,6 +77,9 @@ public class DanskeService implements AccountService, TransactionService {
                     HttpMethod.GET,
                     getRequestEntity(accessToken),
                     new ParameterizedTypeReference<List<DanskeTransaction>>() {});
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return new ArrayList<>();
         }
 
         return getParsedTransactionsList(responseEntity.getBody());
@@ -92,6 +102,9 @@ public class DanskeService implements AccountService, TransactionService {
                     HttpMethod.POST,
                     getRequestEntityWithBodyParams(accessToken, payment),
                     DanskeTransaction.class);
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
         }
 
         return responseEntity.getBody();
