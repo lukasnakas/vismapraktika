@@ -1,22 +1,15 @@
-package lt.lukasnakas.model.revolut;
+package lt.lukasnakas.model.revolut.transaction;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.model.revolut.RevolutCard;
 
-public class RevolutTransaction extends Transaction {
+public class RevolutTransaction extends RevolutTransactionBase {
 
 	private String type;
-	private String state;
-
-	@JsonProperty("created_at")
-	private String createdAt;
 
 	@JsonProperty("updated_at")
 	private String updatedAt;
-
-	@JsonProperty("completed_at")
-	private String completedAt;
 
 	private RevolutMerchant merchant;
 	private RevolutTransactionLegs[] legs;
@@ -25,16 +18,12 @@ public class RevolutTransaction extends Transaction {
 	public RevolutTransaction() {
 	}
 
-	public RevolutTransaction(String id, String type, String state,
-							  String createdAt, String updatedAt, String completedAt,
-							  RevolutMerchant merchant, RevolutTransactionLegs[] legs,
+	public RevolutTransaction(String id, String state, String createdAt, String completedAt, String type,
+							  String updatedAt, RevolutMerchant merchant, RevolutTransactionLegs[] legs,
 							  RevolutCard card) {
-		super(id);
+		super(id, state, createdAt, completedAt);
 		this.type = type;
-		this.state = state;
-		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.completedAt = completedAt;
 		this.merchant = merchant;
 		this.legs = legs;
 		this.card = card;
@@ -48,36 +37,12 @@ public class RevolutTransaction extends Transaction {
 		this.type = type;
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
 	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public String getCompletedAt() {
-		return completedAt;
-	}
-
-	public void setCompletedAt(String completedAt) {
-		this.completedAt = completedAt;
 	}
 
 	public RevolutMerchant getMerchant() {

@@ -4,8 +4,9 @@ import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.model.revolut.RevolutAccount;
-import lt.lukasnakas.model.revolut.RevolutTransaction;
+import lt.lukasnakas.model.revolut.account.RevolutAccount;
+import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
+import lt.lukasnakas.model.revolut.transaction.RevolutTransactionBase;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
 import org.slf4j.Logger;
@@ -86,7 +87,7 @@ public class RevolutService implements AccountService, TransactionService {
     }
 
     public Transaction postTransaction(Payment payment){
-        ResponseEntity<RevolutTransaction> responseEntity;
+        ResponseEntity<RevolutTransactionBase> responseEntity;
 
         try{
             String accessToken = revolutServiceConfiguration.getAccessToken();
@@ -94,14 +95,14 @@ public class RevolutService implements AccountService, TransactionService {
                     revolutServiceConfiguration.getUrlAccountPayment(),
                     HttpMethod.POST,
                     getRequestEntityWithBodyParams(accessToken, payment),
-                    RevolutTransaction.class);
+                    RevolutTransactionBase.class);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = revolutTokenRenewalService.generateAccessToken();
             responseEntity = restTemplate.exchange(
                     revolutServiceConfiguration.getUrlAccountPayment(),
                     HttpMethod.POST,
                     getRequestEntityWithBodyParams(accessToken, payment),
-                    RevolutTransaction.class);
+                    RevolutTransactionBase.class);
         } catch (Exception e){
             LOGGER.error(e.getMessage());
             return null;

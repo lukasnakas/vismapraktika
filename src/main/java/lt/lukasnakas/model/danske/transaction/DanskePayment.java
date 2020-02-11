@@ -1,4 +1,4 @@
-package lt.lukasnakas.model.danske;
+package lt.lukasnakas.model.danske.transaction;
 
 import lt.lukasnakas.model.Payment;
 

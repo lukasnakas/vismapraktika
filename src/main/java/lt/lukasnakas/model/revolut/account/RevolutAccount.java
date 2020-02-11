@@ -1,4 +1,4 @@
-package lt.lukasnakas.model.revolut;
+package lt.lukasnakas.model.revolut.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Account;
@@ -18,7 +18,8 @@ public class RevolutAccount extends Account {
     public RevolutAccount() {
     }
 
-    public RevolutAccount(String id, String name, double balance, String currency, String state, boolean publicAccount, Date createdAt, Date updatedAt) {
+    public RevolutAccount(String id, String name, double balance, String currency, String state,
+                          boolean publicAccount, Date createdAt, Date updatedAt) {
         super(id);
         this.name = name;
         this.balance = balance;

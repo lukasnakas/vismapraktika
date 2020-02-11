@@ -1,4 +1,4 @@
-package lt.lukasnakas.model.revolut;
+package lt.lukasnakas.model.revolut.transaction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Payment;

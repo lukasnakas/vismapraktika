@@ -1,4 +1,4 @@
-package lt.lukasnakas.model.danske;
+package lt.lukasnakas.model.danske.transaction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Transaction;
