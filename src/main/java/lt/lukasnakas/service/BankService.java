@@ -46,17 +46,21 @@ public class BankService {
 	public Transaction postTransaction(String paymentBody){
 		String bankName = getBankName(paymentBody);
 
-		if(bankName != null) {
-			if (bankName.equalsIgnoreCase(danskeService.getBankName()))
-				return danskeService.postTransaction(convertJsonToPayment(paymentBody, DanskePayment.class));
-			else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
-				return revolutService.postTransaction(convertJsonToPayment(paymentBody, RevolutPayment.class));
-		}
-
+		if(bankName != null)
+			executeTransaction(bankName, paymentBody);
 		return null;
 	}
 
-	private Payment convertJsonToPayment(String paymentBody, Class paymentClass){
+	private Transaction executeTransaction(String bankName, String paymentBody){
+		if (bankName.equalsIgnoreCase(danskeService.getBankName()))
+			return danskeService.postTransaction(convertJsonToPaymentObject(paymentBody, DanskePayment.class));
+		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
+			return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutPayment.class));
+		else
+			return null;
+	}
+
+	private Payment convertJsonToPaymentObject(String paymentBody, Class paymentClass){
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(paymentBody);
