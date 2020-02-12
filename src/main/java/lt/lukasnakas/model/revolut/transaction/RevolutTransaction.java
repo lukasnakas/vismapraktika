@@ -2,31 +2,30 @@ package lt.lukasnakas.model.revolut.transaction;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lt.lukasnakas.model.revolut.RevolutCard;
 
 public class RevolutTransaction extends RevolutTransactionBase {
 
 	private String type;
 
+	@JsonProperty("request_id")
+	private String requestId;
+
 	@JsonProperty("updated_at")
 	private String updatedAt;
-
-	private RevolutMerchant merchant;
+	private String reference;
 	private RevolutTransactionLegs[] legs;
-	private RevolutCard card;
 
 	public RevolutTransaction() {
 	}
 
 	public RevolutTransaction(String id, String state, String createdAt, String completedAt, String type,
-							  String updatedAt, RevolutMerchant merchant, RevolutTransactionLegs[] legs,
-							  RevolutCard card) {
+							  String requestId, String updatedAt, String reference, RevolutTransactionLegs[] legs) {
 		super(id, state, createdAt, completedAt);
 		this.type = type;
+		this.requestId = requestId;
 		this.updatedAt = updatedAt;
-		this.merchant = merchant;
+		this.reference = reference;
 		this.legs = legs;
-		this.card = card;
 	}
 
 	public String getType() {
@@ -45,14 +44,6 @@ public class RevolutTransaction extends RevolutTransactionBase {
 		this.updatedAt = updatedAt;
 	}
 
-	public RevolutMerchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(RevolutMerchant merchant) {
-		this.merchant = merchant;
-	}
-
 	public RevolutTransactionLegs[] getLegs() {
 		return legs;
 	}
@@ -61,11 +52,19 @@ public class RevolutTransaction extends RevolutTransactionBase {
 		this.legs = legs;
 	}
 
-	public RevolutCard getCard() {
-		return card;
+	public String getRequestId() {
+		return requestId;
 	}
 
-	public void setCard(RevolutCard card) {
-		this.card = card;
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 }

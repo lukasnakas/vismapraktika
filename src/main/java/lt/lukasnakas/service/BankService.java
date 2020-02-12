@@ -8,6 +8,7 @@ import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.transaction.DanskePayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
+import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
 import lt.lukasnakas.service.danske.DanskeService;
 import lt.lukasnakas.service.revolut.RevolutService;
 import org.slf4j.Logger;
@@ -54,10 +55,14 @@ public class BankService {
 	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody){
 		if (bankName.equalsIgnoreCase(danskeService.getBankName()))
 			return danskeService.postTransaction(convertJsonToPaymentObject(paymentBody, DanskePayment.class));
-		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
-			return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutPayment.class));
-		else
-			return null;
+		else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
+			String paymentType = getPaymentType(paymentBody);
+			if(paymentType != null && paymentType.equalsIgnoreCase("\"payment\""))
+				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutPayment.class));
+			else if(paymentType != null && paymentType.equalsIgnoreCase("\"transfer\""))
+				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutTransfer.class));
+		}
+		return null;
 	}
 
 	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass){
@@ -73,10 +78,20 @@ public class BankService {
 
 	private String getBankName(String paymentBody){
 		ObjectMapper mapper = new ObjectMapper();
-
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("bankName").toString();
+		} catch (JsonProcessingException e) {
+			LOGGER.warn(e.getMessage());
+			return null;
+		}
+	}
+
+	private String getPaymentType(String paymentBody){
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode node = mapper.readTree(paymentBody);
+			return node.get("type").toString();
 		} catch (JsonProcessingException e) {
 			LOGGER.warn(e.getMessage());
 			return null;
