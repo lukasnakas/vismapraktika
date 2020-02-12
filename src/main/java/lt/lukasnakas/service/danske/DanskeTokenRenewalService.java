@@ -14,43 +14,43 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class DanskeTokenRenewalService implements TokenRenewalService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DanskeTokenRenewalService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DanskeTokenRenewalService.class);
 
-    @Autowired
-    private DanskeServiceConfiguration danskeServiceConfiguration;
+	@Autowired
+	private DanskeServiceConfiguration danskeServiceConfiguration;
 
-    @Autowired
-    private RestTemplate restTemplate;
+	@Autowired
+	private RestTemplate restTemplate;
 
-    public String generateAccessToken(){
-        String newAccessToken = null;
+	public String generateAccessToken() {
+		String newAccessToken = null;
 
-        try {
-            ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(
-                    danskeServiceConfiguration.getUrlAuth(),
-                    getRequestBodyParams(),
-                    DanskeAccessToken.class);
+		try {
+			ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(
+					danskeServiceConfiguration.getUrlAuth(),
+					getRequestBodyParams(),
+					DanskeAccessToken.class);
 
-            if(response.getBody() != null) {
-                newAccessToken = response.getBody().getAccessToken();
-                danskeServiceConfiguration.setAccessToken(newAccessToken);
-                LOGGER.info("{} new access token: {}", danskeServiceConfiguration.getName(), newAccessToken);
-            }
-        } catch (Exception e){
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+			if (response.getBody() != null) {
+				newAccessToken = response.getBody().getAccessToken();
+				danskeServiceConfiguration.setAccessToken(newAccessToken);
+				LOGGER.info("{} new access token: {}", danskeServiceConfiguration.getName(), newAccessToken);
+			}
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return null;
+		}
 
-        return newAccessToken;
-    }
+		return newAccessToken;
+	}
 
-    public MultiValueMap<String, String> getRequestBodyParams(){
-        MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+	public MultiValueMap<String, String> getRequestBodyParams() {
+		MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
 
-        bodyParams.add("ClientId", danskeServiceConfiguration.getClientId());
-        bodyParams.add("Secret", danskeServiceConfiguration.getSecret());
+		bodyParams.add("ClientId", danskeServiceConfiguration.getClientId());
+		bodyParams.add("Secret", danskeServiceConfiguration.getSecret());
 
-        return bodyParams;
-    }
+		return bodyParams;
+	}
 
 }

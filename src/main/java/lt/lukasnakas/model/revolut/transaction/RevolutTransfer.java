@@ -45,16 +45,4 @@ public class RevolutTransfer extends RevolutPaymentTransferBase {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	@Override
-	public String toString() {
-		return "RevolutTransfer{" +
-				"request_id='" + getRequestId() + '\'' +
-				", sourceAccountId='" + sourceAccountId + '\'' +
-				", targetAccountId='" + targetAccountId + '\'' +
-				", amount='" + getAmount() + '\'' +
-				", currency='" + getCurrency() + '\'' +
-				", description='" + description + '\'' +
-				'}';
-	}
 }

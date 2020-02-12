@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 import java.util.Map;
 
 @RestController
@@ -18,17 +18,17 @@ public class BankController {
 	private BankService bankService;
 
 	@GetMapping(value = "/accounts", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Map<String, Account>> getAllAccounts(){
+	public ResponseEntity<Map<String, Account>> getAllAccounts() {
 		return new ResponseEntity<>(bankService.getAccounts(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Map<String, Transaction>> getAllTransactions(){
+	public ResponseEntity<Map<String, Transaction>> getAllTransactions() {
 		return new ResponseEntity<>(bankService.getTransactions(), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody){
+	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody) {
 		return new ResponseEntity<>(bankService.postTransaction(paymentBody), HttpStatus.OK);
 	}
 

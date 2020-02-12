@@ -14,46 +14,46 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class RevolutTokenRenewalService implements TokenRenewalService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RevolutTokenRenewalService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RevolutTokenRenewalService.class);
 
-    @Autowired
-    private RevolutServiceConfiguration revolutServiceConfiguration;
+	@Autowired
+	private RevolutServiceConfiguration revolutServiceConfiguration;
 
-    @Autowired
-    private RestTemplate restTemplate;
+	@Autowired
+	private RestTemplate restTemplate;
 
-    public String generateAccessToken(){
-        String newAccessToken = null;
+	public String generateAccessToken() {
+		String newAccessToken = null;
 
-        try {
-            ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(
-                    revolutServiceConfiguration.getUrlAuth(),
-                    getRequestBodyParams(),
-                    RevolutAccessToken.class);
+		try {
+			ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(
+					revolutServiceConfiguration.getUrlAuth(),
+					getRequestBodyParams(),
+					RevolutAccessToken.class);
 
-            if(response.getBody() != null) {
-                newAccessToken = response.getBody().getAccessToken();
-                revolutServiceConfiguration.setAccessToken(newAccessToken);
-                LOGGER.info("{} new access token: {}", revolutServiceConfiguration.getName(), newAccessToken);
-            }
-        } catch (Exception e){
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+			if (response.getBody() != null) {
+				newAccessToken = response.getBody().getAccessToken();
+				revolutServiceConfiguration.setAccessToken(newAccessToken);
+				LOGGER.info("{} new access token: {}", revolutServiceConfiguration.getName(), newAccessToken);
+			}
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return null;
+		}
 
-        return newAccessToken;
-    }
+		return newAccessToken;
+	}
 
-    public MultiValueMap<String, String> getRequestBodyParams(){
-        MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
+	public MultiValueMap<String, String> getRequestBodyParams() {
+		MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
 
-        bodyParams.add("grant_type", revolutServiceConfiguration.getGrantType());
-        bodyParams.add("client_id", revolutServiceConfiguration.getClientId());
-        bodyParams.add("refresh_token", revolutServiceConfiguration.getRefreshToken());
-        bodyParams.add("client_assertion_type", revolutServiceConfiguration.getClientAssertionType());
-        bodyParams.add("client_assertion", revolutServiceConfiguration.getClientAssertion());
+		bodyParams.add("grant_type", revolutServiceConfiguration.getGrantType());
+		bodyParams.add("client_id", revolutServiceConfiguration.getClientId());
+		bodyParams.add("refresh_token", revolutServiceConfiguration.getRefreshToken());
+		bodyParams.add("client_assertion_type", revolutServiceConfiguration.getClientAssertionType());
+		bodyParams.add("client_assertion", revolutServiceConfiguration.getClientAssertion());
 
-        return bodyParams;
-    }
+		return bodyParams;
+	}
 
 }

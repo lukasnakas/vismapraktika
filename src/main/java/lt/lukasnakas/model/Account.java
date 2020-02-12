@@ -2,20 +2,20 @@ package lt.lukasnakas.model;
 
 public class Account {
 
-    private String id;
+	private String id;
 
-    public Account() {
-    }
+	public Account() {
+	}
 
-    public Account(String id) {
-        this.id = id;
-    }
+	public Account(String id) {
+		this.id = id;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 }
