@@ -40,18 +40,10 @@ public class DanskeService implements AccountService, TransactionService {
 
         try {
             String accessToken = danskeServiceConfiguration.getAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeAccount>>() {});
+            responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = danskeTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccounts(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeAccount>>() {});
+            responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (Exception e){
             LOGGER.error(e.getMessage());
             return new ArrayList<>();
@@ -65,18 +57,10 @@ public class DanskeService implements AccountService, TransactionService {
 
         try {
             String accessToken = danskeServiceConfiguration.getAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccountTransactions(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeTransaction>>() {});
+            responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = danskeTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccountTransactions(),
-                    HttpMethod.GET,
-                    getRequestEntity(accessToken),
-                    new ParameterizedTypeReference<List<DanskeTransaction>>() {});
+            responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (Exception e){
             LOGGER.error(e.getMessage());
             return new ArrayList<>();
@@ -90,18 +74,10 @@ public class DanskeService implements AccountService, TransactionService {
 
         try {
             String accessToken = danskeServiceConfiguration.getAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccountTransactions(),
-                    HttpMethod.POST,
-                    getRequestEntityWithBodyParams(accessToken, payment),
-                    DanskeTransaction.class);
+            responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (HttpClientErrorException.Unauthorized e){
             String accessToken = danskeTokenRenewalService.generateAccessToken();
-            responseEntity = restTemplate.exchange(
-                    danskeServiceConfiguration.getUrlAccountTransactions(),
-                    HttpMethod.POST,
-                    getRequestEntityWithBodyParams(accessToken, payment),
-                    DanskeTransaction.class);
+            responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (Exception e){
             LOGGER.error(e.getMessage());
             return null;
@@ -110,16 +86,40 @@ public class DanskeService implements AccountService, TransactionService {
         return responseEntity.getBody();
     }
 
-    private HttpEntity getRequestEntity(String accessToken){
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setBearerAuth(accessToken);
-        return new HttpEntity(httpHeaders);
+    private ResponseEntity<List<DanskeAccount>> getResponseEntityForAccounts(String accessToken){
+        return  restTemplate.exchange(
+                danskeServiceConfiguration.getUrlAccounts(),
+                HttpMethod.GET,
+                getHttpEntity(accessToken),
+                new ParameterizedTypeReference<List<DanskeAccount>>() {});
     }
 
-    public HttpEntity getRequestEntityWithBodyParams(String accessToken, Payment payment){
+    private ResponseEntity<List<DanskeTransaction>> getResponseEntityForTransactions(String accessToken){
+        return  restTemplate.exchange(
+                danskeServiceConfiguration.getUrlAccountTransactions(),
+                HttpMethod.GET,
+                getHttpEntity(accessToken),
+                new ParameterizedTypeReference<List<DanskeTransaction>>() {});
+    }
+
+    private ResponseEntity<DanskeTransaction> getResponseEntityForTransaction(String accessToken, Payment payment){
+        return  restTemplate.exchange(
+                danskeServiceConfiguration.getUrlAccountTransactions(),
+                HttpMethod.POST,
+                getHttpEntity(accessToken, payment),
+                DanskeTransaction.class);
+    }
+
+    private HttpEntity<String> getHttpEntity(String accessToken){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
-        return new HttpEntity(payment, httpHeaders);
+        return new HttpEntity<>(httpHeaders);
+    }
+
+    private HttpEntity<?> getHttpEntity(String accessToken, Payment payment){
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setBearerAuth(accessToken);
+        return new HttpEntity<>(payment, httpHeaders);
     }
 
     public List<Account> getParsedAccountList(List<? extends Account> unparsedAccoutsList){
