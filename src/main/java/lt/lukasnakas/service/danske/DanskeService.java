@@ -1,6 +1,7 @@
 package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
+import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
@@ -144,5 +145,13 @@ public class DanskeService implements AccountService, TransactionService {
 		if (danskePayment.getTemplate() == null) return false;
 		if (danskePayment.getAmount() <= 0) return false;
 		return true;
+	}
+
+	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment){
+		DanskePayment danskePayment = (DanskePayment) payment;
+		if (danskePayment.getBankName() == null) return new TransactionError("bankName");
+		else if (danskePayment.getTemplate() == null) return new TransactionError("template");
+		else if (danskePayment.getAmount() <= 0) return new TransactionError("amount");
+		else return null;
 	}
 }

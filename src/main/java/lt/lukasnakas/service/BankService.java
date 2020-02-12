@@ -3,6 +3,7 @@ package lt.lukasnakas.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
@@ -96,17 +97,21 @@ public class BankService {
 	private Transaction executeRevolutTransactionIfValid(Payment payment) {
 		if (revolutService.isPaymentValid(payment))
 			return revolutService.postTransaction(payment);
-		else
-			LOGGER.error("Invalid revolut payment data");
-		return null;
+		else {
+			TransactionError transactionError = revolutService.getErrorWithFirstMissingParamFromPayment(payment);
+			LOGGER.error(transactionError.getMessage());
+			return transactionError;
+		}
 	}
 
 	private Transaction executeDanskeTransactionIfValid(Payment payment) {
 		if (danskeService.isPaymentValid(payment))
 			return danskeService.postTransaction(payment);
-		else
-			LOGGER.error("Invalid danske payment data");
-		return null;
+		else {
+			TransactionError transactionError = danskeService.getErrorWithFirstMissingParamFromPayment(payment);
+			LOGGER.error(transactionError.getMessage());
+			return transactionError;
+		}
 	}
 
 
