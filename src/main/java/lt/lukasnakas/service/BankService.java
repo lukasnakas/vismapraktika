@@ -75,11 +75,17 @@ public class BankService {
 	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody){
 		if (bankName.equalsIgnoreCase(danskeService.getBankName()))
 			return danskeService.postTransaction(convertJsonToPaymentObject(paymentBody, DanskePayment.class));
-		else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
-			String paymentType = getPaymentType(paymentBody);
-			if(paymentType != null && paymentType.equalsIgnoreCase("\"payment\""))
+		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
+			return executeSpecificRevolutTransactionType(paymentBody);
+		return null;
+	}
+
+	private Transaction executeSpecificRevolutTransactionType(String paymentBody){
+		String paymentType = getPaymentType(paymentBody);
+		if(paymentType != null) {
+			if (paymentType.equalsIgnoreCase("\"payment\""))
 				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutPayment.class));
-			else if(paymentType != null && paymentType.equalsIgnoreCase("\"transfer\""))
+			else if (paymentType.equalsIgnoreCase("\"transfer\""))
 				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutTransfer.class));
 		}
 		return null;
