@@ -48,7 +48,7 @@ public class BankService {
 		return accountsMap;
 	}
 
-	public List<Transaction> getAllTransactionsList(){
+	private List<Transaction> getAllTransactionsList(){
 		List<Transaction> transactionsList = new ArrayList<>();
 		transactionsList.addAll(danskeService.retrieveTransactions());
 		transactionsList.addAll(revolutService.retrieveTransactions());
