@@ -11,13 +11,10 @@ import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
 import lt.lukasnakas.service.danske.DanskeService;
 import lt.lukasnakas.service.revolut.RevolutService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +43,6 @@ public class BankService {
 
 		for(Account account : getAllAccountsList())
 			accountsMap.put(account.getId(), account);
-
 		return accountsMap;
 	}
 
@@ -62,7 +58,6 @@ public class BankService {
 
 		for(Transaction transaction : getAllTransactionsList())
 			transactionsMap.put(transaction.getId(), transaction);
-
 		return transactionsMap;
 	}
 
@@ -71,17 +66,13 @@ public class BankService {
 
 		if(bankName != null)
 			return executeTransactionInSpecificBank(bankName, paymentBody);
-
 		return null;
 	}
 
 	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody){
 		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
 			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
-			if(danskeService.isPaymentValid(payment))
-				return danskeService.postTransaction(payment);
-			else
-				LOGGER.error("Invalid danske payment data");
+			return executeDanskeTransactionIfValid(payment);
 		}
 		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
 			return executeSpecificRevolutTransactionType(paymentBody);
@@ -93,21 +84,32 @@ public class BankService {
 		if(paymentType != null) {
 			if (paymentType.equalsIgnoreCase("\"payment\"")) {
 				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
-				if(revolutService.isPaymentValid(payment))
-					return revolutService.postTransaction(payment);
-				else
-					LOGGER.error("Invalid revolut payment data");
+				return executeRevolutTransactionIfValid(payment);
 			}
 			else if (paymentType.equalsIgnoreCase("\"transfer\"")) {
 				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutTransfer.class);
-				if(revolutService.isPaymentValid(payment))
-					return revolutService.postTransaction(payment);
-				else
-					LOGGER.error("Invalid revolut transfer data");
+				return executeRevolutTransactionIfValid(payment);
 			}
 		}
 		return null;
 	}
+
+	private Transaction executeRevolutTransactionIfValid(Payment payment){
+		if(revolutService.isPaymentValid(payment))
+			return revolutService.postTransaction(payment);
+		else
+			LOGGER.error("Invalid revolut payment data");
+		return null;
+	}
+
+	private Transaction executeDanskeTransactionIfValid(Payment payment){
+		if(danskeService.isPaymentValid(payment))
+			return danskeService.postTransaction(payment);
+		else
+			LOGGER.error("Invalid danske payment data");
+		return null;
+	}
+
 
 	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass){
 		ObjectMapper mapper = new ObjectMapper();
