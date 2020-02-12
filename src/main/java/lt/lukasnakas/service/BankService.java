@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BankService {
@@ -30,18 +32,36 @@ public class BankService {
 	@Autowired
 	private RevolutService revolutService;
 
-	public List<Account> getAccounts(){
+	private List<Account> getAllAccountsList(){
 		List<Account> accountsList = new ArrayList<>();
 		accountsList.addAll(danskeService.retrieveAccounts());
 		accountsList.addAll(revolutService.retrieveAccounts());
 		return accountsList;
 	}
 
-	public List<Transaction> getTransactions(){
+	public Map<String, Account> getAccounts(){
+		Map<String, Account> accountsMap = new HashMap<>();
+
+		for(Account account : getAllAccountsList())
+			accountsMap.put(account.getId(), account);
+
+		return accountsMap;
+	}
+
+	public List<Transaction> getAllTransactionsList(){
 		List<Transaction> transactionsList = new ArrayList<>();
 		transactionsList.addAll(danskeService.retrieveTransactions());
 		transactionsList.addAll(revolutService.retrieveTransactions());
 		return transactionsList;
+	}
+
+	public Map<String, Transaction> getTransactions(){
+		Map<String, Transaction> transactionsMap = new HashMap<>();
+
+		for(Transaction transaction : getAllTransactionsList())
+			transactionsMap.put(transaction.getId(), transaction);
+
+		return transactionsMap;
 	}
 
 	public Transaction postTransaction(String paymentBody){

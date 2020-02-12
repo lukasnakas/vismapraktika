@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -17,12 +18,12 @@ public class BankController {
 	private BankService bankService;
 
 	@GetMapping(value = "/accounts", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<List<Account>> getAllAccounts(){
+	public ResponseEntity<Map<String, Account>> getAllAccounts(){
 		return new ResponseEntity<>(bankService.getAccounts(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<List<Transaction>> getAllTransactions(){
+	public ResponseEntity<Map<String, Transaction>> getAllTransactions(){
 		return new ResponseEntity<>(bankService.getTransactions(), HttpStatus.OK);
 	}
 
