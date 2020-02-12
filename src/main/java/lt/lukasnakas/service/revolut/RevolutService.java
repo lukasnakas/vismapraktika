@@ -5,6 +5,7 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
+import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransactionBase;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
@@ -147,5 +148,38 @@ public class RevolutService implements AccountService, TransactionService {
 
     public String getBankName(){
         return revolutServiceConfiguration.getName();
+    }
+
+    public boolean isPaymentValid(Payment payment){
+        if(payment.getClass() == RevolutPayment.class) {
+            RevolutPayment revolutPayment = (RevolutPayment) payment;
+            return isRevolutPaymentValid(revolutPayment);
+        }
+        else{
+            RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
+            return isRevolutTransferValid(revolutTransfer);
+        }
+    }
+
+    private boolean isRevolutPaymentValid(RevolutPayment revolutPayment){
+        if (revolutPayment.getRequestId() == null) return false;
+        if (revolutPayment.getAccountId() == null) return false;
+        if(revolutPayment.getReceiver() == null) return false;
+        if (revolutPayment.getReceiver().getAccountId() == null) return false;
+        if (revolutPayment.getReceiver().getCounterPartyId() == null) return false;
+        if (revolutPayment.getReference() == null) return false;
+        if (revolutPayment.getCurrency() == null) return false;
+        if (revolutPayment.getAmount() <= 0) return false;
+        return true;
+    }
+
+    private boolean isRevolutTransferValid(RevolutTransfer revolutTransfer){
+        if(revolutTransfer.getRequestId() == null) return false;
+        if(revolutTransfer.getSourceAccountId() == null) return false;
+        if(revolutTransfer.getTargetAccountId() == null) return false;
+        if(revolutTransfer.getDescription() == null) return false;
+        if(revolutTransfer.getCurrency() == null) return false;
+        if(revolutTransfer.getAmount() <= 0) return false;
+        return true;
     }
 }

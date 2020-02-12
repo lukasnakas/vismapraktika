@@ -11,10 +11,13 @@ import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
 import lt.lukasnakas.service.danske.DanskeService;
 import lt.lukasnakas.service.revolut.RevolutService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,12 +71,18 @@ public class BankService {
 
 		if(bankName != null)
 			return executeTransactionInSpecificBank(bankName, paymentBody);
+
 		return null;
 	}
 
 	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody){
-		if (bankName.equalsIgnoreCase(danskeService.getBankName()))
-			return danskeService.postTransaction(convertJsonToPaymentObject(paymentBody, DanskePayment.class));
+		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
+			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
+			if(danskeService.isPaymentValid(payment))
+				return danskeService.postTransaction(payment);
+			else
+				LOGGER.error("Invalid danske payment data");
+		}
 		else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
 			return executeSpecificRevolutTransactionType(paymentBody);
 		return null;
@@ -82,10 +91,20 @@ public class BankService {
 	private Transaction executeSpecificRevolutTransactionType(String paymentBody){
 		String paymentType = getPaymentType(paymentBody);
 		if(paymentType != null) {
-			if (paymentType.equalsIgnoreCase("\"payment\""))
-				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutPayment.class));
-			else if (paymentType.equalsIgnoreCase("\"transfer\""))
-				return revolutService.postTransaction(convertJsonToPaymentObject(paymentBody, RevolutTransfer.class));
+			if (paymentType.equalsIgnoreCase("\"payment\"")) {
+				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
+				if(revolutService.isPaymentValid(payment))
+					return revolutService.postTransaction(payment);
+				else
+					LOGGER.error("Invalid revolut payment data");
+			}
+			else if (paymentType.equalsIgnoreCase("\"transfer\"")) {
+				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutTransfer.class);
+				if(revolutService.isPaymentValid(payment))
+					return revolutService.postTransaction(payment);
+				else
+					LOGGER.error("Invalid revolut transfer data");
+			}
 		}
 		return null;
 	}
@@ -106,10 +125,12 @@ public class BankService {
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("bankName").toString();
-		} catch (JsonProcessingException e) {
+		} catch (NullPointerException e){
+			LOGGER.error("Parameter \"bankName\" is invalid or missing");
+		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
-			return null;
 		}
+		return null;
 	}
 
 	private String getPaymentType(String paymentBody){
@@ -117,10 +138,12 @@ public class BankService {
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("type").toString();
-		} catch (JsonProcessingException e) {
+		} catch (NullPointerException e){
+			LOGGER.error("Parameter \"type\" is invalid or missing");
+		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
-			return null;
 		}
+		return null;
 	}
 
 }

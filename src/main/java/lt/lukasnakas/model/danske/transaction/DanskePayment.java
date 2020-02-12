@@ -31,4 +31,13 @@ public class DanskePayment extends Payment {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+
+	@Override
+	public String toString() {
+		return "DanskePayment{" +
+				"template='" + template + '\'' +
+				", amount=" + amount +
+				", bankName=" + getBankName() +
+				'}';
+	}
 }

@@ -8,4 +8,5 @@ public interface TransactionService {
 	List<Transaction> retrieveTransactions();
 	Transaction postTransaction(Payment payment);
 	List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList);
+	boolean isPaymentValid(Payment payment);
 }

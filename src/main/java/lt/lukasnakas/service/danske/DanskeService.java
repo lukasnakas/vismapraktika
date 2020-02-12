@@ -5,6 +5,7 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
+import lt.lukasnakas.model.danske.transaction.DanskePayment;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
@@ -132,5 +133,13 @@ public class DanskeService implements AccountService, TransactionService {
 
     public String getBankName(){
         return danskeServiceConfiguration.getName();
+    }
+
+    public boolean isPaymentValid(Payment payment){
+        DanskePayment danskePayment = (DanskePayment) payment;
+        if(danskePayment.getBankName() == null) return false;
+        if(danskePayment.getTemplate() == null) return false;
+        if(danskePayment.getAmount() <= 0)      return false;
+        return true;
     }
 }
