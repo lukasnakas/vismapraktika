@@ -10,38 +10,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class RevolutPaymentValidationService implements PaymentValidationService {
 
-	public boolean isValid(Payment payment){
+	public boolean isValid(Payment payment) {
 		if (payment.getClass() == RevolutPayment.class) {
 			RevolutPayment revolutPayment = (RevolutPayment) payment;
 			return areRevolutPaymentParamsNotNull(revolutPayment);
-		}
-		else {
+		} else {
 			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
 			return areRevolutTransferParamsNotNull(revolutTransfer);
 		}
 	}
 
 	private boolean areRevolutPaymentParamsNotNull(RevolutPayment revolutPayment) {
-		return revolutPayment.getRequestId() == null &&
-				revolutPayment.getAccountId() == null &&
-				areRevolutReceiverParamsNotNull(revolutPayment.getReceiver()) &&
-				revolutPayment.getReference() == null &&
-				revolutPayment.getCurrency() == null &&
-				revolutPayment.getAmount() <= 0;
+		return revolutPayment.getRequestId() == null
+				&& revolutPayment.getAccountId() == null
+				&& areRevolutReceiverParamsNotNull(revolutPayment.getReceiver())
+				&& revolutPayment.getReference() == null
+				&& revolutPayment.getCurrency() == null
+				&& revolutPayment.getAmount() <= 0;
 	}
 
-	private boolean areRevolutReceiverParamsNotNull(RevolutReceiver revolutReceiver){
-		return revolutReceiver != null && revolutReceiver.getAccountId() != null &&
-				revolutReceiver.getCounterPartyId() != null;
+	private boolean areRevolutReceiverParamsNotNull(RevolutReceiver revolutReceiver) {
+		return revolutReceiver != null && revolutReceiver.getAccountId() != null
+				&& revolutReceiver.getCounterPartyId() != null;
 	}
 
 	private boolean areRevolutTransferParamsNotNull(RevolutTransfer revolutTransfer) {
-		return revolutTransfer.getRequestId() == null &&
-				revolutTransfer.getSourceAccountId() == null &&
-				revolutTransfer.getTargetAccountId() == null &&
-				revolutTransfer.getDescription() == null &&
-				revolutTransfer.getCurrency() == null &&
-				revolutTransfer.getAmount() <= 0;
+		return revolutTransfer.getRequestId() == null
+				&& revolutTransfer.getSourceAccountId() == null
+				&& revolutTransfer.getTargetAccountId() == null
+				&& revolutTransfer.getDescription() == null
+				&& revolutTransfer.getCurrency() == null
+				&& revolutTransfer.getAmount() <= 0;
 	}
 
 }

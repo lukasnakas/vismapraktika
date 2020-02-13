@@ -17,14 +17,13 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
 		if (payment.getClass() == RevolutPayment.class) {
 			RevolutPayment revolutPayment = (RevolutPayment) payment;
 			return new TransactionError(createMissingParamsList(revolutPayment));
-		}
-		else {
+		} else {
 			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
 			return new TransactionError(createMissingParamsList(revolutTransfer));
 		}
 	}
 
-	public List<String> createMissingParamsList(RevolutPayment revolutPayment){
+	public List<String> createMissingParamsList(RevolutPayment revolutPayment) {
 		List<String> missingParamsList = new ArrayList<>();
 
 		if (revolutPayment.getType() == null) missingParamsList.add("type");
@@ -34,7 +33,8 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
 		if (revolutPayment.getReceiver() == null) missingParamsList.add("receiver");
 		else {
 			if (revolutPayment.getReceiver().getAccountId() == null) missingParamsList.add("receiver.account_id");
-			if (revolutPayment.getReceiver().getCounterPartyId() == null) missingParamsList.add("receiver.counterparty_id");
+			if (revolutPayment.getReceiver().getCounterPartyId() == null)
+				missingParamsList.add("receiver.counterparty_id");
 		}
 
 		if (revolutPayment.getReference() == null) missingParamsList.add("reference");
@@ -44,7 +44,7 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
 		return missingParamsList;
 	}
 
-	public List<String> createMissingParamsList(RevolutTransfer revolutTransfer){
+	public List<String> createMissingParamsList(RevolutTransfer revolutTransfer) {
 		List<String> missingParamsList = new ArrayList<>();
 
 		if (revolutTransfer.getType() == null) missingParamsList.add("type");

@@ -12,12 +12,12 @@ import java.util.List;
 @Service
 public class DanskeTransactionErrorService implements TransactionErrorService {
 
-	public TransactionError getErrorWithAllMissingParamsFromPayment(Payment payment){
+	public TransactionError getErrorWithAllMissingParamsFromPayment(Payment payment) {
 		DanskePayment danskePayment = (DanskePayment) payment;
 		return new TransactionError(createMissingParamsList(danskePayment));
 	}
 
-	private List<String> createMissingParamsList(DanskePayment danskePayment){
+	private List<String> createMissingParamsList(DanskePayment danskePayment) {
 		List<String> missingParamsList = new ArrayList<>();
 
 		if (danskePayment.getTemplate() == null) missingParamsList.add("template");

@@ -17,7 +17,7 @@ public class TransactionError extends Transaction {
 		this.message = "Invalid or missing param: " + invalidKey;
 	}
 
-	public TransactionError(List<String> invalidKeys){
+	public TransactionError(List<String> invalidKeys) {
 		this.message = "Invalid or missing params: " + invalidKeys;
 	}
 

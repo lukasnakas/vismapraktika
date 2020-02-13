@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class DanskePaymentValidationService implements PaymentValidationService {
 
-	public boolean isValid(Payment payment){
+	public boolean isValid(Payment payment) {
 		DanskePayment danskePayment = (DanskePayment) payment;
 		return areParamsNotNull(danskePayment);
 	}
 
-	private boolean areParamsNotNull(DanskePayment danskePayment){
-		return danskePayment.getTemplate() != null &&
-				danskePayment.getAmount() != 0;
+	private boolean areParamsNotNull(DanskePayment danskePayment) {
+		return danskePayment.getTemplate() != null
+				&& danskePayment.getAmount() != 0;
 	}
 
 }
