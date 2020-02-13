@@ -6,7 +6,6 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
-import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransactionBase;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
@@ -33,6 +32,12 @@ public class RevolutService implements AccountService, TransactionService {
 
 	@Autowired
 	private RevolutTokenRenewalService revolutTokenRenewalService;
+
+	@Autowired
+	private RevolutPaymentValidationService revolutPaymentValidationService;
+
+	@Autowired
+	private RevolutTransactionErrorService revolutTransactionErrorService;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -149,72 +154,11 @@ public class RevolutService implements AccountService, TransactionService {
 	}
 
 	public boolean isPaymentValid(Payment payment) {
-		if (payment.getClass() == RevolutPayment.class) {
-			RevolutPayment revolutPayment = (RevolutPayment) payment;
-			return isRevolutPaymentValid(revolutPayment);
-		} else {
-			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
-			return isRevolutTransferValid(revolutTransfer);
-		}
-	}
-
-	private boolean isRevolutPaymentValid(RevolutPayment revolutPayment) {
-		if (revolutPayment.getRequestId() == null) return false;
-		if (revolutPayment.getAccountId() == null) return false;
-		if (revolutPayment.getReceiver() == null) return false;
-		if (revolutPayment.getReceiver().getAccountId() == null) return false;
-		if (revolutPayment.getReceiver().getCounterPartyId() == null) return false;
-		if (revolutPayment.getReference() == null) return false;
-		if (revolutPayment.getCurrency() == null) return false;
-		if (revolutPayment.getAmount() <= 0) return false;
-		return true;
-	}
-
-	private boolean isRevolutTransferValid(RevolutTransfer revolutTransfer) {
-		if (revolutTransfer.getRequestId() == null) return false;
-		if (revolutTransfer.getSourceAccountId() == null) return false;
-		if (revolutTransfer.getTargetAccountId() == null) return false;
-		if (revolutTransfer.getDescription() == null) return false;
-		if (revolutTransfer.getCurrency() == null) return false;
-		if (revolutTransfer.getAmount() <= 0) return false;
-		return true;
+		return revolutPaymentValidationService.isValid(payment);
 	}
 
 	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
-		if (payment.getClass() == RevolutPayment.class) {
-			RevolutPayment revolutPayment = (RevolutPayment) payment;
-			return getErrorWithFirstMissingParamFromRevolutPayment(revolutPayment);
-		} else {
-			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
-			return getErrorWithFirstMissingParamFromRevolutTransfer(revolutTransfer);
-		}
+		return revolutTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
 	}
 
-	public TransactionError getErrorWithFirstMissingParamFromRevolutPayment(Payment payment){
-		RevolutPayment revolutPayment = (RevolutPayment) payment;
-		if (revolutPayment.getBankName() == null) return new TransactionError("bankName");
-		else if (revolutPayment.getType() == null) return new TransactionError("type");
-		else if (revolutPayment.getRequestId() == null) return new TransactionError("request_id");
-		else if (revolutPayment.getAccountId() == null) return new TransactionError("account_id");
-		else if (revolutPayment.getReceiver() == null) return new TransactionError("receiver");
-		else if (revolutPayment.getReceiver().getAccountId() == null) return new TransactionError("receiver.account_id");
-		else if (revolutPayment.getReceiver().getCounterPartyId() == null) return new TransactionError("receiver.counterparty_id");
-		else if (revolutPayment.getReference() == null) return new TransactionError("reference");
-		else if (revolutPayment.getCurrency() == null) return new TransactionError("currency");
-		else if (revolutPayment.getAmount() <= 0) return new TransactionError("amount");
-		return null;
-	}
-
-	public TransactionError getErrorWithFirstMissingParamFromRevolutTransfer(Payment payment){
-		RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
-		if (revolutTransfer.getBankName() == null) return new TransactionError("bankName");
-		else if (revolutTransfer.getType() == null) return new TransactionError("type");
-		else if (revolutTransfer.getRequestId() == null) return new TransactionError("request_id");
-		else if (revolutTransfer.getDescription() == null) return new TransactionError("description'");
-		else if (revolutTransfer.getTargetAccountId() == null) return new TransactionError("target_account_id");
-		else if (revolutTransfer.getSourceAccountId() == null) return new TransactionError("source_account_id");
-		else if (revolutTransfer.getCurrency() == null) return new TransactionError("currency");
-		else if (revolutTransfer.getAmount() <= 0) return new TransactionError("amount");
-		return null;
-	}
 }

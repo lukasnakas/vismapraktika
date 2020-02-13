@@ -63,21 +63,17 @@ public class BankService {
 		return transactionsMap;
 	}
 
-	public Transaction postTransaction(String paymentBody) {
-		String bankName = getBankName(paymentBody);
-
-		if (bankName != null)
-			return executeTransactionInSpecificBank(bankName, paymentBody);
-		return null;
-	}
-
-	private Transaction executeTransactionInSpecificBank(String bankName, String paymentBody) {
+	public Transaction postTransaction(String paymentBody, String bankName) {
 		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
 			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
 			return executeDanskeTransactionIfValid(payment);
-		} else if (bankName.equalsIgnoreCase(revolutService.getBankName()))
+		} else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
 			return executeSpecificRevolutTransactionType(paymentBody);
-		return null;
+		}
+		TransactionError transactionError = new TransactionError("bankName");
+		String errorMsg = transactionError.toString();
+		LOGGER.error(errorMsg);
+		return transactionError;
 	}
 
 	private Transaction executeSpecificRevolutTransactionType(String paymentBody) {
@@ -99,7 +95,8 @@ public class BankService {
 			return revolutService.postTransaction(payment);
 		else {
 			TransactionError transactionError = revolutService.getErrorWithFirstMissingParamFromPayment(payment);
-			LOGGER.error(transactionError.getMessage());
+			String errorMsg = transactionError.toString();
+			LOGGER.error(errorMsg);
 			return transactionError;
 		}
 	}
@@ -109,7 +106,8 @@ public class BankService {
 			return danskeService.postTransaction(payment);
 		else {
 			TransactionError transactionError = danskeService.getErrorWithFirstMissingParamFromPayment(payment);
-			LOGGER.error(transactionError.getMessage());
+			String errorMsg = transactionError.toString();
+			LOGGER.error(errorMsg);
 			return transactionError;
 		}
 	}
@@ -126,26 +124,14 @@ public class BankService {
 		}
 	}
 
-	private String getBankName(String paymentBody) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode node = mapper.readTree(paymentBody);
-			return node.get("bankName").toString();
-		} catch (NullPointerException e) {
-			LOGGER.error("Parameter \"bankName\" is invalid or missing");
-		} catch (Exception e) {
-			LOGGER.warn(e.getMessage());
-		}
-		return null;
-	}
-
 	private String getPaymentType(String paymentBody) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("type").toString();
 		} catch (NullPointerException e) {
-			LOGGER.error("Parameter \"type\" is invalid or missing");
+			TransactionError transactionError = new TransactionError("type");
+			LOGGER.error(transactionError.toString());
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
 		}

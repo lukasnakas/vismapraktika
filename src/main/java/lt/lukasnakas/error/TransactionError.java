@@ -3,6 +3,8 @@ package lt.lukasnakas.error;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lt.lukasnakas.model.Transaction;
 
+import java.util.List;
+
 @JsonIgnoreProperties({"id"})
 public class TransactionError extends Transaction {
 
@@ -12,7 +14,11 @@ public class TransactionError extends Transaction {
 	}
 
 	public TransactionError(String invalidKey) {
-		this.message = "parameter '" + invalidKey + "' is invalid or missing";
+		this.message = "Invalid or missing param: " + invalidKey;
+	}
+
+	public TransactionError(List<String> invalidKeys){
+		this.message = "Invalid or missing params: " + invalidKeys;
 	}
 
 	public String getMessage() {
@@ -21,5 +27,12 @@ public class TransactionError extends Transaction {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "TransactionError{" +
+				"message='" + message + '\'' +
+				'}';
 	}
 }

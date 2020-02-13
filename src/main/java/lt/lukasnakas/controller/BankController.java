@@ -27,9 +27,9 @@ public class BankController {
 		return new ResponseEntity<>(bankService.getTransactions(), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/transactions", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody) {
-		return new ResponseEntity<>(bankService.postTransaction(paymentBody), HttpStatus.OK);
+	@PostMapping(value = "/transactions/{bankName}", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody, @PathVariable String bankName) {
+		return new ResponseEntity<>(bankService.postTransaction(paymentBody, bankName), HttpStatus.OK);
 	}
 
 }

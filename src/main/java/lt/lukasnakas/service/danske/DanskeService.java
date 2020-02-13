@@ -6,7 +6,6 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
-import lt.lukasnakas.model.danske.transaction.DanskePayment;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
@@ -31,6 +30,12 @@ public class DanskeService implements AccountService, TransactionService {
 
 	@Autowired
 	private DanskeTokenRenewalService danskeTokenRenewalService;
+
+	@Autowired
+	private DanskePaymentValidationService danskePaymentValidationService;
+
+	@Autowired
+	private DanskeTransactionErrorService danskeTransactionErrorService;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -140,18 +145,10 @@ public class DanskeService implements AccountService, TransactionService {
 	}
 
 	public boolean isPaymentValid(Payment payment) {
-		DanskePayment danskePayment = (DanskePayment) payment;
-		if (danskePayment.getBankName() == null) return false;
-		if (danskePayment.getTemplate() == null) return false;
-		if (danskePayment.getAmount() == 0) return false;
-		return true;
+		return danskePaymentValidationService.isValid(payment);
 	}
 
 	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment){
-		DanskePayment danskePayment = (DanskePayment) payment;
-		if (danskePayment.getBankName() == null) return new TransactionError("bankName");
-		else if (danskePayment.getTemplate() == null) return new TransactionError("template");
-		else if (danskePayment.getAmount() == 0) return new TransactionError("amount");
-		else return null;
+		return danskeTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
 	}
 }
