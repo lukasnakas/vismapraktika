@@ -2,6 +2,7 @@ package lt.lukasnakas.model.revolut.transaction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Payment;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public abstract class RevolutPaymentTransferBase extends Payment {
 
@@ -52,5 +53,9 @@ public abstract class RevolutPaymentTransferBase extends Payment {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public void generateRequestId(){
+		this.requestId = RandomStringUtils.randomAlphanumeric(40);
 	}
 }

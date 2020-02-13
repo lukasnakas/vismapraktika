@@ -27,7 +27,6 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
 		List<String> missingParamsList = new ArrayList<>();
 
 		if (revolutPayment.getType() == null) missingParamsList.add("type");
-		if (revolutPayment.getRequestId() == null) missingParamsList.add("request_id");
 		if (revolutPayment.getAccountId() == null) missingParamsList.add("account_id");
 
 		if (revolutPayment.getReceiver() == null) missingParamsList.add("receiver");
@@ -48,7 +47,6 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
 		List<String> missingParamsList = new ArrayList<>();
 
 		if (revolutTransfer.getType() == null) missingParamsList.add("type");
-		if (revolutTransfer.getRequestId() == null) missingParamsList.add("request_id");
 		if (revolutTransfer.getDescription() == null) missingParamsList.add("description'");
 		if (revolutTransfer.getTargetAccountId() == null) missingParamsList.add("target_account_id");
 		if (revolutTransfer.getSourceAccountId() == null) missingParamsList.add("source_account_id");

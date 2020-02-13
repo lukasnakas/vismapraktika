@@ -6,6 +6,7 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
+import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransactionBase;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
@@ -159,6 +160,29 @@ public class RevolutService implements AccountService, TransactionService {
 
 	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
 		return revolutTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
+	}
+
+	public Transaction executeTransactionIfValid(Payment payment) {
+		if (isPaymentValid(payment))
+			return postTransaction(getPaymentWithGeneratedRequestId(payment));
+		else {
+			TransactionError transactionError = getErrorWithFirstMissingParamFromPayment(payment);
+			String errorMsg = transactionError.toString();
+			LOGGER.error(errorMsg);
+			return transactionError;
+		}
+	}
+
+	private Payment getPaymentWithGeneratedRequestId(Payment payment){
+		if(payment.getClass() == RevolutPayment.class){
+			RevolutPayment revolutPayment = (RevolutPayment) payment;
+			revolutPayment.generateRequestId();
+			return revolutPayment;
+		} else{
+			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
+			revolutTransfer.generateRequestId();
+			return revolutTransfer;
+		}
 	}
 
 }

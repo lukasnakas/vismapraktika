@@ -21,12 +21,11 @@ public class RevolutPaymentValidationService implements PaymentValidationService
 	}
 
 	private boolean areRevolutPaymentParamsNotNull(RevolutPayment revolutPayment) {
-		return revolutPayment.getRequestId() == null
-				&& revolutPayment.getAccountId() == null
+		return revolutPayment.getAccountId() != null
 				&& areRevolutReceiverParamsNotNull(revolutPayment.getReceiver())
-				&& revolutPayment.getReference() == null
-				&& revolutPayment.getCurrency() == null
-				&& revolutPayment.getAmount() <= 0;
+				&& revolutPayment.getReference() != null
+				&& revolutPayment.getCurrency() != null
+				&& revolutPayment.getAmount() > 0;
 	}
 
 	private boolean areRevolutReceiverParamsNotNull(RevolutReceiver revolutReceiver) {
@@ -35,12 +34,11 @@ public class RevolutPaymentValidationService implements PaymentValidationService
 	}
 
 	private boolean areRevolutTransferParamsNotNull(RevolutTransfer revolutTransfer) {
-		return revolutTransfer.getRequestId() == null
-				&& revolutTransfer.getSourceAccountId() == null
-				&& revolutTransfer.getTargetAccountId() == null
-				&& revolutTransfer.getDescription() == null
-				&& revolutTransfer.getCurrency() == null
-				&& revolutTransfer.getAmount() <= 0;
+		return revolutTransfer.getSourceAccountId() != null
+				&& revolutTransfer.getTargetAccountId() != null
+				&& revolutTransfer.getDescription() != null
+				&& revolutTransfer.getCurrency() != null
+				&& revolutTransfer.getAmount() > 0;
 	}
 
 }

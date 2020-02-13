@@ -81,13 +81,16 @@ public class BankService {
 		if (paymentType != null) {
 			if (paymentType.equalsIgnoreCase("\"payment\"")) {
 				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
-				return executeRevolutTransactionIfValid(payment);
+				return revolutService.executeTransactionIfValid(payment);
 			} else if (paymentType.equalsIgnoreCase("\"transfer\"")) {
 				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutTransfer.class);
-				return executeRevolutTransactionIfValid(payment);
+				return revolutService.executeTransactionIfValid(payment);
 			}
 		}
-		return null;
+		TransactionError transactionError = new TransactionError("type");
+		String errorMsg = transactionError.toString();
+		LOGGER.error(errorMsg);
+		return transactionError;
 	}
 
 	private Transaction executeRevolutTransactionIfValid(Payment payment) {
@@ -130,12 +133,11 @@ public class BankService {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("type").toString();
 		} catch (NullPointerException e) {
-			TransactionError transactionError = new TransactionError("type");
-			LOGGER.error(transactionError.toString());
+			return null;
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
+			return null;
 		}
-		return null;
 	}
 
 }
