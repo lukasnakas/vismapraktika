@@ -48,6 +48,10 @@ public class BankService {
 		return accountsMap;
 	}
 
+	public Account getAccountById(String id){
+		return getAccounts().get(id);
+	}
+
 	private List<Transaction> getAllTransactionsList() {
 		List<Transaction> transactionsList = new ArrayList<>();
 		transactionsList.addAll(danskeService.retrieveTransactions());
@@ -61,6 +65,10 @@ public class BankService {
 		for (Transaction transaction : getAllTransactionsList())
 			transactionsMap.put(transaction.getId(), transaction);
 		return transactionsMap;
+	}
+
+	public Transaction getTransactionById(String id){
+		return getTransactions().get(id);
 	}
 
 	public Transaction postTransaction(String paymentBody, String bankName) {
