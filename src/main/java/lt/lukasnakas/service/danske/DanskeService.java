@@ -151,4 +151,15 @@ public class DanskeService implements AccountService, TransactionService {
 	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
 		return danskeTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
 	}
+
+	public Transaction executeTransactionIfValid(Payment payment) {
+		if (isPaymentValid(payment))
+			return postTransaction(payment);
+		else {
+			TransactionError transactionError = getErrorWithFirstMissingParamFromPayment(payment);
+			String errorMsg = transactionError.toString();
+			LOGGER.error(errorMsg);
+			return transactionError;
+		}
+	}
 }

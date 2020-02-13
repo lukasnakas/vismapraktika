@@ -66,7 +66,7 @@ public class BankService {
 	public Transaction postTransaction(String paymentBody, String bankName) {
 		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
 			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
-			return executeDanskeTransactionIfValid(payment);
+			return danskeService.executeTransactionIfValid(payment);
 		} else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
 			return executeSpecificRevolutTransactionType(paymentBody);
 		}
@@ -77,7 +77,7 @@ public class BankService {
 	}
 
 	private Transaction executeSpecificRevolutTransactionType(String paymentBody) {
-		String paymentType = getPaymentType(paymentBody);
+		String paymentType = revolutService.getPaymentType(paymentBody);
 		if (paymentType != null) {
 			if (paymentType.equalsIgnoreCase("\"payment\"")) {
 				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
@@ -93,29 +93,6 @@ public class BankService {
 		return transactionError;
 	}
 
-	private Transaction executeRevolutTransactionIfValid(Payment payment) {
-		if (revolutService.isPaymentValid(payment))
-			return revolutService.postTransaction(payment);
-		else {
-			TransactionError transactionError = revolutService.getErrorWithFirstMissingParamFromPayment(payment);
-			String errorMsg = transactionError.toString();
-			LOGGER.error(errorMsg);
-			return transactionError;
-		}
-	}
-
-	private Transaction executeDanskeTransactionIfValid(Payment payment) {
-		if (danskeService.isPaymentValid(payment))
-			return danskeService.postTransaction(payment);
-		else {
-			TransactionError transactionError = danskeService.getErrorWithFirstMissingParamFromPayment(payment);
-			String errorMsg = transactionError.toString();
-			LOGGER.error(errorMsg);
-			return transactionError;
-		}
-	}
-
-
 	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -126,18 +103,4 @@ public class BankService {
 			return null;
 		}
 	}
-
-	private String getPaymentType(String paymentBody) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode node = mapper.readTree(paymentBody);
-			return node.get("type").toString();
-		} catch (NullPointerException e) {
-			return null;
-		} catch (Exception e) {
-			LOGGER.warn(e.getMessage());
-			return null;
-		}
-	}
-
 }

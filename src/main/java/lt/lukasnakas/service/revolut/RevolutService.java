@@ -1,5 +1,7 @@
 package lt.lukasnakas.service.revolut;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.model.Account;
@@ -173,15 +175,28 @@ public class RevolutService implements AccountService, TransactionService {
 		}
 	}
 
-	private Payment getPaymentWithGeneratedRequestId(Payment payment){
-		if(payment.getClass() == RevolutPayment.class){
+	private Payment getPaymentWithGeneratedRequestId(Payment payment) {
+		if (payment.getClass() == RevolutPayment.class) {
 			RevolutPayment revolutPayment = (RevolutPayment) payment;
 			revolutPayment.generateRequestId();
 			return revolutPayment;
-		} else{
+		} else {
 			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
 			revolutTransfer.generateRequestId();
 			return revolutTransfer;
+		}
+	}
+
+	public String getPaymentType(String paymentBody) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode node = mapper.readTree(paymentBody);
+			return node.get("type").toString();
+		} catch (NullPointerException e) {
+			return null;
+		} catch (Exception e) {
+			LOGGER.warn(e.getMessage());
+			return null;
 		}
 	}
 
