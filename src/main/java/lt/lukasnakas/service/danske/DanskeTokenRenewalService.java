@@ -34,7 +34,7 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
 			if (response.getBody() != null) {
 				newAccessToken = response.getBody().getAccessToken();
 				danskeServiceConfiguration.setAccessToken(newAccessToken);
-				LOGGER.info("{} new access token: {}", danskeServiceConfiguration.getName(), newAccessToken);
+				LOGGER.info("Generated new {} access token [{}]", danskeServiceConfiguration.getName(), newAccessToken);
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

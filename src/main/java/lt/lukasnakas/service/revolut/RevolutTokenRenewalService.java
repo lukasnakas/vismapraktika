@@ -34,7 +34,7 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
 			if (response.getBody() != null) {
 				newAccessToken = response.getBody().getAccessToken();
 				revolutServiceConfiguration.setAccessToken(newAccessToken);
-				LOGGER.info("{} new access token: {}", revolutServiceConfiguration.getName(), newAccessToken);
+				LOGGER.info("Generated new {} access token [{}]", revolutServiceConfiguration.getName(), newAccessToken);
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

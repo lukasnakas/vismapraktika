@@ -57,6 +57,7 @@ public class DanskeService implements AccountService, TransactionService {
 			return new ArrayList<>();
 		}
 
+		log("GET", "accounts", responseEntity);
 		return getParsedAccountList(responseEntity.getBody());
 	}
 
@@ -74,6 +75,7 @@ public class DanskeService implements AccountService, TransactionService {
 			return new ArrayList<>();
 		}
 
+		log("GET", "transactions", responseEntity);
 		return getParsedTransactionsList(responseEntity.getBody());
 	}
 
@@ -91,7 +93,16 @@ public class DanskeService implements AccountService, TransactionService {
 			return null;
 		}
 
+		log("POST", "transaction", responseEntity);
 		return responseEntity.getBody();
+	}
+
+	private void log(String method, String object, ResponseEntity<?> responseEntity){
+		LOGGER.info("[{}] {} {} [Status Code: {}]",
+				danskeServiceConfiguration.getName(),
+				method,
+				object,
+				responseEntity.getStatusCode());
 	}
 
 	private ResponseEntity<List<DanskeAccount>> getResponseEntityForAccounts(String accessToken) {

@@ -62,6 +62,7 @@ public class RevolutService implements AccountService, TransactionService {
 			return new ArrayList<>();
 		}
 
+		log("GET", "accounts", responseEntity);
 		return getParsedAccountList(responseEntity.getBody());
 	}
 
@@ -79,6 +80,7 @@ public class RevolutService implements AccountService, TransactionService {
 			return new ArrayList<>();
 		}
 
+		log("GET", "transactions", responseEntity);
 		return getParsedTransactionsList(responseEntity.getBody());
 	}
 
@@ -96,7 +98,16 @@ public class RevolutService implements AccountService, TransactionService {
 			return null;
 		}
 
+		log("POST", "transaction", responseEntity);
 		return responseEntity.getBody();
+	}
+
+	private void log(String method, String object, ResponseEntity<?> responseEntity){
+		LOGGER.info("[{}] {} {} [Status Code: {}]",
+				revolutServiceConfiguration.getName(),
+				method,
+				object,
+				responseEntity.getStatusCode());
 	}
 
 	private ResponseEntity<List<RevolutAccount>> getResponseEntityForAccounts(String accessToken) {
@@ -192,10 +203,7 @@ public class RevolutService implements AccountService, TransactionService {
 		try {
 			JsonNode node = mapper.readTree(paymentBody);
 			return node.get("type").toString();
-		} catch (NullPointerException e) {
-			return null;
 		} catch (Exception e) {
-			LOGGER.warn(e.getMessage());
 			return null;
 		}
 	}
