@@ -6,10 +6,8 @@ public class RevolutTransactionLegs {
 
 	@JsonProperty("leg_id")
 	private String id;
-
 	@JsonProperty("account_id")
 	private String accountId;
-
 	private RevolutCounterparty counterparty;
 	private double amount;
 	private String currency;

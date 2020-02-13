@@ -9,17 +9,16 @@ public class RevolutTransaction extends Transaction {
 
 	@JsonProperty("request_id")
 	private String requestId;
-	private String type;
-	private String reference;
-	private RevolutTransactionLegs[] legs;
-	private String state;
-	
 	@JsonProperty("created_at")
 	private String createdAt;
 	@JsonProperty("completed_at")
 	private String completedAt;
 	@JsonProperty("updated_at")
 	private String updatedAt;
+	private String type;
+	private String reference;
+	private RevolutTransactionLegs[] legs;
+	private String state;
 
 	public RevolutTransaction() {
 	}

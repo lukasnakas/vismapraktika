@@ -6,7 +6,6 @@ public class RevolutReceiver {
 
 	@JsonProperty("counterparty_id")
 	private String counterPartyId;
-
 	@JsonProperty("account_id")
 	private String accountId;
 

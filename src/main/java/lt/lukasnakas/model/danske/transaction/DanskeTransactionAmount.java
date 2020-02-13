@@ -6,7 +6,6 @@ public class DanskeTransactionAmount {
 
 	@JsonProperty("Amount")
 	private double amount;
-
 	@JsonProperty("Currency")
 	private String currency;
 

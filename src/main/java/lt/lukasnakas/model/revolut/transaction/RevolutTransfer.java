@@ -6,7 +6,6 @@ public class RevolutTransfer extends RevolutPaymentTransferBase {
 
 	@JsonProperty("source_account_id")
 	private String sourceAccountId;
-
 	@JsonProperty("target_account_id")
 	private String targetAccountId;
 	private String description;

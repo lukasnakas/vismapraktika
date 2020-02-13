@@ -7,7 +7,6 @@ public class DanskeTransaction extends Transaction {
 
 	@JsonProperty("CreditDebitIndicator")
 	private String creditDebitIndicator;
-
 	@JsonProperty("Amount")
 	private DanskeTransactionAmount transactionAmount;
 
