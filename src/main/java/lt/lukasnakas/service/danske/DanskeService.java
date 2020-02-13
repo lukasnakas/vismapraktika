@@ -50,7 +50,7 @@ public class DanskeService implements AccountService, TransactionService {
 			String accessToken = danskeServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForAccounts(accessToken);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = danskeTokenRenewalService.generateAccessToken();
+			String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForAccounts(accessToken);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -68,7 +68,7 @@ public class DanskeService implements AccountService, TransactionService {
 			String accessToken = danskeServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForTransactions(accessToken);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = danskeTokenRenewalService.generateAccessToken();
+			String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForTransactions(accessToken);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -86,7 +86,7 @@ public class DanskeService implements AccountService, TransactionService {
 			String accessToken = danskeServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForTransaction(accessToken, payment);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = danskeTokenRenewalService.generateAccessToken();
+			String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForTransaction(accessToken, payment);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -97,7 +97,7 @@ public class DanskeService implements AccountService, TransactionService {
 		return responseEntity.getBody();
 	}
 
-	private void log(String method, String object, ResponseEntity<?> responseEntity){
+	private void log(String method, String object, ResponseEntity<?> responseEntity) {
 		LOGGER.info("[{}] {} {} [Status Code: {}]",
 				danskeServiceConfiguration.getName(),
 				method,

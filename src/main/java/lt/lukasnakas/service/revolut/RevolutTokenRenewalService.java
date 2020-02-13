@@ -1,6 +1,7 @@
 package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
+import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.model.revolut.RevolutAccessToken;
 import lt.lukasnakas.service.TokenRenewalService;
 import org.slf4j.Logger;
@@ -22,26 +23,33 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public String generateAccessToken() {
-		String newAccessToken = null;
+	public AccessToken generateAccessToken() {
+		ResponseEntity<RevolutAccessToken> responseEntity;
 
 		try {
-			ResponseEntity<RevolutAccessToken> response = restTemplate.postForEntity(
-					revolutServiceConfiguration.getUrlAuth(),
-					getRequestBodyParams(),
-					RevolutAccessToken.class);
-
-			if (response.getBody() != null) {
-				newAccessToken = response.getBody().getAccessToken();
-				revolutServiceConfiguration.setAccessToken(newAccessToken);
-				LOGGER.info("Generated new {} access token [{}]", revolutServiceConfiguration.getName(), newAccessToken);
-			}
+			responseEntity = getResponseEntityForAccessToken();
+			setupNewAccessToken(responseEntity);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			return null;
 		}
 
-		return newAccessToken;
+		return responseEntity.getBody();
+	}
+
+	public void setupNewAccessToken(ResponseEntity<? extends AccessToken> response) {
+		if (response.getBody() != null) {
+			String newAccessToken = response.getBody().getToken();
+			revolutServiceConfiguration.setAccessToken(newAccessToken);
+			LOGGER.info("[{}] Generated new access token [{}]", revolutServiceConfiguration.getName(), newAccessToken);
+		}
+	}
+
+	private ResponseEntity<RevolutAccessToken> getResponseEntityForAccessToken() {
+		return restTemplate.postForEntity(
+				revolutServiceConfiguration.getUrlAuth(),
+				getRequestBodyParams(),
+				RevolutAccessToken.class);
 	}
 
 	public MultiValueMap<String, String> getRequestBodyParams() {

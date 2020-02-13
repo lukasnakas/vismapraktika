@@ -55,7 +55,7 @@ public class RevolutService implements AccountService, TransactionService {
 			String accessToken = revolutServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForAccounts(accessToken);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = revolutTokenRenewalService.generateAccessToken();
+			String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForAccounts(accessToken);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -73,7 +73,7 @@ public class RevolutService implements AccountService, TransactionService {
 			String accessToken = revolutServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForTransactions(accessToken);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = revolutTokenRenewalService.generateAccessToken();
+			String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForTransactions(accessToken);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -91,7 +91,7 @@ public class RevolutService implements AccountService, TransactionService {
 			String accessToken = revolutServiceConfiguration.getAccessToken();
 			responseEntity = getResponseEntityForTransaction(accessToken, payment);
 		} catch (HttpClientErrorException.Unauthorized e) {
-			String accessToken = revolutTokenRenewalService.generateAccessToken();
+			String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
 			responseEntity = getResponseEntityForTransaction(accessToken, payment);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -102,7 +102,7 @@ public class RevolutService implements AccountService, TransactionService {
 		return responseEntity.getBody();
 	}
 
-	private void log(String method, String object, ResponseEntity<?> responseEntity){
+	private void log(String method, String object, ResponseEntity<?> responseEntity) {
 		LOGGER.info("[{}] {} {} [Status Code: {}]",
 				revolutServiceConfiguration.getName(),
 				method,

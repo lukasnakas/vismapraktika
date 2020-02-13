@@ -1,7 +1,7 @@
 package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
-import lt.lukasnakas.model.danske.DanskeAccessToken;
+import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.service.TokenRenewalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,26 +22,33 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public String generateAccessToken() {
-		String newAccessToken = null;
+	public AccessToken generateAccessToken() {
+		ResponseEntity<AccessToken> responseEntity;
 
 		try {
-			ResponseEntity<DanskeAccessToken> response = restTemplate.postForEntity(
-					danskeServiceConfiguration.getUrlAuth(),
-					getRequestBodyParams(),
-					DanskeAccessToken.class);
-
-			if (response.getBody() != null) {
-				newAccessToken = response.getBody().getAccessToken();
-				danskeServiceConfiguration.setAccessToken(newAccessToken);
-				LOGGER.info("Generated new {} access token [{}]", danskeServiceConfiguration.getName(), newAccessToken);
-			}
+			responseEntity = getResponseEntityForAccessToken();
+			setupNewAccessToken(responseEntity);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			return null;
 		}
 
-		return newAccessToken;
+		return responseEntity.getBody();
+	}
+
+	public void setupNewAccessToken(ResponseEntity<? extends AccessToken> response) {
+		if (response.getBody() != null) {
+			String newAccessToken = response.getBody().getToken();
+			danskeServiceConfiguration.setAccessToken(newAccessToken);
+			LOGGER.info("[{}] Generated new access token [{}]", danskeServiceConfiguration.getName(), newAccessToken);
+		}
+	}
+
+	private ResponseEntity<AccessToken> getResponseEntityForAccessToken() {
+		return restTemplate.postForEntity(
+				danskeServiceConfiguration.getUrlAuth(),
+				getRequestBodyParams(),
+				AccessToken.class);
 	}
 
 	public MultiValueMap<String, String> getRequestBodyParams() {

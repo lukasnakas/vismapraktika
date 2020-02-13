@@ -1,11 +1,10 @@
 package lt.lukasnakas.model.revolut;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lt.lukasnakas.model.AccessToken;
 
-public class RevolutAccessToken {
+public class RevolutAccessToken extends AccessToken {
 
-	@JsonProperty("access_token")
-	private String accessToken;
 	@JsonProperty("token_type")
 	private String tokenType;
 	@JsonProperty("expires_in")
@@ -14,18 +13,9 @@ public class RevolutAccessToken {
 	public RevolutAccessToken() {
 	}
 
-	public RevolutAccessToken(String accessToken, String tokenType, String expiresIn) {
-		this.accessToken = accessToken;
+	public RevolutAccessToken(String tokenType, String expiresIn) {
 		this.tokenType = tokenType;
 		this.expiresIn = expiresIn;
-	}
-
-	public String getAccessToken() {
-		return accessToken;
-	}
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
 	}
 
 	public String getTokenType() {
