@@ -143,7 +143,7 @@ public class DanskeService implements AccountService, TransactionService {
 		DanskePayment danskePayment = (DanskePayment) payment;
 		if (danskePayment.getBankName() == null) return false;
 		if (danskePayment.getTemplate() == null) return false;
-		if (danskePayment.getAmount() <= 0) return false;
+		if (danskePayment.getAmount() == 0) return false;
 		return true;
 	}
 
@@ -151,7 +151,7 @@ public class DanskeService implements AccountService, TransactionService {
 		DanskePayment danskePayment = (DanskePayment) payment;
 		if (danskePayment.getBankName() == null) return new TransactionError("bankName");
 		else if (danskePayment.getTemplate() == null) return new TransactionError("template");
-		else if (danskePayment.getAmount() <= 0) return new TransactionError("amount");
+		else if (danskePayment.getAmount() == 0) return new TransactionError("amount");
 		else return null;
 	}
 }
