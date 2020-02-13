@@ -1,31 +1,40 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lt.lukasnakas.model.Transaction;
 
-public class RevolutTransaction extends RevolutTransactionBase {
-
-	private String type;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class RevolutTransaction extends Transaction {
 
 	@JsonProperty("request_id")
 	private String requestId;
-
-	@JsonProperty("updated_at")
-	private String updatedAt;
+	private String type;
 	private String reference;
 	private RevolutTransactionLegs[] legs;
+	private String state;
+	
+	@JsonProperty("created_at")
+	private String createdAt;
+	@JsonProperty("completed_at")
+	private String completedAt;
+	@JsonProperty("updated_at")
+	private String updatedAt;
 
 	public RevolutTransaction() {
 	}
 
-	public RevolutTransaction(String id, String state, String createdAt, String completedAt, String type,
-							  String requestId, String updatedAt, String reference, RevolutTransactionLegs[] legs) {
-		super(id, state, createdAt, completedAt);
+	public RevolutTransaction(String id, String type, String requestId, String updatedAt, String reference,
+							  RevolutTransactionLegs[] legs, String state, String createdAt, String completedAt) {
+		super(id);
 		this.type = type;
 		this.requestId = requestId;
 		this.updatedAt = updatedAt;
 		this.reference = reference;
 		this.legs = legs;
+		this.state = state;
+		this.createdAt = createdAt;
+		this.completedAt = completedAt;
 	}
 
 	public String getType() {
@@ -66,5 +75,29 @@ public class RevolutTransaction extends RevolutTransactionBase {
 
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public String getCompletedAt() {
+		return completedAt;
+	}
+
+	public void setCompletedAt(String completedAt) {
+		this.completedAt = completedAt;
 	}
 }

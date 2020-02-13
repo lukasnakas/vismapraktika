@@ -10,7 +10,6 @@ import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransactionBase;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
@@ -85,7 +84,7 @@ public class RevolutService implements AccountService, TransactionService {
 	}
 
 	public Transaction postTransaction(Payment payment) {
-		ResponseEntity<RevolutTransactionBase> responseEntity;
+		ResponseEntity<RevolutTransaction> responseEntity;
 
 		try {
 			String accessToken = revolutServiceConfiguration.getAccessToken();
@@ -128,12 +127,12 @@ public class RevolutService implements AccountService, TransactionService {
 				});
 	}
 
-	private ResponseEntity<RevolutTransactionBase> getResponseEntityForTransaction(String accessToken, Payment payment) {
+	private ResponseEntity<RevolutTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
 		return restTemplate.exchange(
 				getTransactionUrl(payment),
 				HttpMethod.POST,
 				getHttpEntity(accessToken, payment),
-				RevolutTransactionBase.class);
+				RevolutTransaction.class);
 	}
 
 	private String getTransactionUrl(Payment payment) {
