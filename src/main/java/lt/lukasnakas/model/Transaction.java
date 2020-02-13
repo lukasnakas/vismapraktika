@@ -1,6 +1,6 @@
 package lt.lukasnakas.model;
 
-public class Transaction {
+public abstract class Transaction {
 
 	private String id;
 

@@ -3,7 +3,7 @@ package lt.lukasnakas.model.revolut.transaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Payment;
 
-public class RevolutPaymentTransferBase extends Payment {
+public abstract class RevolutPaymentTransferBase extends Payment {
 
 	@JsonProperty("request_id")
 	private String requestId;

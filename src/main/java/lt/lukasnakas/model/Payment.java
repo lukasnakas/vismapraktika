@@ -1,6 +1,6 @@
 package lt.lukasnakas.model;
 
-public class Payment {
+public abstract class Payment {
 
 	private String bankName;
 
