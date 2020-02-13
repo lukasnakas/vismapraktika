@@ -12,15 +12,15 @@ public class RevolutAccount extends Account {
 	private String state;
 	private boolean publicAccount;
 	@JsonProperty("created_at")
-	private Date createdAt;
+	private String createdAt;
 	@JsonProperty("updated_at")
-	private Date updatedAt;
+	private String updatedAt;
 
 	public RevolutAccount() {
 	}
 
 	public RevolutAccount(String id, String name, double balance, String currency, String state,
-						  boolean publicAccount, Date createdAt, Date updatedAt) {
+						  boolean publicAccount, String createdAt, String updatedAt) {
 		super(id);
 		this.name = name;
 		this.balance = balance;
@@ -55,19 +55,19 @@ public class RevolutAccount extends Account {
 		this.publicAccount = publicAccount;
 	}
 
-	public Date getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
