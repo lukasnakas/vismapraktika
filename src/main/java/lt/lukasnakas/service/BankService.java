@@ -78,10 +78,7 @@ public class BankService {
 		} else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
 			return executeSpecificRevolutTransactionType(paymentBody);
 		}
-		TransactionError transactionError = new TransactionError("bankName");
-		String errorMsg = transactionError.toString();
-		LOGGER.error(errorMsg);
-		return transactionError;
+		return getTransactionError("bankName");
 	}
 
 	private Transaction executeSpecificRevolutTransactionType(String paymentBody) {
@@ -95,10 +92,7 @@ public class BankService {
 				return revolutService.executeTransactionIfValid(payment);
 			}
 		}
-		TransactionError transactionError = new TransactionError("type");
-		String errorMsg = transactionError.toString();
-		LOGGER.error(errorMsg);
-		return transactionError;
+		return getTransactionError("type");
 	}
 
 	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass) {
@@ -110,5 +104,12 @@ public class BankService {
 			LOGGER.warn(e.getMessage());
 			return null;
 		}
+	}
+
+	private TransactionError getTransactionError(String invalidKey){
+		TransactionError transactionError = new TransactionError(invalidKey);
+		String errorMsg = transactionError.toString();
+		LOGGER.error(errorMsg);
+		return transactionError;
 	}
 }
