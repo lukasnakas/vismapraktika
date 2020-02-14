@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest
-public class ServiceRequestTest {
+public class BankServiceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -46,16 +46,16 @@ public class ServiceRequestTest {
 		detailsArray[0] = details;
 		Account account = new DanskeAccount("123", detailsArray);
 
-		Map<String, Account> mappedAccounts = new HashMap<>();
-		mappedAccounts.put(account.getId(), account);
+		Map<String, Account> expected = new HashMap<>();
+		expected.put(account.getId(), account);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String accountAsString = mapper.writeValueAsString(mappedAccounts);
+		String actual = mapper.writeValueAsString(expected);
 
-		when(bankService.getAccounts()).thenReturn(mappedAccounts);
+		when(bankService.getAccounts()).thenReturn(expected);
 		mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(accountAsString));
+				.andExpect(content().string(actual));
 	}
 
 	@Test
@@ -67,12 +67,12 @@ public class ServiceRequestTest {
 		mappedAccounts.put(account.getId(), account);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String accountAsString = mapper.writeValueAsString(mappedAccounts);
+		String actual = mapper.writeValueAsString(mappedAccounts);
 
 		when(bankService.getAccounts()).thenReturn(mappedAccounts);
 		mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(accountAsString));
+				.andExpect(content().string(actual));
 	}
 
 	@Test
@@ -83,12 +83,12 @@ public class ServiceRequestTest {
 		mappedTransactions.put(transaction.getId(), transaction);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String transactionAsString = mapper.writeValueAsString(mappedTransactions);
+		String actual = mapper.writeValueAsString(mappedTransactions);
 
 		when(bankService.getTransactions()).thenReturn(mappedTransactions);
 		mockMvc.perform(get("/api/transactions").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(transactionAsString));
+				.andExpect(content().string(actual));
 	}
 
 	@Test
@@ -103,24 +103,24 @@ public class ServiceRequestTest {
 		mappedTransactions.put(transaction.getId(), transaction);
 
 		ObjectMapper mapper = new ObjectMapper();
-		String transactionAsString = mapper.writeValueAsString(mappedTransactions);
+		String actual = mapper.writeValueAsString(mappedTransactions);
 
 		when(bankService.getTransactions()).thenReturn(mappedTransactions);
 		mockMvc.perform(get("/api/transactions").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(transactionAsString));
+				.andExpect(content().string(actual));
 	}
 
 	@Test
 	public void postDanskeTransactionShouldReturnTransaction() throws Exception {
 		DanskeTransactionAmount amount = new DanskeTransactionAmount(550, "EUR");
-		Transaction transactionResponse = new DanskeTransaction("123", "credit", amount);
+		Transaction expected = new DanskeTransaction("123", "credit", amount);
 
 		String newTransactionRequestBody = "{\n" +
 				"\"template\": \"credit\",\n" +
 				"\"amount\": 550\n" +
 				"}";
-		String expectedResponse = "{\n" +
+		String actual = "{\n" +
 				"    \"id\": \"123\",\n" +
 				"    \"CreditDebitIndicator\": \"credit\",\n" +
 				"    \"Amount\": {\n" +
@@ -129,16 +129,16 @@ public class ServiceRequestTest {
 				"    }\n" +
 				"}";
 
-		when(bankService.postTransaction(newTransactionRequestBody, "danske")).thenReturn(transactionResponse);
+		when(bankService.postTransaction(newTransactionRequestBody, "danske")).thenReturn(expected);
 		mockMvc.perform(post("/api/transactions/danske")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(newTransactionRequestBody))
-				.andExpect(content().json(expectedResponse));
+				.andExpect(content().json(actual));
 	}
 
 	@Test
 	public void postRevolutTransactionShouldReturnTransaction() throws Exception {
-		Transaction transactionResponse = new RevolutTransaction("123", null, null, null, null, null, "completed", "2020-02-13", "2020-02-14");
+		Transaction expected = new RevolutTransaction("123", null, null, null, null, null, "completed", "2020-02-13", "2020-02-14");
 
 		String newTransactionRequestBody = "{\n" +
 				"\"type\":\"payment\",\n" +
@@ -151,18 +151,18 @@ public class ServiceRequestTest {
 				"\"currency\":\"GBP\",\n" +
 				"\"reference\":\"ref\"\n" +
 				"}";
-		String expectedResponse = "{\n" +
+		String actual = "{\n" +
 				"\"id\":\"123\",\n" +
 				"\"state\":\"completed\",\n" +
 				"\"created_at\":\"2020-02-13\",\n" +
 				"\"completed_at\":\"2020-02-14\"\n" +
 				"}";
 
-		when(bankService.postTransaction(newTransactionRequestBody, "revolut")).thenReturn(transactionResponse);
+		when(bankService.postTransaction(newTransactionRequestBody, "revolut")).thenReturn(expected);
 		mockMvc.perform(post("/api/transactions/revolut")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(newTransactionRequestBody))
-				.andExpect(content().json(expectedResponse));
+				.andExpect(content().json(actual));
 	}
 
 }

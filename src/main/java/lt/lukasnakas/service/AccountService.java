@@ -7,5 +7,5 @@ import java.util.List;
 public interface AccountService {
 	List<Account> retrieveAccounts();
 
-	List<Account> getParsedAccountList(List<? extends Account> unparsedAccountsList);
+	List<Account> getParsedAccountsList(List<? extends Account> unparsedAccountsList);
 }
