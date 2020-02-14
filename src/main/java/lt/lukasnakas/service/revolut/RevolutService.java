@@ -9,8 +9,8 @@ import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
+import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.service.TransactionService;
 import org.slf4j.Logger;
@@ -129,17 +129,10 @@ public class RevolutService implements AccountService, TransactionService {
 
 	private ResponseEntity<RevolutTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
 		return restTemplate.exchange(
-				getTransactionUrl(payment),
+				revolutServiceConfiguration.getUrlAccountPayment(),
 				HttpMethod.POST,
 				getHttpEntity(accessToken, payment),
 				RevolutTransaction.class);
-	}
-
-	private String getTransactionUrl(Payment payment) {
-		if (payment.getClass().equals(RevolutTransfer.class))
-			return revolutServiceConfiguration.getUrlAccountTranfer();
-		else
-			return revolutServiceConfiguration.getUrlAccountPayment();
 	}
 
 	private HttpEntity<String> getHttpEntity(String accessToken) {
@@ -170,15 +163,20 @@ public class RevolutService implements AccountService, TransactionService {
 		return revolutPaymentValidationService.isValid(payment);
 	}
 
-	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
-		return revolutTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
+	public TransactionError getErrorWithMissingsParamFromPayment(Payment payment) {
+		return revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
 	}
 
 	public Transaction executeTransactionIfValid(Payment payment) {
-		if (isPaymentValid(payment))
-			return postTransaction(getPaymentWithGeneratedRequestId(payment));
+		RevolutReceiver revolutReceiver = new RevolutReceiver(payment.getCounterpartyId(), payment.getReceiverAccountId());
+		RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver, payment.getCurrency(),
+				payment.getDescription());
+		System.out.println(revolutPayment);
+
+		if (isPaymentValid(revolutPayment))
+			return postTransaction(getPaymentWithGeneratedRequestId(revolutPayment));
 		else {
-			TransactionError transactionError = getErrorWithFirstMissingParamFromPayment(payment);
+			TransactionError transactionError = getErrorWithMissingsParamFromPayment(revolutPayment);
 			String errorMsg = transactionError.toString();
 			LOGGER.error(errorMsg);
 			return transactionError;
@@ -186,15 +184,10 @@ public class RevolutService implements AccountService, TransactionService {
 	}
 
 	private Payment getPaymentWithGeneratedRequestId(Payment payment) {
-		if (payment.getClass() == RevolutPayment.class) {
-			RevolutPayment revolutPayment = (RevolutPayment) payment;
-			revolutPayment.generateRequestId();
-			return revolutPayment;
-		} else {
-			RevolutTransfer revolutTransfer = (RevolutTransfer) payment;
-			revolutTransfer.generateRequestId();
-			return revolutTransfer;
-		}
+		RevolutPayment revolutPayment = (RevolutPayment) payment;
+		revolutPayment.generateRequestId();
+		return revolutPayment;
+
 	}
 
 	public String getPaymentType(String paymentBody) {

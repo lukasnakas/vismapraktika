@@ -1,23 +1,27 @@
 package lt.lukasnakas.model.revolut.transaction;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Transaction;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RevolutTransaction extends Transaction {
 
-	@JsonProperty("request_id")
+	@JsonAlias("request_id")
 	private String requestId;
-	@JsonProperty("created_at")
+	@JsonAlias("created_at")
 	private String createdAt;
-	@JsonProperty("completed_at")
+	@JsonAlias("completed_at")
 	private String completedAt;
-	@JsonProperty("updated_at")
+	@JsonAlias("updated_at")
 	private String updatedAt;
+	@JsonAlias("type")
 	private String type;
+	@JsonAlias("reference")
 	private String reference;
+	@JsonAlias("legs")
 	private RevolutTransactionLegs[] legs;
+	@JsonAlias("state")
 	private String state;
 
 	public RevolutTransaction() {

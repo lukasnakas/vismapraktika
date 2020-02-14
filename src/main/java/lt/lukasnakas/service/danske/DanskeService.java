@@ -160,7 +160,7 @@ public class DanskeService implements AccountService, TransactionService {
 	}
 
 	public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
-		return danskeTransactionErrorService.getErrorWithAllMissingParamsFromPayment(payment);
+		return danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
 	}
 
 	public Transaction executeTransactionIfValid(Payment payment) {

@@ -1,17 +1,23 @@
 package lt.lukasnakas.model.revolut.account;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lt.lukasnakas.model.Account;
 
 public class RevolutAccount extends Account {
+
+	@JsonAlias("name")
 	private String name;
+	@JsonAlias("balance")
 	private double balance;
+	@JsonAlias("currency")
 	private String currency;
+	@JsonAlias("state")
 	private String state;
+	@JsonAlias("publicAccount")
 	private boolean publicAccount;
-	@JsonProperty("created_at")
+	@JsonAlias("created_at")
 	private String createdAt;
-	@JsonProperty("updated_at")
+	@JsonAlias("updated_at")
 	private String updatedAt;
 
 	public RevolutAccount() {

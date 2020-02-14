@@ -7,9 +7,8 @@ import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.model.danske.transaction.DanskePayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
+import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;
 import lt.lukasnakas.service.danske.DanskeService;
 import lt.lukasnakas.service.revolut.RevolutService;
 import org.slf4j.Logger;
@@ -71,28 +70,16 @@ public class BankService {
 		return getTransactions().get(id);
 	}
 
-	public Transaction postTransaction(String paymentBody, String bankName) {
+	public Transaction postTransaction(Payment payment, String bankName) {
 		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
-			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
+			//Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
 			return danskeService.executeTransactionIfValid(payment);
 		} else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
-			return executeSpecificRevolutTransactionType(paymentBody);
+			//Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
+			return revolutService.executeTransactionIfValid(payment);
+			//return executeSpecificRevolutTransactionType(paymentBody);
 		}
 		return getTransactionError("bankName");
-	}
-
-	private Transaction executeSpecificRevolutTransactionType(String paymentBody) {
-		String paymentType = revolutService.getPaymentType(paymentBody);
-		if (paymentType != null) {
-			if (paymentType.equalsIgnoreCase("\"payment\"")) {
-				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
-				return revolutService.executeTransactionIfValid(payment);
-			} else if (paymentType.equalsIgnoreCase("\"transfer\"")) {
-				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutTransfer.class);
-				return revolutService.executeTransactionIfValid(payment);
-			}
-		}
-		return getTransactionError("type");
 	}
 
 	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass) {

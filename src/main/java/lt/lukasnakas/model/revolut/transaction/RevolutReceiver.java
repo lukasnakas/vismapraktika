@@ -1,12 +1,12 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class RevolutReceiver {
 
-	@JsonProperty("counterparty_id")
+	@JsonAlias("counterparty_id")
 	private String counterPartyId;
-	@JsonProperty("account_id")
+	@JsonAlias("account_id")
 	private String accountId;
 
 	public RevolutReceiver() {

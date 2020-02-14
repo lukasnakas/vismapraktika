@@ -1,7 +1,10 @@
 package lt.lukasnakas.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 public abstract class Transaction {
 
+	@JsonAlias("id")
 	private String id;
 
 	public Transaction() {

@@ -1,12 +1,12 @@
 package lt.lukasnakas.model.danske.transaction;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class DanskeTransactionAmount {
 
-	@JsonProperty("Amount")
+	@JsonAlias("Amount")
 	private double amount;
-	@JsonProperty("Currency")
+	@JsonAlias("Currency")
 	private String currency;
 
 	public DanskeTransactionAmount() {

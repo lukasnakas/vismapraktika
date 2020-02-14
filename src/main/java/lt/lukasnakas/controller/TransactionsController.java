@@ -1,5 +1,6 @@
 package lt.lukasnakas.controller;
 
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class TransactionsController {
 	}
 
 	@PostMapping(value = "/{bankName}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Transaction> addTransaction(@RequestBody String paymentBody, @PathVariable String bankName) {
-		return new ResponseEntity<>(bankService.postTransaction(paymentBody, bankName), HttpStatus.OK);
+	public ResponseEntity<Transaction> addTransaction(@RequestBody Payment payment, @PathVariable String bankName) {
+		return new ResponseEntity<>(bankService.postTransaction(payment, bankName), HttpStatus.OK);
 	}
 
 }

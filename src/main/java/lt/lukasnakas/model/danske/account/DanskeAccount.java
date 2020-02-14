@@ -1,11 +1,11 @@
 package lt.lukasnakas.model.danske.account;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lt.lukasnakas.model.Account;
 
 public class DanskeAccount extends Account {
 
-	@JsonProperty("Account")
+	@JsonAlias("Account")
 	private DanskeAccountDetails[] account;
 
 	public DanskeAccount() {

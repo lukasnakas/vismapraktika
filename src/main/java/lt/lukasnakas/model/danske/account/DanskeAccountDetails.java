@@ -1,16 +1,16 @@
 package lt.lukasnakas.model.danske.account;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class DanskeAccountDetails {
 
-	@JsonProperty("Identification")
+	@JsonAlias("Identification")
 	private String identification;
-	@JsonProperty("SchemeName")
+	@JsonAlias("SchemeName")
 	private String schemeName;
-	@JsonProperty("Name")
+	@JsonAlias("Name")
 	private String name;
-	@JsonProperty("SecondaryIdentification")
+	@JsonAlias("SecondaryIdentification")
 	private String secondaryIdentification;
 
 	public DanskeAccountDetails() {

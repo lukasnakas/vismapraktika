@@ -1,17 +1,22 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class RevolutTransactionLegs {
 
-	@JsonProperty("leg_id")
+	@JsonAlias("leg_id")
 	private String id;
-	@JsonProperty("account_id")
+	@JsonAlias("account_id")
 	private String accountId;
+	@JsonAlias("counterparty")
 	private RevolutCounterparty counterparty;
+	@JsonAlias("amount")
 	private double amount;
+	@JsonAlias("currency")
 	private String currency;
+	@JsonAlias("description")
 	private String description;
+	@JsonAlias("balance")
 	private double balance;
 
 	public RevolutTransactionLegs() {
