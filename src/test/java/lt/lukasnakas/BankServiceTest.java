@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest
-public class ServiceRequestTest {
+public class BankServiceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
