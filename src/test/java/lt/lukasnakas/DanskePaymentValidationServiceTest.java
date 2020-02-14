@@ -18,25 +18,22 @@ public class DanskePaymentValidationServiceTest {
 	@Test
 	public void isValid_shouldReturnTrue(){
 		DanskePayment payment = new DanskePayment("danske", "debit", 100);
-		boolean expected = (payment.getAmount() != 0 && payment.getTemplate() != null);
 		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(expected, actual);
+		assertEquals(true, actual);
 	}
 
 	@Test
 	public void isValidNoTemplate_shouldReturnFalse(){
 		DanskePayment payment = new DanskePayment("danske", null, 100);
-		boolean expected = (payment.getAmount() != 0 && payment.getTemplate() != null);
 		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(expected, actual);
+		assertEquals(false, actual);
 	}
 
 	@Test
 	public void isValidNoAmount_shouldReturnFalse(){
 		DanskePayment payment = new DanskePayment("danske", "credit", 0);
-		boolean expected = (payment.getAmount() != 0 && payment.getTemplate() != null);
 		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(expected, actual);
+		assertEquals(false, actual);
 	}
 
 }
