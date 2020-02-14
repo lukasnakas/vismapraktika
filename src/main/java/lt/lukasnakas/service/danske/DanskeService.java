@@ -58,7 +58,7 @@ public class DanskeService implements AccountService, TransactionService {
 		}
 
 		log("GET", "accounts", responseEntity);
-		return getParsedAccountList(responseEntity.getBody());
+		return getParsedAccountsList(responseEntity.getBody());
 	}
 
 	public List<Transaction> retrieveTransactions() {
@@ -143,7 +143,7 @@ public class DanskeService implements AccountService, TransactionService {
 		return new HttpEntity<>(payment, httpHeaders);
 	}
 
-	public List<Account> getParsedAccountList(List<? extends Account> unparsedAccoutsList) {
+	public List<Account> getParsedAccountsList(List<? extends Account> unparsedAccoutsList) {
 		return new ArrayList<>(unparsedAccoutsList);
 	}
 

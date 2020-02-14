@@ -62,7 +62,7 @@ public class RevolutService implements AccountService, TransactionService {
 		}
 
 		log("GET", "accounts", responseEntity);
-		return getParsedAccountList(responseEntity.getBody());
+		return getParsedAccountsList(responseEntity.getBody());
 	}
 
 	public List<Transaction> retrieveTransactions() {
@@ -154,7 +154,7 @@ public class RevolutService implements AccountService, TransactionService {
 		return new HttpEntity<>(payment, httpHeaders);
 	}
 
-	public List<Account> getParsedAccountList(List<? extends Account> unparsedAccountsList) {
+	public List<Account> getParsedAccountsList(List<? extends Account> unparsedAccountsList) {
 		return new ArrayList<>(unparsedAccountsList);
 	}
 
