@@ -1,22 +1,22 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RevolutTransactionLegs {
 
-	@JsonAlias("leg_id")
+	@JsonProperty("leg_id")
 	private String id;
-	@JsonAlias("account_id")
+	@JsonProperty("account_id")
 	private String accountId;
-	@JsonAlias("counterparty")
+	@JsonProperty("counterparty")
 	private RevolutCounterparty counterparty;
-	@JsonAlias("amount")
+	@JsonProperty("bill_amount")
 	private double amount;
-	@JsonAlias("currency")
+	@JsonProperty("currency")
 	private String currency;
-	@JsonAlias("description")
+	@JsonProperty("description")
 	private String description;
-	@JsonAlias("balance")
+	@JsonProperty("balance")
 	private double balance;
 
 	public RevolutTransactionLegs() {
@@ -87,5 +87,18 @@ public class RevolutTransactionLegs {
 
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+
+	@Override
+	public String toString() {
+		return "RevolutTransactionLegs{" +
+				"id='" + id + '\'' +
+				", accountId='" + accountId + '\'' +
+				", counterparty=" + counterparty +
+				", amount=" + amount +
+				", currency='" + currency + '\'' +
+				", description='" + description + '\'' +
+				", balance=" + balance +
+				'}';
 	}
 }

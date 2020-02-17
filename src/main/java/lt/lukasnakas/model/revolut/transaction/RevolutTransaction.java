@@ -1,27 +1,29 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Transaction;
+
+import java.util.Arrays;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RevolutTransaction extends Transaction {
 
-	@JsonAlias("request_id")
+	@JsonProperty("request_id")
 	private String requestId;
-	@JsonAlias("created_at")
+	@JsonProperty("created_at")
 	private String createdAt;
-	@JsonAlias("completed_at")
+	@JsonProperty("completed_at")
 	private String completedAt;
-	@JsonAlias("updated_at")
+	@JsonProperty("updated_at")
 	private String updatedAt;
-	@JsonAlias("type")
+	@JsonProperty("type")
 	private String type;
-	@JsonAlias("reference")
+	@JsonProperty("reference")
 	private String reference;
-	@JsonAlias("legs")
+	@JsonProperty("legs")
 	private RevolutTransactionLegs[] legs;
-	@JsonAlias("state")
+	@JsonProperty("state")
 	private String state;
 
 	public RevolutTransaction() {
@@ -102,5 +104,19 @@ public class RevolutTransaction extends Transaction {
 
 	public void setCompletedAt(String completedAt) {
 		this.completedAt = completedAt;
+	}
+
+	@Override
+	public String toString() {
+		return "RevolutTransaction{" +
+				"requestId='" + requestId + '\'' +
+				", createdAt='" + createdAt + '\'' +
+				", completedAt='" + completedAt + '\'' +
+				", updatedAt='" + updatedAt + '\'' +
+				", type='" + type + '\'' +
+				", reference='" + reference + '\'' +
+				", legs=" + Arrays.toString(legs) +
+				", state='" + state + '\'' +
+				'}';
 	}
 }

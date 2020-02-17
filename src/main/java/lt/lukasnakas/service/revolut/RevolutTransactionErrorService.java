@@ -13,17 +13,20 @@ import java.util.List;
 public class RevolutTransactionErrorService implements TransactionErrorService {
 
 	public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
-		return new TransactionError(createMissingParamsList(payment));
+		RevolutPayment revolutPayment = (RevolutPayment) payment;
+		return new TransactionError(createMissingParamsList(revolutPayment));
 	}
 
-	public List<String> createMissingParamsList(Payment payment) {
+	public List<String> createMissingParamsList(RevolutPayment revolutPayment) {
 		List<String> missingParamsList = new ArrayList<>();
 
-		if (payment.getSenderAccountId() == null) missingParamsList.add("account_id");
-		if (payment.getReceiverAccountId() == null) missingParamsList.add("receiver");
-		if (payment.getDescription() == null) missingParamsList.add("reference");
-		if (payment.getCurrency() == null) missingParamsList.add("currency");
-		if (payment.getAmount() <= 0) missingParamsList.add("amount");
+		if (revolutPayment.getAccountId() == null) missingParamsList.add("account_id");
+		if (revolutPayment.getReceiver() == null) missingParamsList.add("receiver");
+		if (revolutPayment.getReceiver().getAccountId() == null) missingParamsList.add("receiver.account_id");
+		if (revolutPayment.getReceiver().getCounterPartyId() == null) missingParamsList.add("receiver.counterparty_id");
+		if (revolutPayment.getReference() == null) missingParamsList.add("reference");
+		if (revolutPayment.getCurrency() == null) missingParamsList.add("currency");
+		if (revolutPayment.getAmount() <= 0) missingParamsList.add("amount");
 
 		return missingParamsList;
 	}

@@ -1,12 +1,12 @@
 package lt.lukasnakas.model.revolut.transaction;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RevolutCounterparty {
 
-	@JsonAlias("account_type")
+	@JsonProperty("account_type")
 	private String accountType;
-	@JsonAlias("account_id")
+	@JsonProperty("account_id")
 	private String accountId;
 
 	public RevolutCounterparty() {
@@ -31,5 +31,13 @@ public class RevolutCounterparty {
 
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
+	}
+
+	@Override
+	public String toString() {
+		return "RevolutCounterparty{" +
+				"accountType='" + accountType + '\'' +
+				", accountId='" + accountId + '\'' +
+				'}';
 	}
 }

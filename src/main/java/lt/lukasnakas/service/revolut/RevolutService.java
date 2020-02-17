@@ -1,5 +1,6 @@
 package lt.lukasnakas.service.revolut;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
@@ -98,6 +99,7 @@ public class RevolutService implements AccountService, TransactionService {
 		}
 
 		log("POST", "transaction", responseEntity);
+		System.out.println(responseEntity.getBody());
 		return responseEntity.getBody();
 	}
 
@@ -128,6 +130,14 @@ public class RevolutService implements AccountService, TransactionService {
 	}
 
 	private ResponseEntity<RevolutTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
+		System.out.println(payment);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String node = mapper.writeValueAsString(payment);
+			System.out.println(node);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		return restTemplate.exchange(
 				revolutServiceConfiguration.getUrlAccountPayment(),
 				HttpMethod.POST,
@@ -170,8 +180,7 @@ public class RevolutService implements AccountService, TransactionService {
 	public Transaction executeTransactionIfValid(Payment payment) {
 		RevolutReceiver revolutReceiver = new RevolutReceiver(payment.getCounterpartyId(), payment.getReceiverAccountId());
 		RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver, payment.getCurrency(),
-				payment.getDescription());
-		System.out.println(revolutPayment);
+				payment.getDescription(), payment.getAmount());
 
 		if (isPaymentValid(revolutPayment))
 			return postTransaction(getPaymentWithGeneratedRequestId(revolutPayment));
@@ -183,21 +192,9 @@ public class RevolutService implements AccountService, TransactionService {
 		}
 	}
 
-	private Payment getPaymentWithGeneratedRequestId(Payment payment) {
-		RevolutPayment revolutPayment = (RevolutPayment) payment;
+	private RevolutPayment getPaymentWithGeneratedRequestId(RevolutPayment revolutPayment) {
 		revolutPayment.generateRequestId();
 		return revolutPayment;
-
-	}
-
-	public String getPaymentType(String paymentBody) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode node = mapper.readTree(paymentBody);
-			return node.get("type").toString();
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 }
