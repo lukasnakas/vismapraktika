@@ -16,20 +16,17 @@ public class BankService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
 
-    private final BankingService[] bankingServices;
+    private final List<BankingService> bankingServices;
 
-    public BankService(BankingService[] bankingServices) {
+    public BankService(List<BankingService> bankingServices) {
         this.bankingServices = bankingServices;
     }
 
     private List<Account> getAllAccountsList() {
-        List<Account> accountsList = new ArrayList<>();
-
-        for (BankingService bankingService : bankingServices) {
-            accountsList.addAll(bankingService.retrieveAccounts());
-        }
-
-        return accountsList;
+        return bankingServices.stream()
+                .map(BankingService::retrieveAccounts)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public Map<String, Account> getAccounts() {
@@ -42,13 +39,10 @@ public class BankService {
     }
 
     private List<Transaction> getAllTransactionsList() {
-        List<Transaction> transactionsList = new ArrayList<>();
-
-        for (BankingService bankingService : bankingServices) {
-            transactionsList.addAll(bankingService.retrieveTransactions());
-        }
-
-        return transactionsList;
+        return bankingServices.stream()
+                .map(BankingService::retrieveTransactions)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public Map<String, Transaction> getTransactions() {
