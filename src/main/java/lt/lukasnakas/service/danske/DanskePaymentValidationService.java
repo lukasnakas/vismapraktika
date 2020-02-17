@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DanskePaymentValidationService implements PaymentValidationService {
 
-	public boolean isValid(Payment payment) {
-		return areParamsNotNull(payment);
-	}
+    public boolean isValid(Payment payment) {
+        return areParamsNotNull(payment);
+    }
 
-	private boolean areParamsNotNull(Payment payment) {
-		return payment.getAmount() != 0;
-	}
+    private boolean areParamsNotNull(Payment payment) {
+        return payment.getAmount() != 0;
+    }
 
 }

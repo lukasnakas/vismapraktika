@@ -11,84 +11,84 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "danske-service")
 public class DanskeServiceConfiguration {
 
-	@NotNull
-	private String name;
-	@NotNull
-	private String tokenType;
-	@NotNull
-	private String urlAuth;
-	@NotNull
-	private String urlAccounts;
-	@NotNull
-	private String urlAccountTransactions;
-	@NotNull
-	private String clientId;
-	@NotNull
-	private String accessToken;
-	@NotNull
-	private String secret;
+    @NotNull
+    private String name;
+    @NotNull
+    private String tokenType;
+    @NotNull
+    private String urlAuth;
+    @NotNull
+    private String urlAccounts;
+    @NotNull
+    private String urlAccountTransactions;
+    @NotNull
+    private String clientId;
+    @NotNull
+    private String accessToken;
+    @NotNull
+    private String secret;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getTokenType() {
-		return tokenType;
-	}
+    public String getTokenType() {
+        return tokenType;
+    }
 
-	public void setTokenType(String tokenType) {
-		this.tokenType = tokenType;
-	}
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
+    }
 
-	public String getUrlAuth() {
-		return urlAuth;
-	}
+    public String getUrlAuth() {
+        return urlAuth;
+    }
 
-	public void setUrlAuth(String urlAuth) {
-		this.urlAuth = urlAuth;
-	}
+    public void setUrlAuth(String urlAuth) {
+        this.urlAuth = urlAuth;
+    }
 
-	public String getUrlAccounts() {
-		return urlAccounts;
-	}
+    public String getUrlAccounts() {
+        return urlAccounts;
+    }
 
-	public void setUrlAccounts(String urlAccounts) {
-		this.urlAccounts = urlAccounts;
-	}
+    public void setUrlAccounts(String urlAccounts) {
+        this.urlAccounts = urlAccounts;
+    }
 
-	public String getUrlAccountTransactions() {
-		return urlAccountTransactions;
-	}
+    public String getUrlAccountTransactions() {
+        return urlAccountTransactions;
+    }
 
-	public void setUrlAccountTransactions(String urlAccountTransactions) {
-		this.urlAccountTransactions = urlAccountTransactions;
-	}
+    public void setUrlAccountTransactions(String urlAccountTransactions) {
+        this.urlAccountTransactions = urlAccountTransactions;
+    }
 
-	public String getClientId() {
-		return clientId;
-	}
+    public String getClientId() {
+        return clientId;
+    }
 
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 
-	public String getAccessToken() {
-		return accessToken;
-	}
+    public String getAccessToken() {
+        return accessToken;
+    }
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
-	public String getSecret() {
-		return secret;
-	}
+    public String getSecret() {
+        return secret;
+    }
 
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 }

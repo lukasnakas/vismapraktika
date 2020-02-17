@@ -12,23 +12,37 @@ import java.util.List;
 @Service
 public class RevolutTransactionErrorService implements TransactionErrorService {
 
-	public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
-		RevolutPayment revolutPayment = (RevolutPayment) payment;
-		return new TransactionError(createMissingParamsList(revolutPayment));
-	}
+    public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
+        RevolutPayment revolutPayment = (RevolutPayment) payment;
+        return new TransactionError(createMissingParamsList(revolutPayment));
+    }
 
-	public List<String> createMissingParamsList(RevolutPayment revolutPayment) {
-		List<String> missingParamsList = new ArrayList<>();
+    public List<String> createMissingParamsList(RevolutPayment revolutPayment) {
+        List<String> missingParamsList = new ArrayList<>();
 
-		if (revolutPayment.getAccountId() == null) missingParamsList.add("account_id");
-		if (revolutPayment.getReceiver() == null) missingParamsList.add("receiver");
-		if (revolutPayment.getReceiver().getAccountId() == null) missingParamsList.add("receiver.account_id");
-		if (revolutPayment.getReceiver().getCounterPartyId() == null) missingParamsList.add("receiver.counterparty_id");
-		if (revolutPayment.getReference() == null) missingParamsList.add("reference");
-		if (revolutPayment.getCurrency() == null) missingParamsList.add("currency");
-		if (revolutPayment.getAmount() <= 0) missingParamsList.add("amount");
+        if (revolutPayment.getAccountId() == null) {
+            missingParamsList.add("account_id");
+        }
+        if (revolutPayment.getReceiver() == null) {
+            missingParamsList.add("receiver");
+        }
+        if (revolutPayment.getReceiver().getAccountId() == null) {
+            missingParamsList.add("receiver.account_id");
+        }
+        if (revolutPayment.getReceiver().getCounterPartyId() == null) {
+            missingParamsList.add("receiver.counterparty_id");
+        }
+        if (revolutPayment.getReference() == null) {
+            missingParamsList.add("reference");
+        }
+        if (revolutPayment.getCurrency() == null) {
+            missingParamsList.add("currency");
+        }
+        if (revolutPayment.getAmount() <= 0) {
+            missingParamsList.add("amount");
+        }
 
-		return missingParamsList;
-	}
+        return missingParamsList;
+    }
 
 }

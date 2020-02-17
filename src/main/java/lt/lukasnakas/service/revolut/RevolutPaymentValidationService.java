@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class RevolutPaymentValidationService implements PaymentValidationService {
 
-	public boolean isValid(Payment payment) {
-		return areRevolutPaymentParamsNotNull((RevolutPayment) payment);
-	}
+    public boolean isValid(Payment payment) {
+        return areRevolutPaymentParamsNotNull((RevolutPayment) payment);
+    }
 
-	private boolean areRevolutPaymentParamsNotNull(RevolutPayment revolutPayment) {
-		return revolutPayment.getAccountId() != null
-				&& revolutPayment.getReceiver() != null
-				&& revolutPayment.getReceiver().getAccountId() != null
-				&& revolutPayment.getReceiver().getCounterPartyId() != null
-				&& revolutPayment.getReference() != null
-				&& revolutPayment.getCurrency() != null
-				&& revolutPayment.getAmount() > 0;
-	}
+    private boolean areRevolutPaymentParamsNotNull(RevolutPayment revolutPayment) {
+        return revolutPayment.getAccountId() != null
+                && revolutPayment.getReceiver() != null
+                && revolutPayment.getReceiver().getAccountId() != null
+                && revolutPayment.getReceiver().getCounterPartyId() != null
+                && revolutPayment.getReference() != null
+                && revolutPayment.getCurrency() != null
+                && revolutPayment.getAmount() > 0;
+    }
 
 }
