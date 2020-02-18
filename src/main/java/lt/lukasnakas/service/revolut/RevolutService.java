@@ -83,7 +83,7 @@ public class RevolutService implements BankingService {
 
     public Transaction postTransaction(Payment payment) {
         ResponseEntity<RevolutTransaction> responseEntity;
-        System.out.println(payment);
+
         try {
             String accessToken = revolutServiceConfiguration.getAccessToken();
             responseEntity = getResponseEntityForTransaction(accessToken, payment);

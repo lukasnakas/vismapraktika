@@ -28,11 +28,4 @@ public class TransactionError extends Transaction {
     public void setMessage(String message) {
         this.message = message;
     }
-
-    @Override
-    public String toString() {
-        return "TransactionError{" +
-                "message='" + message + '\'' +
-                '}';
-    }
 }
