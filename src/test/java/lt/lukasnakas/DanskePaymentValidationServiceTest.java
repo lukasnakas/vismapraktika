@@ -1,13 +1,13 @@
 package lt.lukasnakas;
 
-import lt.lukasnakas.model.danske.transaction.DanskePayment;
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.service.danske.DanskePaymentValidationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DanskePaymentValidationServiceTest {
@@ -17,23 +17,16 @@ public class DanskePaymentValidationServiceTest {
 
 	@Test
 	public void isValid_shouldReturnTrue(){
-		DanskePayment payment = new DanskePayment("danske", "debit", 100);
+		Payment payment = new Payment(null, null, null, 110, null, null);
 		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(true, actual);
-	}
-
-	@Test
-	public void isValidNoTemplate_shouldReturnFalse(){
-		DanskePayment payment = new DanskePayment("danske", null, 100);
-		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(false, actual);
+		assertTrue(actual);
 	}
 
 	@Test
 	public void isValidNoAmount_shouldReturnFalse(){
-		DanskePayment payment = new DanskePayment("danske", "credit", 0);
+		Payment payment = new Payment(null, null, null, 0, null, null);
 		boolean actual = danskePaymentValidationService.isValid(payment);
-		assertEquals(false, actual);
+		assertFalse(actual);
 	}
 
 }

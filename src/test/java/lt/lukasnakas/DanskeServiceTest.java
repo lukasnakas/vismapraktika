@@ -46,7 +46,8 @@ public class DanskeServiceTest {
 
 	@Test
 	public void getParsedTransactionsList_returnsTransactionsList(){
-		DanskeTransaction transaction = new DanskeTransaction("123", "debit", new DanskeTransactionAmount(100, "EUR"));
+		DanskeTransaction transaction = new DanskeTransaction("123", "456",
+				"debit", new DanskeTransactionAmount(100, "EUR"));
 		List<DanskeTransaction> danskeTransactionsList = Lists.newArrayList(transaction);
 
 		List<Transaction> expected = new ArrayList<>(danskeTransactionsList);

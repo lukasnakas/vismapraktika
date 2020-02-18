@@ -5,32 +5,32 @@ import lt.lukasnakas.model.AccessToken;
 
 public class RevolutAccessToken extends AccessToken {
 
-	@JsonProperty("token_type")
-	private String tokenType;
-	@JsonProperty("expires_in")
-	private String expiresIn;
+    @JsonProperty("token_type")
+    private String tokenType;
+    @JsonProperty("expires_in")
+    private String expiresIn;
 
-	public RevolutAccessToken() {
-	}
+    public RevolutAccessToken() {
+    }
 
-	public RevolutAccessToken(String tokenType, String expiresIn) {
-		this.tokenType = tokenType;
-		this.expiresIn = expiresIn;
-	}
+    public RevolutAccessToken(String tokenType, String expiresIn) {
+        this.tokenType = tokenType;
+        this.expiresIn = expiresIn;
+    }
 
-	public String getTokenType() {
-		return tokenType;
-	}
+    public String getTokenType() {
+        return tokenType;
+    }
 
-	public void setTokenType(String tokenType) {
-		this.tokenType = tokenType;
-	}
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
+    }
 
-	public String getExpiresIn() {
-		return expiresIn;
-	}
+    public String getExpiresIn() {
+        return expiresIn;
+    }
 
-	public void setExpiresIn(String expiresIn) {
-		this.expiresIn = expiresIn;
-	}
+    public void setExpiresIn(String expiresIn) {
+        this.expiresIn = expiresIn;
+    }
 }

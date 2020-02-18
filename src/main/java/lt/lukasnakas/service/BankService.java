@@ -1,115 +1,65 @@
 package lt.lukasnakas.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.model.danske.transaction.DanskePayment;
-import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransfer;
-import lt.lukasnakas.service.danske.DanskeService;
-import lt.lukasnakas.service.revolut.RevolutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BankService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
 
-	@Autowired
-	private DanskeService danskeService;
+    private final List<BankingService> bankingServices;
 
-	@Autowired
-	private RevolutService revolutService;
+    public BankService(List<BankingService> bankingServices) {
+        this.bankingServices = bankingServices;
+    }
 
-	private List<Account> getAllAccountsList() {
-		List<Account> accountsList = new ArrayList<>();
-		accountsList.addAll(danskeService.retrieveAccounts());
-		accountsList.addAll(revolutService.retrieveAccounts());
-		return accountsList;
-	}
+    private Stream<Account> getAllAccountsStream() {
+        return bankingServices.stream()
+                .map(BankingService::retrieveAccounts)
+                .flatMap(Collection::stream);
+    }
 
-	public Map<String, Account> getAccounts() {
-		Map<String, Account> accountsMap = new HashMap<>();
+    public Map<String, Account> getAccounts() {
+        return getAllAccountsStream()
+                .collect(Collectors.toMap(Account::getId, account -> account));
+    }
 
-		for (Account account : getAllAccountsList())
-			accountsMap.put(account.getId(), account);
-		return accountsMap;
-	}
+    public Account getAccountById(String id) {
+        return getAccounts().get(id);
+    }
 
-	public Account getAccountById(String id){
-		return getAccounts().get(id);
-	}
+    private Stream<Transaction> getAllTransactionsList() {
+        return bankingServices.stream()
+                .map(BankingService::retrieveTransactions)
+                .flatMap(Collection::stream);
+    }
 
-	private List<Transaction> getAllTransactionsList() {
-		List<Transaction> transactionsList = new ArrayList<>();
-		transactionsList.addAll(danskeService.retrieveTransactions());
-		transactionsList.addAll(revolutService.retrieveTransactions());
-		return transactionsList;
-	}
+    public Map<String, Transaction> getTransactions() {
+        return getAllTransactionsList()
+                .collect(Collectors.toMap(Transaction::getId, transaction -> transaction));
+    }
 
-	public Map<String, Transaction> getTransactions() {
-		Map<String, Transaction> transactionsMap = new HashMap<>();
+    public Transaction getTransactionById(String id) {
+        return getTransactions().get(id);
+    }
 
-		for (Transaction transaction : getAllTransactionsList())
-			transactionsMap.put(transaction.getId(), transaction);
-		return transactionsMap;
-	}
-
-	public Transaction getTransactionById(String id){
-		return getTransactions().get(id);
-	}
-
-	public Transaction postTransaction(String paymentBody, String bankName) {
-		if (bankName.equalsIgnoreCase(danskeService.getBankName())) {
-			Payment payment = convertJsonToPaymentObject(paymentBody, DanskePayment.class);
-			return danskeService.executeTransactionIfValid(payment);
-		} else if (bankName.equalsIgnoreCase(revolutService.getBankName())) {
-			return executeSpecificRevolutTransactionType(paymentBody);
-		}
-		return getTransactionError("bankName");
-	}
-
-	private Transaction executeSpecificRevolutTransactionType(String paymentBody) {
-		String paymentType = revolutService.getPaymentType(paymentBody);
-		if (paymentType != null) {
-			if (paymentType.equalsIgnoreCase("\"payment\"")) {
-				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutPayment.class);
-				return revolutService.executeTransactionIfValid(payment);
-			} else if (paymentType.equalsIgnoreCase("\"transfer\"")) {
-				Payment payment = convertJsonToPaymentObject(paymentBody, RevolutTransfer.class);
-				return revolutService.executeTransactionIfValid(payment);
-			}
-		}
-		return getTransactionError("type");
-	}
-
-	private Payment convertJsonToPaymentObject(String paymentBody, Class<? extends Payment> paymentClass) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode jsonNode = mapper.readTree(paymentBody);
-			return mapper.convertValue(jsonNode, paymentClass);
-		} catch (JsonProcessingException e) {
-			LOGGER.warn(e.getMessage());
-			return null;
-		}
-	}
-
-	private TransactionError getTransactionError(String invalidKey){
-		TransactionError transactionError = new TransactionError(invalidKey);
-		String errorMsg = transactionError.toString();
-		LOGGER.error(errorMsg);
-		return transactionError;
-	}
+    public Transaction postTransaction(Payment payment, String bankName) throws Exception {
+        for (BankingService bankingService : bankingServices) {
+            if (bankName.equalsIgnoreCase(bankingService.getBankName())) {
+                return bankingService.executeTransactionIfValid(payment);
+            }
+        }
+        throw new BadRequestException(new TransactionError("bankName").getMessage());
+    }
 }

@@ -24,7 +24,8 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getParsedAccountsList_returnsAccountsList(){
-		RevolutAccount account = new RevolutAccount("123", "AccName", 500, "EUR", "active", true, "", "");
+		RevolutAccount account = new RevolutAccount("123", "AccName", 500, "EUR",
+				"active", true, "", "");
 		List<RevolutAccount> revolutAccountsList = Lists.newArrayList(account);
 
 		List<Account> expected = new ArrayList<>(revolutAccountsList);
@@ -34,7 +35,8 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getParsedTransactionsList_returnsTransactionsList(){
-		RevolutTransaction transaction = new RevolutTransaction("123", "payment", "111", "", "ref", null, "completed", "", "");
+		RevolutTransaction transaction = new RevolutTransaction("123", "payment", "111",
+				"", "ref", null, "completed", "", "");
 		List<RevolutTransaction> revolutTransactionsList = Lists.newArrayList(transaction);
 
 		List<Transaction> expected = new ArrayList<>(revolutTransactionsList);
