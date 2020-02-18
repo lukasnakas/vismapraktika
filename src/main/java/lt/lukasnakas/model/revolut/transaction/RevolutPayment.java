@@ -86,16 +86,4 @@ public class RevolutPayment extends Payment {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
-    @Override
-    public String toString() {
-        return "RevolutPayment{" +
-                "accountId='" + accountId + '\'' +
-                ", receiver=" + receiver +
-                ", currency='" + currency + '\'' +
-                ", reference='" + reference + '\'' +
-                ", requestId='" + requestId + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
 }
