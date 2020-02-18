@@ -23,7 +23,7 @@ public class RevolutServiceTest {
 	private RevolutService revolutService;
 
 	@Test
-	public void getParsedAccountsList_returnsAccountsList(){
+	public void getParsedAccountsList_shouldReturnAccountsList() {
 		RevolutAccount account = new RevolutAccount("123", "AccName", 500, "EUR",
 				"active", true, "", "");
 		List<RevolutAccount> revolutAccountsList = Lists.newArrayList(account);
@@ -34,7 +34,7 @@ public class RevolutServiceTest {
 	}
 
 	@Test
-	public void getParsedTransactionsList_returnsTransactionsList(){
+	public void getParsedTransactionsList_shouldReturnTransactionsList() {
 		RevolutTransaction transaction = new RevolutTransaction("123", "payment", "111",
 				"", "ref", null, "completed", "", "");
 		List<RevolutTransaction> revolutTransactionsList = Lists.newArrayList(transaction);

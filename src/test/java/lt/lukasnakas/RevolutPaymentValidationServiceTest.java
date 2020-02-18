@@ -8,7 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class RevolutPaymentValidationServiceTest {
@@ -17,7 +18,7 @@ public class RevolutPaymentValidationServiceTest {
 	private RevolutPaymentValidationService revolutPaymentValidationService;
 
 	@Test
-	public void isValid_shouldReturnTrue(){
+	public void isValid_shouldReturnTrue() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
 				"EUR", "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -25,7 +26,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoAmount_shouldReturnFalse(){
+	public void isValidNoAmount_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
 				"EUR", "ref", 0);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -33,7 +34,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNegativeAmount_shouldReturnFalse(){
+	public void isValidNegativeAmount_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
 				"EUR", "ref", -100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -41,7 +42,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoCurrency_shouldReturnFalse(){
+	public void isValidNoCurrency_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
 				null, "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -49,7 +50,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoAccountId_shouldReturnFalse(){
+	public void isValidNoAccountId_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment(null, new RevolutReceiver("789", "123456"),
 				"EUR", "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -57,7 +58,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoRevolutReceiver_shouldReturnFalse(){
+	public void isValidNoRevolutReceiver_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", null,
 				"EUR", "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -65,7 +66,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoRevolutReceiverCounterpartyId_shouldReturnFalse(){
+	public void isValidNoRevolutReceiverCounterpartyId_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver(null,
 				"123456"), "EUR", "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -73,7 +74,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoRevolutReceiverAccountId_shouldReturnFalse(){
+	public void isValidNoRevolutReceiverAccountId_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789",
 				null), "EUR", "ref", 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);
@@ -81,7 +82,7 @@ public class RevolutPaymentValidationServiceTest {
 	}
 
 	@Test
-	public void isValidNoReference_shouldReturnFalse(){
+	public void isValidNoReference_shouldReturnFalse() {
 		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
 				"EUR", null, 100);
 		boolean actual = revolutPaymentValidationService.isValid(payment);

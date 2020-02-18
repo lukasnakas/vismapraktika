@@ -3,7 +3,7 @@ package lt.lukasnakas.controller;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.service.BankService;
+import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +16,21 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(value = "/api/transactions")
 public class TransactionController {
-	private final BankService bankService;
+	private final TransactionService transactionService;
 
-	public TransactionController(BankService bankService) {
-		this.bankService = bankService;
+	public TransactionController(TransactionService transactionService) {
+		this.transactionService = transactionService;
 	}
 
 	@GetMapping(value = "", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Map<String, Transaction>> getAllTransactions() {
-		return ok(bankService.getTransactionList());
+		return ok(transactionService.getTransactionMap());
 	}
 
 	@GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Transaction> getTransactionById(@PathVariable String id) {
 		try {
-			return ok(bankService.getTransactionById(id));
+			return ok(transactionService.getTransactionById(id));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 		}
@@ -39,7 +39,7 @@ public class TransactionController {
 	@PostMapping(value = "/{bankName}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Transaction> addTransaction(@RequestBody Payment payment, @PathVariable String bankName) {
 		try {
-			return ok(bankService.postTransaction(payment, bankName));
+			return ok(transactionService.postTransaction(payment, bankName));
 		} catch (BadRequestException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
