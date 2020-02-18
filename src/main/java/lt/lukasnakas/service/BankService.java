@@ -5,8 +5,6 @@ import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,8 +13,6 @@ import java.util.stream.Stream;
 
 @Service
 public class BankService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
 
     private final List<BankingService> bankingServices;
 
@@ -54,7 +50,7 @@ public class BankService {
         return getTransactions().get(id);
     }
 
-    public Transaction postTransaction(Payment payment, String bankName) throws Exception {
+    public Transaction postTransaction(Payment payment, String bankName) {
         for (BankingService bankingService : bankingServices) {
             if (bankName.equalsIgnoreCase(bankingService.getBankName())) {
                 return bankingService.executeTransactionIfValid(payment);

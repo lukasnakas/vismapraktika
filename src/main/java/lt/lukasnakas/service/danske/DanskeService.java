@@ -55,7 +55,6 @@ public class DanskeService implements BankingService {
             String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new AccountRetrievalException(e.getMessage());
         }
 
@@ -73,7 +72,6 @@ public class DanskeService implements BankingService {
             String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new TransactionRetrievalException(e.getMessage());
         }
 
@@ -91,7 +89,6 @@ public class DanskeService implements BankingService {
             String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new TransactionExecutionExeption(e.getMessage());
         }
 
