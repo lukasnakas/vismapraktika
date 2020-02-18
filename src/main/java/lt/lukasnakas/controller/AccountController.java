@@ -24,7 +24,7 @@ public class AccountController {
 
     @GetMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Map<String, Account>> getAllAccounts() {
-        return ok(bankService.getAccounts());
+        return ok(bankService.getAccountList());
     }
 
     @GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
