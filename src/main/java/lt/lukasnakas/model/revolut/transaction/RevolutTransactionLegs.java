@@ -10,7 +10,7 @@ public class RevolutTransactionLegs {
     private String accountId;
     @JsonProperty("counterparty")
     private RevolutCounterparty counterparty;
-    @JsonProperty("bill_amount")
+    @JsonProperty("amount")
     private double amount;
     @JsonProperty("currency")
     private String currency;

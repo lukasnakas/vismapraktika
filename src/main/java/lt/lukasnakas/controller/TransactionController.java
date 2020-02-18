@@ -27,7 +27,7 @@ public class TransactionController {
 
     @GetMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Map<String, Transaction>> getAllTransactions() {
-        return ok(bankService.getTransactions());
+        return ok(bankService.getTransactionList());
     }
 
     @GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")

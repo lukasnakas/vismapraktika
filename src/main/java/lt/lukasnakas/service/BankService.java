@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class BankService {
@@ -20,42 +19,38 @@ public class BankService {
         this.bankingServices = bankingServices;
     }
 
-    private Stream<Account> getAllAccountsStream() {
+    public Map<String, Account> getAccountList() {
         return bankingServices.stream()
                 .map(BankingService::retrieveAccounts)
-                .flatMap(Collection::stream);
-    }
-
-    public Map<String, Account> getAccounts() {
-        return getAllAccountsStream()
+                .flatMap(Collection::stream)
                 .collect(Collectors.toMap(Account::getId, account -> account));
     }
 
     public Account getAccountById(String id) {
-        return getAccounts().get(id);
+        return getAccountList().get(id);
     }
 
-    private Stream<Transaction> getAllTransactionsList() {
+    public Map<String, Transaction> getTransactionList() {
         return bankingServices.stream()
                 .map(BankingService::retrieveTransactions)
-                .flatMap(Collection::stream);
-    }
-
-    public Map<String, Transaction> getTransactions() {
-        return getAllTransactionsList()
+                .flatMap(Collection::stream)
                 .collect(Collectors.toMap(Transaction::getId, transaction -> transaction));
     }
 
     public Transaction getTransactionById(String id) {
-        return getTransactions().get(id);
+        return getTransactionList().get(id);
     }
 
     public Transaction postTransaction(Payment payment, String bankName) {
         for (BankingService bankingService : bankingServices) {
-            if (bankName.equalsIgnoreCase(bankingService.getBankName())) {
+            if (bankNameMatches(bankName, bankingService.getBankName())) {
                 return bankingService.executeTransactionIfValid(payment);
             }
         }
         throw new BadRequestException(new TransactionError("bankName").getMessage());
+    }
+
+    private boolean bankNameMatches(String bankName, String bankingServiceBankName){
+        return bankName.equalsIgnoreCase(bankingServiceBankName);
     }
 }
