@@ -2,6 +2,7 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.exception.*;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
@@ -55,7 +56,7 @@ public class DanskeService implements BankingService {
             responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return new ArrayList<>();
+            throw new AccountRetrievalException(e.getMessage());
         }
 
         log("GET", "accounts", responseEntity);
@@ -73,7 +74,7 @@ public class DanskeService implements BankingService {
             responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return new ArrayList<>();
+            throw new TransactionRetrievalException(e.getMessage());
         }
 
         log("GET", "transactions", responseEntity);
@@ -91,7 +92,7 @@ public class DanskeService implements BankingService {
             responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new TransactionExecutionExeption(e.getMessage());
         }
 
         log("POST", "transaction", responseEntity);
@@ -169,9 +170,7 @@ public class DanskeService implements BankingService {
             return postTransaction(payment);
         } else {
             TransactionError transactionError = getErrorWithFirstMissingParamFromPayment(payment);
-            String errorMsg = transactionError.toString();
-            LOGGER.error(errorMsg);
-            return transactionError;
+            throw new BadRequestException(transactionError.getMessage());
         }
     }
 }

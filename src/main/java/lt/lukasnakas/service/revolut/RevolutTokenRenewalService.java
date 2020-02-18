@@ -1,6 +1,7 @@
 package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
+import lt.lukasnakas.exception.TokenGenerationException;
 import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.model.revolut.RevolutAccessToken;
 import lt.lukasnakas.service.TokenRenewalService;
@@ -25,7 +26,7 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
         this.restTemplate = restTemplate;
     }
 
-    public AccessToken generateAccessToken() {
+    public AccessToken generateAccessToken() throws TokenGenerationException {
         ResponseEntity<RevolutAccessToken> responseEntity;
 
         try {
@@ -33,7 +34,7 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
             setupNewAccessToken(responseEntity);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new TokenGenerationException(e.getMessage());
         }
 
         return responseEntity.getBody();

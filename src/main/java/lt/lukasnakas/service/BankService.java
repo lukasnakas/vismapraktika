@@ -1,6 +1,7 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BankService {
@@ -22,15 +24,14 @@ public class BankService {
         this.bankingServices = bankingServices;
     }
 
-    private List<Account> getAllAccountsList() {
+    private Stream<Account> getAllAccountsStream() {
         return bankingServices.stream()
                 .map(BankingService::retrieveAccounts)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .flatMap(Collection::stream);
     }
 
     public Map<String, Account> getAccounts() {
-        return getAllAccountsList().stream()
+        return getAllAccountsStream()
                 .collect(Collectors.toMap(Account::getId, account -> account));
     }
 
@@ -38,15 +39,14 @@ public class BankService {
         return getAccounts().get(id);
     }
 
-    private List<Transaction> getAllTransactionsList() {
+    private Stream<Transaction> getAllTransactionsList() {
         return bankingServices.stream()
                 .map(BankingService::retrieveTransactions)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .flatMap(Collection::stream);
     }
 
     public Map<String, Transaction> getTransactions() {
-        return getAllTransactionsList().stream()
+        return getAllTransactionsList()
                 .collect(Collectors.toMap(Transaction::getId, transaction -> transaction));
     }
 
@@ -54,19 +54,12 @@ public class BankService {
         return getTransactions().get(id);
     }
 
-    public Transaction postTransaction(Payment payment, String bankName) {
+    public Transaction postTransaction(Payment payment, String bankName) throws Exception {
         for (BankingService bankingService : bankingServices) {
             if (bankName.equalsIgnoreCase(bankingService.getBankName())) {
                 return bankingService.executeTransactionIfValid(payment);
             }
         }
-        return getTransactionError("bankName");
-    }
-
-    private TransactionError getTransactionError(String invalidKey) {
-        TransactionError transactionError = new TransactionError(invalidKey);
-        String errorMsg = transactionError.toString();
-        LOGGER.error(errorMsg);
-        return transactionError;
+        throw new BadRequestException(new TransactionError("bankName").getMessage());
     }
 }

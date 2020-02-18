@@ -21,19 +21,19 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
         List<String> missingParamsList = new ArrayList<>();
 
         if (revolutPayment.getAccountId() == null) {
-            missingParamsList.add("account_id");
+            missingParamsList.add("sender_account_id");
         }
         if (revolutPayment.getReceiver() == null) {
             missingParamsList.add("receiver");
         }
         if (revolutPayment.getReceiver().getAccountId() == null) {
-            missingParamsList.add("receiver.account_id");
+            missingParamsList.add("receiver_account_id");
         }
         if (revolutPayment.getReceiver().getCounterPartyId() == null) {
-            missingParamsList.add("receiver.counterparty_id");
+            missingParamsList.add("counterparty_id");
         }
         if (revolutPayment.getReference() == null) {
-            missingParamsList.add("reference");
+            missingParamsList.add("description");
         }
         if (revolutPayment.getCurrency() == null) {
             missingParamsList.add("currency");

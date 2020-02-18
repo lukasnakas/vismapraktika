@@ -1,6 +1,7 @@
 package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
+import lt.lukasnakas.exception.TokenGenerationException;
 import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.service.TokenRenewalService;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
         this.restTemplate = restTemplate;
     }
 
-    public AccessToken generateAccessToken() {
+    public AccessToken generateAccessToken() throws TokenGenerationException {
         ResponseEntity<AccessToken> responseEntity;
 
         try {
@@ -32,7 +33,7 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
             setupNewAccessToken(responseEntity);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new TokenGenerationException(e.getMessage());
         }
 
         return responseEntity.getBody();

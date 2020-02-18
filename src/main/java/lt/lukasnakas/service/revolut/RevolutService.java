@@ -2,6 +2,7 @@ package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.exception.*;
 import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
@@ -57,7 +58,7 @@ public class RevolutService implements BankingService {
             responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return new ArrayList<>();
+            throw new AccountRetrievalException(e.getMessage());
         }
 
         log("GET", "accounts", responseEntity);
@@ -75,7 +76,7 @@ public class RevolutService implements BankingService {
             responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return new ArrayList<>();
+            throw new TransactionRetrievalException(e.getMessage());
         }
 
         log("GET", "transactions", responseEntity);
@@ -93,7 +94,7 @@ public class RevolutService implements BankingService {
             responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new TransactionExecutionExeption(e.getMessage());
         }
 
         log("POST", "transaction", responseEntity);
@@ -168,17 +169,15 @@ public class RevolutService implements BankingService {
 
     public Transaction executeTransactionIfValid(Payment payment) {
         RevolutReceiver revolutReceiver = new RevolutReceiver(payment.getCounterpartyId(), payment.getReceiverAccountId());
-        RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver, payment.getCurrency(),
-                payment.getDescription(), payment.getAmount());
+        RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver,
+                payment.getCurrency(), payment.getDescription(), payment.getAmount());
 
         if (isPaymentValid(revolutPayment)) {
             revolutPayment.setGeneratedRequestId();
             return postTransaction(revolutPayment);
         } else {
             TransactionError transactionError = getErrorWithMissingsParamFromPayment(revolutPayment);
-            String errorMsg = transactionError.toString();
-            LOGGER.error(errorMsg);
-            return transactionError;
+            throw new BadRequestException(transactionError.getMessage());
         }
     }
 }
