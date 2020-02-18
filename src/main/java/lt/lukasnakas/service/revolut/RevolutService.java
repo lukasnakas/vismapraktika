@@ -57,7 +57,6 @@ public class RevolutService implements BankingService {
             String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new AccountRetrievalException(e.getMessage());
         }
 
@@ -75,7 +74,6 @@ public class RevolutService implements BankingService {
             String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForTransactions(accessToken);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new TransactionRetrievalException(e.getMessage());
         }
 
@@ -93,7 +91,6 @@ public class RevolutService implements BankingService {
             String accessToken = revolutTokenRenewalService.generateAccessToken().getToken();
             responseEntity = getResponseEntityForTransaction(accessToken, payment);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new TransactionExecutionExeption(e.getMessage());
         }
 

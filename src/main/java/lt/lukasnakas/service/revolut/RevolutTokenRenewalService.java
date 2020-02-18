@@ -26,14 +26,13 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
         this.restTemplate = restTemplate;
     }
 
-    public AccessToken generateAccessToken() throws TokenGenerationException {
+    public AccessToken generateAccessToken() {
         ResponseEntity<RevolutAccessToken> responseEntity;
 
         try {
             responseEntity = getResponseEntityForAccessToken();
             setupNewAccessToken(responseEntity);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new TokenGenerationException(e.getMessage());
         }
 
