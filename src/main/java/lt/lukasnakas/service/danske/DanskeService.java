@@ -8,6 +8,7 @@ import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
+import lt.lukasnakas.repository.AccountRepository;
 import lt.lukasnakas.service.BankingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

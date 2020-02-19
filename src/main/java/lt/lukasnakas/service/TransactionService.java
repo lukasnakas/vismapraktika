@@ -5,6 +5,7 @@ import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,9 +17,12 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 	private final List<BankingService> bankingServices;
+	private final TransactionRepository transactionRepository;
 
-	public TransactionService(List<BankingService> bankingServices) {
+	public TransactionService(List<BankingService> bankingServices,
+							  TransactionRepository transactionRepository) {
 		this.bankingServices = bankingServices;
+		this.transactionRepository = transactionRepository;
 	}
 
 	public Map<String, Transaction> getTransactionMap() {
@@ -28,11 +32,24 @@ public class TransactionService {
 				.collect(Collectors.toMap(Transaction::getId, transaction -> transaction));
 	}
 
-	public Transaction getTransactionById(String id) {
-		return Optional.ofNullable(getTransactionMap().get(id))
-				.orElseThrow(() -> new TransactionNotFoundException(
-						String.format("Transaction [id: %s] could not be found", id)));
+	public List<Transaction> getTransactions() {
+		return (List<Transaction>) transactionRepository.findAll();
 	}
+
+	public Transaction getTransactionById(String id) {
+		Optional<Transaction> transaction = transactionRepository.findById(id);
+
+		if(transaction.isPresent()) {
+			return transaction.get();
+		}
+		throw new TransactionNotFoundException(String.format("Transaction [id: %s] not found", id));
+	}
+
+//	public Transaction getTransactionById(String id) {
+//		return Optional.ofNullable(getTransactionMap().get(id))
+//				.orElseThrow(() -> new TransactionNotFoundException(
+//						String.format("Transaction [id: %s] could not be found", id)));
+//	}
 
 	private List<Transaction> getChosenBankingServiceListForPost(Payment payment, String bankName) {
 		return bankingServices.stream()
