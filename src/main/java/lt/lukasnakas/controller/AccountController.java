@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -36,6 +37,11 @@ public class AccountController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 		}
+	}
+
+	@GetMapping(value = "/update", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<List<Account>> updateAccounts(){
+		return ok(accountService.updateAccounts());
 	}
 
 }
