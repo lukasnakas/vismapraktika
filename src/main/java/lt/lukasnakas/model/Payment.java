@@ -2,8 +2,17 @@ package lt.lukasnakas.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     @JsonProperty("sender_account_id")
     private String senderAccountId;
     @JsonProperty("receiver_account_id")
@@ -28,6 +37,14 @@ public class Payment {
         this.amount = amount;
         this.currency = currency;
         this.description = description;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getSenderAccountId() {

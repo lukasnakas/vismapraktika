@@ -30,6 +30,11 @@ public class AccountController {
 		return ok(accountService.getAccountMap());
 	}
 
+	@GetMapping(value = "/v2", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<List<Account>> getAllAccountsV2() {
+		return ok(accountService.getAccounts());
+	}
+
 	@GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Account> getAccountById(@PathVariable String id) {
 		try {

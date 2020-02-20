@@ -16,6 +16,10 @@ public class DanskeServiceConfiguration {
     @NotNull
     private String tokenType;
     @NotNull
+    private String xFapiFinancialId;
+    @NotNull
+    private String urlAccountsVirtual;
+    @NotNull
     private String urlAuth;
     @NotNull
     private String urlAccounts;
@@ -42,6 +46,22 @@ public class DanskeServiceConfiguration {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public String getxFapiFinancialId() {
+        return xFapiFinancialId;
+    }
+
+    public void setxFapiFinancialId(String xFapiFinancialId) {
+        this.xFapiFinancialId = xFapiFinancialId;
+    }
+
+    public String getUrlAccountsVirtual() {
+        return urlAccountsVirtual;
+    }
+
+    public void setUrlAccountsVirtual(String urlAccountsVirtual) {
+        this.urlAccountsVirtual = urlAccountsVirtual;
     }
 
     public String getUrlAuth() {

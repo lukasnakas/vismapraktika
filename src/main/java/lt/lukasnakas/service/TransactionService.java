@@ -5,6 +5,7 @@ import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,14 @@ import java.util.stream.Collectors;
 public class TransactionService {
 	private final List<BankingService> bankingServices;
 	private final TransactionRepository transactionRepository;
+	private final PaymentRepository paymentRepository;
 
 	public TransactionService(List<BankingService> bankingServices,
-							  TransactionRepository transactionRepository) {
+							  TransactionRepository transactionRepository,
+							  PaymentRepository paymentRepository) {
 		this.bankingServices = bankingServices;
 		this.transactionRepository = transactionRepository;
+		this.paymentRepository = paymentRepository;
 	}
 
 	public Map<String, Transaction> getTransactionMap() {
@@ -62,6 +66,7 @@ public class TransactionService {
 		List<Transaction> transactionList = getChosenBankingServiceListForPost(payment, bankName);
 
 		if (!transactionList.isEmpty()) {
+			paymentRepository.save(payment);
 			return transactionList.get(0);
 		} else {
 			throw new BadRequestException(new TransactionError("bankName").getMessage());
