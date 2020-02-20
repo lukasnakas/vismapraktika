@@ -3,9 +3,7 @@ package lt.lukasnakas.service.revolut;
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.exception.*;
-import lt.lukasnakas.model.Account;
-import lt.lukasnakas.model.Payment;
-import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.model.*;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;
@@ -21,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RevolutService implements BankingService {
@@ -47,7 +47,7 @@ public class RevolutService implements BankingService {
         this.httpHeaders = httpHeaders;
     }
 
-    public List<Account> retrieveAccounts() {
+    public List<CommonAccount> retrieveAccounts() {
         ResponseEntity<List<RevolutAccount>> responseEntity;
 
         try {
@@ -60,11 +60,22 @@ public class RevolutService implements BankingService {
             throw new AccountRetrievalException(e.getMessage());
         }
 
+        List<CommonAccount> commonAccountList = responseEntity.getBody().stream()
+                .map(this::convertToCommonAccount)
+                .collect(Collectors.toList());
+
         log("GET", "accounts", responseEntity);
-        return getParsedAccountsList(responseEntity.getBody());
+        return commonAccountList;
     }
 
-    public List<Transaction> retrieveTransactions() {
+    private CommonAccount convertToCommonAccount(RevolutAccount revolutAccount){
+        return new CommonAccount("Revolut",
+                revolutAccount.getId(),
+                revolutAccount.getBalance(),
+                revolutAccount.getCurrency());
+    }
+
+    public List<CommonTransaction> retrieveTransactions() {
         ResponseEntity<List<RevolutTransaction>> responseEntity;
 
         try {
@@ -77,8 +88,25 @@ public class RevolutService implements BankingService {
             throw new TransactionRetrievalException(e.getMessage());
         }
 
+        List<CommonTransaction> commonTransactionList = responseEntity.getBody().stream()
+                .filter(this::hasCounterparty)
+                .map(this::convertToCommonTransaction)
+                .collect(Collectors.toList());
+
         log("GET", "transactions", responseEntity);
-        return getParsedTransactionsList(responseEntity.getBody());
+        return commonTransactionList;
+    }
+
+    private boolean hasCounterparty(RevolutTransaction revolutTransaction){
+        return Optional.ofNullable(revolutTransaction.getLegs()[0].getCounterparty()).isPresent();
+    }
+
+    private CommonTransaction convertToCommonTransaction(RevolutTransaction revolutTransaction){
+        return new CommonTransaction(revolutTransaction.getId(),
+                revolutTransaction.getLegs()[0].getAccountId(),
+                revolutTransaction.getLegs()[0].getCounterparty().getAccountId(),
+                revolutTransaction.getLegs()[0].getAmount(),
+                revolutTransaction.getLegs()[0].getCurrency());
     }
 
     public Transaction postTransaction(Payment payment) {

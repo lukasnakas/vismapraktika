@@ -3,6 +3,7 @@ package lt.lukasnakas.service;
 import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
+import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.repository.PaymentRepository;
@@ -29,19 +30,19 @@ public class TransactionService {
 		this.paymentRepository = paymentRepository;
 	}
 
-	public Map<String, Transaction> getTransactionMap() {
+	public Map<String, CommonTransaction> getTransactionMap() {
 		return bankingServices.stream()
 				.map(BankingService::retrieveTransactions)
 				.flatMap(Collection::stream)
-				.collect(Collectors.toMap(Transaction::getId, transaction -> transaction));
+				.collect(Collectors.toMap(CommonTransaction::getId, transaction -> transaction));
 	}
 
-	public List<Transaction> getTransactions() {
-		return (List<Transaction>) transactionRepository.findAll();
+	public List<CommonTransaction> getTransactions() {
+		return (List<CommonTransaction>) transactionRepository.findAll();
 	}
 
-	public Transaction getTransactionById(String id) {
-		Optional<Transaction> transaction = transactionRepository.findById(id);
+	public CommonTransaction getTransactionById(String id) {
+		Optional<CommonTransaction> transaction = transactionRepository.findById(id);
 
 		if(transaction.isPresent()) {
 			return transaction.get();
@@ -49,11 +50,14 @@ public class TransactionService {
 		throw new TransactionNotFoundException(String.format("Transaction [id: %s] not found", id));
 	}
 
-//	public Transaction getTransactionById(String id) {
-//		return Optional.ofNullable(getTransactionMap().get(id))
-//				.orElseThrow(() -> new TransactionNotFoundException(
-//						String.format("Transaction [id: %s] could not be found", id)));
-//	}
+	public List<CommonTransaction> updateTransactions() {
+		List<CommonTransaction> commonTransactionList = bankingServices.stream()
+				.map(BankingService::retrieveTransactions)
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList());
+
+		return (List<CommonTransaction>) transactionRepository.saveAll(commonTransactionList);
+	}
 
 	private List<Transaction> getChosenBankingServiceListForPost(Payment payment, String bankName) {
 		return bankingServices.stream()
@@ -71,7 +75,6 @@ public class TransactionService {
 		} else {
 			throw new BadRequestException(new TransactionError("bankName").getMessage());
 		}
-
 	}
 
 	private boolean bankNameMatches(String bankName, String bankingServiceBankName) {

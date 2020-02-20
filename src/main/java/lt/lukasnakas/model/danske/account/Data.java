@@ -2,23 +2,33 @@ package lt.lukasnakas.model.danske.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Data {
 
-	@JsonProperty("Account")
-	private DanskeAccount[] account;
+	@JsonProperty("Balance")
+	private Balance[] balance;
 
 	public Data() {
 	}
 
-	public Data(DanskeAccount[] account) {
-		this.account = account;
+	public Data(Balance[] balance) {
+		this.balance = balance;
 	}
 
-	public DanskeAccount[] getAccount() {
-		return account;
+	public Balance[] getBalance() {
+		return balance;
 	}
 
-	public void setAccount(DanskeAccount[] account) {
-		this.account = account;
+	public void setBalance(Balance[] balance) {
+		this.balance = balance;
+	}
+
+	@Override
+	public String toString() {
+		return "Data{" +
+				"balance=" + Arrays.toString(balance) +
+				'}';
 	}
 }

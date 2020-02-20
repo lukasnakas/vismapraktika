@@ -1,17 +1,15 @@
 package lt.lukasnakas.service;
 
-import lt.lukasnakas.model.Account;
-import lt.lukasnakas.model.Payment;
-import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.model.*;
 
 import java.util.List;
 
 public interface BankingService {
-    List<Account> retrieveAccounts();
+    List<CommonAccount> retrieveAccounts();
 
     List<Account> getParsedAccountsList(List<? extends Account> unparsedAccountsList);
 
-    List<Transaction> retrieveTransactions();
+    List<CommonTransaction> retrieveTransactions();
 
     Transaction postTransaction(Payment payment);
 

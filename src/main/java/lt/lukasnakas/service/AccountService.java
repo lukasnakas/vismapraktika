@@ -1,13 +1,8 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.exception.AccountNotFoundException;
-import lt.lukasnakas.exception.TransactionNotFoundException;
-import lt.lukasnakas.model.Account;
-import lt.lukasnakas.model.Transaction;
-import lt.lukasnakas.model.danske.account.DanskeAccount;
-import lt.lukasnakas.model.danske.account.DanskeAccountDetails;
+import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.repository.AccountRepository;
-import lt.lukasnakas.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,12 +20,12 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> getAccounts() {
-        return (List<Account>) accountRepository.findAll();
+    public List<CommonAccount> getAccounts() {
+        return (List<CommonAccount>) accountRepository.findAll();
     }
 
-    public Account getAccountById(String id) {
-        Optional<Account> account = accountRepository.findById(id);
+    public CommonAccount getAccountById(String id) {
+        Optional<CommonAccount> account = accountRepository.findById(id);
 
         if (account.isPresent()) {
             return account.get();
@@ -38,40 +33,13 @@ public class AccountService {
         throw new AccountNotFoundException(String.format("Account [id: %s] not found", id));
     }
 
-    public Map<String, Account> getAccountMap() {
-        return bankingServices.stream()
-                .map(BankingService::retrieveAccounts)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Account::getId, account -> account));
-    }
-
-    public List<Account> updateAccounts() {
-        List<Account> accs = bankingServices.stream()
+    public List<CommonAccount> updateAccounts() {
+        List<CommonAccount> commonAccountList = bankingServices.stream()
                 .map(BankingService::retrieveAccounts)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        for (Account acc : accs) {
-            if (acc instanceof DanskeAccount) {
-                DanskeAccount dAcc = (DanskeAccount) acc;
-                for (DanskeAccountDetails danskeAccountDetails : dAcc.getAccount()) {
-                    danskeAccountDetails.setDanskeAccount(dAcc);
-                }
-            }
-        }
-
-        System.out.println(accs);
-        return (List<Account>) accountRepository.saveAll(accs);
-//        return bankingServices.stream()
-//                .map(BankingService::retrieveAccounts)
-//                .flatMap(Collection::stream)
-//                .collect(Collectors.toMap(Account::getId, account -> account));
+        return (List<CommonAccount>) accountRepository.saveAll(commonAccountList);
     }
-
-//    public Account getAccountById(String id) {
-//        return Optional.ofNullable(getAccountMap().get(id))
-//                .orElseThrow(() -> new AccountNotFoundException(
-//                        String.format("Account [id: %s] could not be found", id)));
-//    }
 
 }

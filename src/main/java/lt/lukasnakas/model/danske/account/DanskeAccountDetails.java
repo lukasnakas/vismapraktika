@@ -2,14 +2,8 @@ package lt.lukasnakas.model.danske.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-
-@Entity
 public class DanskeAccountDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
     @JsonProperty("Identification")
     private String identification;
     @JsonProperty("SchemeName")
@@ -18,9 +12,6 @@ public class DanskeAccountDetails {
     private String name;
     @JsonProperty("SecondaryIdentification")
     private String secondaryIdentification;
-    @ManyToOne
-    @JoinColumn(name = "danskeAccount_id", nullable = false)
-    private DanskeAccount danskeAccount;
 
     public DanskeAccountDetails() {
     }
@@ -30,22 +21,6 @@ public class DanskeAccountDetails {
         this.schemeName = schemeName;
         this.name = name;
         this.secondaryIdentification = secondaryIdentification;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public DanskeAccount getDanskeAccount() {
-        return danskeAccount;
-    }
-
-    public void setDanskeAccount(DanskeAccount danskeAccount) {
-        this.danskeAccount = danskeAccount;
     }
 
     public String getIdentification() {
@@ -83,12 +58,10 @@ public class DanskeAccountDetails {
     @Override
     public String toString() {
         return "DanskeAccountDetails{" +
-                "id=" + id +
                 ", identification='" + identification + '\'' +
                 ", schemeName='" + schemeName + '\'' +
                 ", name='" + name + '\'' +
                 ", secondaryIdentification='" + secondaryIdentification + '\'' +
-                ", danskeAccount=" + danskeAccount +
                 '}';
     }
 }

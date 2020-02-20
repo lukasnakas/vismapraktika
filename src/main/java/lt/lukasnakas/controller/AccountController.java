@@ -1,6 +1,6 @@
 package lt.lukasnakas.controller;
 
-import lt.lukasnakas.model.Account;
+import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -25,18 +24,13 @@ public class AccountController {
 		this.accountService = accountService;
 	}
 
-	@GetMapping(value = "", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Map<String, Account>> getAllAccounts() {
-		return ok(accountService.getAccountMap());
-	}
-
-	@GetMapping(value = "/v2", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<List<Account>> getAllAccountsV2() {
+	@GetMapping(value = "/", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<List<CommonAccount>> getAllAccounts() {
 		return ok(accountService.getAccounts());
 	}
 
 	@GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Account> getAccountById(@PathVariable String id) {
+	public ResponseEntity<CommonAccount> getAccountById(@PathVariable String id) {
 		try {
 			return ok(accountService.getAccountById(id));
 		} catch (Exception e) {
@@ -45,7 +39,7 @@ public class AccountController {
 	}
 
 	@GetMapping(value = "/update", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<List<Account>> updateAccounts(){
+	public ResponseEntity<List<CommonAccount>> updateAccounts(){
 		return ok(accountService.updateAccounts());
 	}
 

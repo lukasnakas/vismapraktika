@@ -3,16 +3,8 @@ package lt.lukasnakas.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Account {
 
-    @Id
     @JsonProperty("id")
     @JsonAlias("AccountId")
     private String id;

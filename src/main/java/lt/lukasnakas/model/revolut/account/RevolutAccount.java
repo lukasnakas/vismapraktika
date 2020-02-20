@@ -3,9 +3,6 @@ package lt.lukasnakas.model.revolut.account;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lt.lukasnakas.model.Account;
 
-import javax.persistence.Entity;
-
-@Entity
 public class RevolutAccount extends Account {
 
     @JsonProperty("name")

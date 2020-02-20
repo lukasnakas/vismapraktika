@@ -2,16 +2,8 @@ package lt.lukasnakas.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Transaction {
 
-    @Id
     @JsonProperty("id")
     private String id;
 
