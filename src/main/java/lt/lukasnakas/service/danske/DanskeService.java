@@ -7,6 +7,7 @@ import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.Transaction;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
+import lt.lukasnakas.model.danske.account.Data;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.repository.AccountRepository;
 import lt.lukasnakas.service.BankingService;
@@ -47,10 +48,10 @@ public class DanskeService implements BankingService {
     }
 
     public List<Account> retrieveAccounts() {
-        ResponseEntity<List<DanskeAccount>> responseEntity;
+        ResponseEntity<Data> responseEntity;
 
         try {
-            String accessToken = danskeServiceConfiguration.getAccessToken();
+            String accessToken = danskeServiceConfiguration.getAccessTokenVirtual();
             responseEntity = getResponseEntityForAccounts(accessToken);
         } catch (HttpClientErrorException.Unauthorized e) {
             String accessToken = danskeTokenRenewalService.generateAccessToken().getToken();
@@ -60,7 +61,9 @@ public class DanskeService implements BankingService {
         }
 
         log("GET", "accounts", responseEntity);
-        return getParsedAccountsList(responseEntity.getBody());
+        System.out.println(responseEntity.getBody().getAccount()[0]);
+        return null;
+        //return getParsedAccountsList(responseEntity.getBody());
     }
 
     public List<Transaction> retrieveTransactions() {
@@ -105,12 +108,12 @@ public class DanskeService implements BankingService {
                 responseEntity.getStatusCode());
     }
 
-    private ResponseEntity<List<DanskeAccount>> getResponseEntityForAccounts(String accessToken) {
+    private ResponseEntity<Data> getResponseEntityForAccounts(String accessToken) {
         return restTemplate.exchange(
-                danskeServiceConfiguration.getUrlAccounts(),
+                danskeServiceConfiguration.getUrlAccountsVirtual(),
                 HttpMethod.GET,
-                getHttpEntity(accessToken),
-                new ParameterizedTypeReference<List<DanskeAccount>>() {
+                getHttpEntityVirtual(accessToken),
+                new ParameterizedTypeReference<Data>() {
                 });
     }
 
@@ -134,6 +137,14 @@ public class DanskeService implements BankingService {
     private HttpEntity<String> getHttpEntity(String accessToken) {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
+        return new HttpEntity<>(httpHeaders);
+    }
+
+    private HttpEntity<String> getHttpEntityVirtual(String accessToken) {
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        //httpHeaders.setBearerAuth(accessToken);
+        httpHeaders.add("Authorization", danskeServiceConfiguration.getAccessTokenVirtual());
+        httpHeaders.add("x-fapi-financial-id", "0015800000jf7AeAAI");
         return new HttpEntity<>(httpHeaders);
     }
 

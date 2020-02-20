@@ -1,5 +1,6 @@
 package lt.lukasnakas.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ public abstract class Account {
 
     @Id
     @JsonProperty("id")
+    @JsonAlias("AccountId")
     private String id;
 
     public Account() {

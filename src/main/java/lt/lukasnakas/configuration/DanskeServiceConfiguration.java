@@ -20,6 +20,10 @@ public class DanskeServiceConfiguration {
     @NotNull
     private String urlAccountsVirtual;
     @NotNull
+    private String urlTransactionsVirtual;
+    @NotNull
+    private String accessTokenVirtual;
+    @NotNull
     private String urlAuth;
     @NotNull
     private String urlAccounts;
@@ -62,6 +66,22 @@ public class DanskeServiceConfiguration {
 
     public void setUrlAccountsVirtual(String urlAccountsVirtual) {
         this.urlAccountsVirtual = urlAccountsVirtual;
+    }
+
+    public String getUrlTransactionsVirtual() {
+        return urlTransactionsVirtual;
+    }
+
+    public void setUrlTransactionsVirtual(String urlTransactionsVirtual) {
+        this.urlTransactionsVirtual = urlTransactionsVirtual;
+    }
+
+    public String getAccessTokenVirtual() {
+        return accessTokenVirtual;
+    }
+
+    public void setAccessTokenVirtual(String accessTokenVirtual) {
+        this.accessTokenVirtual = accessTokenVirtual;
     }
 
     public String getUrlAuth() {

@@ -24,17 +24,17 @@ public class DanskeServiceTest {
 	@InjectMocks
 	private DanskeService danskeService;
 
-	@Test
-	public void getParsedAccountsList_shouldReturnAccountsList() {
-		DanskeAccount account = new DanskeAccount("123", new DanskeAccountDetails[]{
-				new DanskeAccountDetails("id123", "IBAN", "AccountName", "secondary")
-		});
-		List<DanskeAccount> danskeAccountsList = Lists.newArrayList(account);
-
-		List<Account> expected = new ArrayList<>(danskeAccountsList);
-		List<Account> actual = danskeService.getParsedAccountsList(danskeAccountsList);
-		assertEquals(expected, actual);
-	}
+//	@Test
+//	public void getParsedAccountsList_shouldReturnAccountsList() {
+//		DanskeAccount account = new DanskeAccount("123", new DanskeAccountDetails[]{
+//				new DanskeAccountDetails("id123", "IBAN", "AccountName", "secondary")
+//		});
+//		List<DanskeAccount> danskeAccountsList = Lists.newArrayList(account);
+//
+//		List<Account> expected = new ArrayList<>(danskeAccountsList);
+//		List<Account> actual = danskeService.getParsedAccountsList(danskeAccountsList);
+//		assertEquals(expected, actual);
+//	}
 
 	@Test
 	public void getParsedTransactionsList_shouldReturnTransactionsList() {
