@@ -2,7 +2,6 @@ package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.CommonTransaction;
-import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;

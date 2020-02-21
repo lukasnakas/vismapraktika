@@ -87,9 +87,6 @@ public class TransactionService {
 	}
 
 	private Payment convertToPayment(PaymentDTO paymentDTO){
-		System.out.println(paymentDTO);
-		Payment payment = modelMapper.map(paymentDTO, Payment.class);
-		System.out.println(payment);
-		return payment;
+		return modelMapper.map(paymentDTO, Payment.class);
 	}
 }
