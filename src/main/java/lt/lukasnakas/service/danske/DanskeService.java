@@ -127,7 +127,7 @@ public class DanskeService implements BankingService {
                 });
     }
 
-    private ResponseEntity<List<DanskeTransaction>> getResponseEntityForTransactions(String accessToken) {
+    public ResponseEntity<List<DanskeTransaction>> getResponseEntityForTransactions(String accessToken) {
         return restTemplate.exchange(
                 danskeServiceConfiguration.getUrlAccountTransactions(),
                 HttpMethod.GET,
@@ -136,7 +136,7 @@ public class DanskeService implements BankingService {
                 });
     }
 
-    private ResponseEntity<DanskeTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
+    public ResponseEntity<DanskeTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
         return restTemplate.exchange(
                 danskeServiceConfiguration.getUrlAccountTransactions(),
                 HttpMethod.POST,
@@ -172,7 +172,7 @@ public class DanskeService implements BankingService {
         return danskePaymentValidationService.isValid(payment);
     }
 
-    public TransactionError getErrorWithFirstMissingParamFromPayment(Payment payment) {
+    public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
         return danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
@@ -180,7 +180,7 @@ public class DanskeService implements BankingService {
         if (isPaymentValid(payment)) {
             return postTransaction(payment);
         } else {
-            TransactionError transactionError = getErrorWithFirstMissingParamFromPayment(payment);
+            TransactionError transactionError = getErrorWithMissingParamsFromPayment(payment);
             throw new BadRequestException(transactionError.getMessage());
         }
     }

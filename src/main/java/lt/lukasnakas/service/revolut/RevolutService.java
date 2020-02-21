@@ -126,7 +126,7 @@ public class RevolutService implements BankingService {
                 responseEntity.getStatusCode());
     }
 
-    private ResponseEntity<List<RevolutAccount>> getResponseEntityForAccounts(String accessToken) {
+    public ResponseEntity<List<RevolutAccount>> getResponseEntityForAccounts(String accessToken) {
         return restTemplate.exchange(
                 revolutServiceConfiguration.getUrlAccounts(),
                 HttpMethod.GET,
@@ -135,7 +135,7 @@ public class RevolutService implements BankingService {
                 });
     }
 
-    private ResponseEntity<List<RevolutTransaction>> getResponseEntityForTransactions(String accessToken) {
+    public ResponseEntity<List<RevolutTransaction>> getResponseEntityForTransactions(String accessToken) {
         return restTemplate.exchange(
                 revolutServiceConfiguration.getUrlAccountTransactions(),
                 HttpMethod.GET,
@@ -144,7 +144,7 @@ public class RevolutService implements BankingService {
                 });
     }
 
-    private ResponseEntity<RevolutTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
+    public ResponseEntity<RevolutTransaction> getResponseEntityForTransaction(String accessToken, Payment payment) {
         return restTemplate.exchange(
                 revolutServiceConfiguration.getUrlAccountPayment(),
                 HttpMethod.POST,
@@ -172,7 +172,7 @@ public class RevolutService implements BankingService {
         return revolutPaymentValidationService.isValid(payment);
     }
 
-    public TransactionError getErrorWithMissingsParamFromPayment(Payment payment) {
+    public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
         return revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
@@ -185,7 +185,7 @@ public class RevolutService implements BankingService {
             revolutPayment.setGeneratedRequestId();
             return postTransaction(revolutPayment);
         } else {
-            TransactionError transactionError = getErrorWithMissingsParamFromPayment(revolutPayment);
+            TransactionError transactionError = getErrorWithMissingParamsFromPayment(revolutPayment);
             throw new BadRequestException(transactionError.getMessage());
         }
     }
