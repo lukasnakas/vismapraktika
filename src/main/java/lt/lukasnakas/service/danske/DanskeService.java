@@ -2,11 +2,17 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
-import lt.lukasnakas.exception.*;
-import lt.lukasnakas.model.*;
+import lt.lukasnakas.exception.AccountRetrievalException;
+import lt.lukasnakas.exception.BadRequestException;
+import lt.lukasnakas.exception.TransactionExecutionExeption;
+import lt.lukasnakas.exception.TransactionRetrievalException;
+import lt.lukasnakas.model.CommonAccount;
+import lt.lukasnakas.model.CommonTransaction;
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.service.BankingService;
+import lt.lukasnakas.service.CommonEntityMapperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,6 +32,7 @@ public class DanskeService implements BankingService {
     private final DanskeTokenRenewalService danskeTokenRenewalService;
     private final DanskePaymentValidationService danskePaymentValidationService;
     private final DanskeTransactionErrorService danskeTransactionErrorService;
+    private final CommonEntityMapperService commonEntityMapperService;
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
 
@@ -33,12 +40,14 @@ public class DanskeService implements BankingService {
                          DanskeTokenRenewalService danskeTokenRenewalService,
                          DanskePaymentValidationService danskePaymentValidationService,
                          DanskeTransactionErrorService danskeTransactionErrorService,
+                         CommonEntityMapperService commonEntityMapperService,
                          RestTemplate restTemplate,
                          HttpHeaders httpHeaders) {
         this.danskeServiceConfiguration = danskeServiceConfiguration;
         this.danskeTokenRenewalService = danskeTokenRenewalService;
         this.danskePaymentValidationService = danskePaymentValidationService;
         this.danskeTransactionErrorService = danskeTransactionErrorService;
+        this.commonEntityMapperService = commonEntityMapperService;
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -57,15 +66,8 @@ public class DanskeService implements BankingService {
         log("GET", "accounts", responseEntity);
 
         return Collections.singletonList(
-                convertToCommonAccount(Optional.ofNullable(responseEntity.getBody())
+                commonEntityMapperService.convertToCommonAccount(Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))));
-    }
-
-    public CommonAccount convertToCommonAccount(DanskeAccount danskeAccount){
-        return new CommonAccount("Danske",
-                danskeAccount.getData().getBalance()[0].getAccountId(),
-                danskeAccount.getData().getBalance()[0].getAmount().getAmount(),
-                danskeAccount.getData().getBalance()[0].getAmount().getCurrency());
     }
 
     public List<CommonTransaction> retrieveTransactions() {
@@ -86,16 +88,8 @@ public class DanskeService implements BankingService {
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
                 .stream()
-                .map(this::convertToCommonTransaction)
+                .map(commonEntityMapperService::convertToCommonTransaction)
                 .collect(Collectors.toList());
-    }
-
-    private CommonTransaction convertToCommonTransaction(DanskeTransaction danskeTransaction){
-        return new CommonTransaction(danskeTransaction.getId(),
-                danskeTransaction.getAccountId(),
-                null,
-                danskeTransaction.getTransactionAmount().getAmount(),
-                danskeTransaction.getTransactionAmount().getCurrency());
     }
 
     public CommonTransaction postTransaction(Payment payment) {
@@ -112,7 +106,7 @@ public class DanskeService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return convertToCommonTransaction(Optional.ofNullable(responseEntity.getBody())
+        return commonEntityMapperService.convertToCommonTransaction(Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")));
     }
 
@@ -158,6 +152,7 @@ public class DanskeService implements BankingService {
 
     private HttpEntity<String> getHttpEntityVirtual() {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.clear();
         httpHeaders.add("Authorization", danskeServiceConfiguration.getAccessTokenVirtual());
         httpHeaders.add("x-fapi-financial-id", "0015800000jf7AeAAI");
         return new HttpEntity<>(httpHeaders);
