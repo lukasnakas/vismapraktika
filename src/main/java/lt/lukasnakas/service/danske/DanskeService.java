@@ -61,7 +61,7 @@ public class DanskeService implements BankingService {
                 .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))));
     }
 
-    private CommonAccount convertToCommonAccount(DanskeAccount danskeAccount){
+    public CommonAccount convertToCommonAccount(DanskeAccount danskeAccount){
         return new CommonAccount("Danske",
                 danskeAccount.getData().getBalance()[0].getAccountId(),
                 danskeAccount.getData().getBalance()[0].getAmount().getAmount(),
@@ -124,7 +124,7 @@ public class DanskeService implements BankingService {
                 responseEntity.getStatusCode());
     }
 
-    private ResponseEntity<DanskeAccount> getResponseEntityForAccounts() {
+    public ResponseEntity<DanskeAccount> getResponseEntityForAccounts() {
         return restTemplate.exchange(
                 danskeServiceConfiguration.getUrlAccountsVirtual(),
                 HttpMethod.GET,
@@ -167,14 +167,6 @@ public class DanskeService implements BankingService {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setBearerAuth(accessToken);
         return new HttpEntity<>(payment, httpHeaders);
-    }
-
-    public List<Account> getParsedAccountsList(List<? extends Account> unparsedAccoutsList) {
-        return new ArrayList<>(unparsedAccoutsList);
-    }
-
-    public List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList) {
-        return new ArrayList<>(unparsedTransactionsList);
     }
 
     public String getBankName() {

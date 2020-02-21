@@ -55,12 +55,24 @@ public class CommonAccount {
 	}
 
 	@Override
-	public String toString() {
-		return "CommonAccount{" +
-				"bankName='" + bankName + '\'' +
-				", accountId='" + accountId + '\'' +
-				", amount=" + balance +
-				", currency='" + currency + '\'' +
-				'}';
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof CommonAccount)){
+			return false;
+		}
+
+		CommonAccount commonAccount = (CommonAccount) obj;
+
+		if (this.getAccountId().equals(commonAccount.getAccountId())
+				&& this.getBalance() == commonAccount.getBalance()
+				&& this.getBankName().equals(commonAccount.getBankName())
+				&& this.getCurrency().equals(commonAccount.getCurrency())) {
+			return true;
+		}
+
+		return false;
 	}
 }

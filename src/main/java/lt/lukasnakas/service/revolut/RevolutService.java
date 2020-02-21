@@ -183,14 +183,6 @@ public class RevolutService implements BankingService {
         return new HttpEntity<>(payment, httpHeaders);
     }
 
-    public List<Account> getParsedAccountsList(List<? extends Account> unparsedAccountsList) {
-        return new ArrayList<>(unparsedAccountsList);
-    }
-
-    public List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList) {
-        return new ArrayList<>(unparsedTransactionsList);
-    }
-
     public String getBankName() {
         return revolutServiceConfiguration.getName();
     }
