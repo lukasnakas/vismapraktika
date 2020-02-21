@@ -12,6 +12,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Service
 public class DanskeTokenRenewalService implements TokenRenewalService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DanskeTokenRenewalService.class);
@@ -26,31 +28,27 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
     }
 
     public AccessToken generateAccessToken() {
-        ResponseEntity<AccessToken> responseEntity;
-
-        try {
-            responseEntity = getResponseEntityForAccessToken();
-            setupNewAccessToken(responseEntity);
-        } catch (Exception e) {
-            throw new TokenGenerationException(e.getMessage());
-        }
-
+        ResponseEntity<AccessToken> responseEntity = getAccessTokenResponseEntity();
+        AccessToken accessToken = extractAccessToken(responseEntity);
+        danskeServiceConfiguration.setAccessToken(accessToken.getToken());
+        LOGGER.info("[{}] Generated new access token [{}]", danskeServiceConfiguration.getName(), accessToken.getToken());
         return responseEntity.getBody();
     }
 
-    public void setupNewAccessToken(ResponseEntity<? extends AccessToken> response) {
-        if (response.getBody() != null) {
-            String newAccessToken = response.getBody().getToken();
-            danskeServiceConfiguration.setAccessToken(newAccessToken);
-            LOGGER.info("[{}] Generated new access token [{}]", danskeServiceConfiguration.getName(), newAccessToken);
-        }
+    public AccessToken extractAccessToken(ResponseEntity<? extends AccessToken> responseEntity) {
+        return Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new TokenGenerationException("Failed to generate new access token"));
     }
 
-    private ResponseEntity<AccessToken> getResponseEntityForAccessToken() {
-        return restTemplate.postForEntity(
-                danskeServiceConfiguration.getUrlAuth(),
-                getRequestBodyParams(),
-                AccessToken.class);
+    private ResponseEntity<AccessToken> getAccessTokenResponseEntity() {
+        try {
+            return restTemplate.postForEntity(
+                    danskeServiceConfiguration.getUrlAuth(),
+                    getRequestBodyParams(),
+                    AccessToken.class);
+        } catch (Exception e) {
+            throw new TokenGenerationException(e.getMessage());
+        }
     }
 
     public MultiValueMap<String, String> getRequestBodyParams() {

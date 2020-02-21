@@ -7,7 +7,7 @@ import org.springframework.util.MultiValueMap;
 public interface TokenRenewalService {
     AccessToken generateAccessToken();
 
-    void setupNewAccessToken(ResponseEntity<? extends AccessToken> response);
+    AccessToken extractAccessToken(ResponseEntity<? extends AccessToken> responseEntity);
 
     MultiValueMap<String, String> getRequestBodyParams();
 }

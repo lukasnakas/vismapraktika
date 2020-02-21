@@ -13,6 +13,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Service
 public class RevolutTokenRenewalService implements TokenRenewalService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RevolutTokenRenewalService.class);
@@ -27,31 +29,27 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
     }
 
     public AccessToken generateAccessToken() {
-        ResponseEntity<RevolutAccessToken> responseEntity;
-
-        try {
-            responseEntity = getResponseEntityForAccessToken();
-            setupNewAccessToken(responseEntity);
-        } catch (Exception e) {
-            throw new TokenGenerationException(e.getMessage());
-        }
-
+        ResponseEntity<RevolutAccessToken> responseEntity = getRevolutAccessTokenResponseEntity();
+        AccessToken accessToken = extractAccessToken(responseEntity);
+        revolutServiceConfiguration.setAccessToken(accessToken.getToken());
+        LOGGER.info("[{}] Generated new access token [{}]", revolutServiceConfiguration.getName(), accessToken.getToken());
         return responseEntity.getBody();
     }
 
-    public void setupNewAccessToken(ResponseEntity<? extends AccessToken> response) {
-        if (response.getBody() != null) {
-            String newAccessToken = response.getBody().getToken();
-            revolutServiceConfiguration.setAccessToken(newAccessToken);
-            LOGGER.info("[{}] Generated new access token [{}]", revolutServiceConfiguration.getName(), newAccessToken);
-        }
+    public AccessToken extractAccessToken(ResponseEntity<? extends AccessToken> responseEntity) {
+        return Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new TokenGenerationException("Failed to generate new access token"));
     }
 
-    private ResponseEntity<RevolutAccessToken> getResponseEntityForAccessToken() {
-        return restTemplate.postForEntity(
-                revolutServiceConfiguration.getUrlAuth(),
-                getRequestBodyParams(),
-                RevolutAccessToken.class);
+    private ResponseEntity<RevolutAccessToken> getRevolutAccessTokenResponseEntity() {
+        try {
+            return restTemplate.postForEntity(
+                    revolutServiceConfiguration.getUrlAuth(),
+                    getRequestBodyParams(),
+                    RevolutAccessToken.class);
+        } catch (Exception e) {
+            throw new TokenGenerationException(e.getMessage());
+        }
     }
 
     public MultiValueMap<String, String> getRequestBodyParams() {
