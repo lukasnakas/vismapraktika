@@ -83,12 +83,10 @@ public class DanskeService implements BankingService {
             throw new TransactionRetrievalException(e.getMessage());
         }
 
-        List<CommonTransaction> commonTransactionList = responseEntity.getBody().stream()
+        log("GET", "transactions", responseEntity);
+        return responseEntity.getBody().stream()
                 .map(this::convertToCommonTransaction)
                 .collect(Collectors.toList());
-
-        log("GET", "transactions", responseEntity);
-        return commonTransactionList;
     }
 
     private CommonTransaction convertToCommonTransaction(DanskeTransaction danskeTransaction){
@@ -99,7 +97,7 @@ public class DanskeService implements BankingService {
                 danskeTransaction.getTransactionAmount().getCurrency());
     }
 
-    public Transaction postTransaction(Payment payment) {
+    public CommonTransaction postTransaction(Payment payment) {
         ResponseEntity<DanskeTransaction> responseEntity;
 
         try {
@@ -113,7 +111,7 @@ public class DanskeService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return responseEntity.getBody();
+        return convertToCommonTransaction(responseEntity.getBody());
     }
 
     private void log(String method, String object, ResponseEntity<?> responseEntity) {
@@ -189,7 +187,7 @@ public class DanskeService implements BankingService {
         return danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public Transaction executeTransactionIfValid(Payment payment) {
+    public CommonTransaction executeTransactionIfValid(Payment payment) {
         if (isPaymentValid(payment)) {
             return postTransaction(payment);
         } else {

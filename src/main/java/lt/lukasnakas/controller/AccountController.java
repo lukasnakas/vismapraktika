@@ -24,7 +24,7 @@ public class AccountController {
 		this.accountService = accountService;
 	}
 
-	@GetMapping(value = "/", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<List<CommonAccount>> getAllAccounts() {
 		return ok(accountService.getAccounts());
 	}

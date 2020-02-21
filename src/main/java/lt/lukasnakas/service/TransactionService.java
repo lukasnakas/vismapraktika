@@ -59,19 +59,19 @@ public class TransactionService {
 		return (List<CommonTransaction>) transactionRepository.saveAll(commonTransactionList);
 	}
 
-	private List<Transaction> getChosenBankingServiceListForPost(Payment payment, String bankName) {
+	private List<CommonTransaction> getChosenBankingServiceListForPost(Payment payment, String bankName) {
 		return bankingServices.stream()
 				.filter(bankingService -> bankNameMatches(bankName, bankingService.getBankName()))
 				.map(bankingService -> bankingService.executeTransactionIfValid(payment))
 				.collect(Collectors.toList());
 	}
 
-	public Transaction postTransaction(Payment payment, String bankName) {
-		List<Transaction> transactionList = getChosenBankingServiceListForPost(payment, bankName);
+	public CommonTransaction postTransaction(Payment payment, String bankName) {
+		List<CommonTransaction> transactionList = getChosenBankingServiceListForPost(payment, bankName);
 
 		if (!transactionList.isEmpty()) {
 			paymentRepository.save(payment);
-			return transactionList.get(0);
+			return transactionRepository.save(transactionList.get(0));
 		} else {
 			throw new BadRequestException(new TransactionError("bankName").getMessage());
 		}

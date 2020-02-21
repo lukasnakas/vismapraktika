@@ -38,7 +38,7 @@ public class TransactionController {
 	}
 
 	@PostMapping(value = "/{bankName}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Transaction> addTransaction(@RequestBody Payment payment, @PathVariable String bankName) {
+	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody Payment payment, @PathVariable String bankName) {
 		try {
 			return ok(transactionService.postTransaction(payment, bankName));
 		} catch (BadRequestException e) {

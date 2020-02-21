@@ -11,11 +11,11 @@ public interface BankingService {
 
     List<CommonTransaction> retrieveTransactions();
 
-    Transaction postTransaction(Payment payment);
+    CommonTransaction postTransaction(Payment payment);
 
     List<Transaction> getParsedTransactionsList(List<? extends Transaction> unparsedTransactionsList);
 
-    Transaction executeTransactionIfValid(Payment payment);
+    CommonTransaction executeTransactionIfValid(Payment payment);
 
     boolean isPaymentValid(Payment payment);
 

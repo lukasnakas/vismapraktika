@@ -60,12 +60,10 @@ public class RevolutService implements BankingService {
             throw new AccountRetrievalException(e.getMessage());
         }
 
-        List<CommonAccount> commonAccountList = responseEntity.getBody().stream()
+        log("GET", "accounts", responseEntity);
+        return responseEntity.getBody().stream()
                 .map(this::convertToCommonAccount)
                 .collect(Collectors.toList());
-
-        log("GET", "accounts", responseEntity);
-        return commonAccountList;
     }
 
     private CommonAccount convertToCommonAccount(RevolutAccount revolutAccount){
@@ -88,13 +86,11 @@ public class RevolutService implements BankingService {
             throw new TransactionRetrievalException(e.getMessage());
         }
 
-        List<CommonTransaction> commonTransactionList = responseEntity.getBody().stream()
+        log("GET", "transactions", responseEntity);
+        return responseEntity.getBody().stream()
                 .filter(this::hasCounterparty)
                 .map(this::convertToCommonTransaction)
                 .collect(Collectors.toList());
-
-        log("GET", "transactions", responseEntity);
-        return commonTransactionList;
     }
 
     private boolean hasCounterparty(RevolutTransaction revolutTransaction){
@@ -109,7 +105,15 @@ public class RevolutService implements BankingService {
                 revolutTransaction.getLegs()[0].getCurrency());
     }
 
-    public Transaction postTransaction(Payment payment) {
+    private CommonTransaction convertToCommonTransaction(RevolutTransaction revolutTransaction, RevolutPayment revolutPayment){
+        return new CommonTransaction(revolutTransaction.getId(),
+                revolutPayment.getAccountId(),
+                revolutPayment.getReceiver().getAccountId(),
+                revolutPayment.getAmount(),
+                revolutPayment.getCurrency());
+    }
+
+    public CommonTransaction postTransaction(Payment payment) {
         ResponseEntity<RevolutTransaction> responseEntity;
 
         try {
@@ -123,7 +127,7 @@ public class RevolutService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return responseEntity.getBody();
+        return convertToCommonTransaction(responseEntity.getBody(), (RevolutPayment) payment);
     }
 
     private void log(String method, String object, ResponseEntity<?> responseEntity) {
@@ -192,7 +196,7 @@ public class RevolutService implements BankingService {
         return revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public Transaction executeTransactionIfValid(Payment payment) {
+    public CommonTransaction executeTransactionIfValid(Payment payment) {
         RevolutReceiver revolutReceiver = new RevolutReceiver(payment.getCounterpartyId(), payment.getReceiverAccountId());
         RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver,
                 payment.getCurrency(), payment.getDescription(), payment.getAmount());
