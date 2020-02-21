@@ -40,7 +40,7 @@ public class DanskeServiceTest {
 	private DanskeService danskeService;
 
 	@Test
-	public void retrieveAccounts_shouldReturn() throws Exception {
+	public void retrieveAccounts_shouldReturn() {
 		Balance[] balances = new Balance[1];
 		balances[0] = new Balance("123", "debit", "type", "2020",
 				new DanskeTransactionAmount(55, "EUR"));
