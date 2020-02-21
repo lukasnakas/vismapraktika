@@ -54,14 +54,4 @@ public class DanskeAccountDetails {
     public void setSecondaryIdentification(String secondaryIdentification) {
         this.secondaryIdentification = secondaryIdentification;
     }
-
-    @Override
-    public String toString() {
-        return "DanskeAccountDetails{" +
-                ", identification='" + identification + '\'' +
-                ", schemeName='" + schemeName + '\'' +
-                ", name='" + name + '\'' +
-                ", secondaryIdentification='" + secondaryIdentification + '\'' +
-                '}';
-    }
 }

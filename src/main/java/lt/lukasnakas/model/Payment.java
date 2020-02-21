@@ -86,17 +86,4 @@ public class Payment {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", senderAccountId='" + senderAccountId + '\'' +
-                ", receiverAccountId='" + receiverAccountId + '\'' +
-                ", counterpartyId='" + counterpartyId + '\'' +
-                ", amount=" + amount +
-                ", currency='" + currency + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

@@ -2,6 +2,7 @@ package lt.lukasnakas.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class CommonAccount {
@@ -66,13 +67,19 @@ public class CommonAccount {
 
 		CommonAccount commonAccount = (CommonAccount) obj;
 
-		if (this.getAccountId().equals(commonAccount.getAccountId())
-				&& this.getBalance() == commonAccount.getBalance()
-				&& this.getBankName().equals(commonAccount.getBankName())
-				&& this.getCurrency().equals(commonAccount.getCurrency())) {
-			return true;
-		}
+		return Objects.equals(accountId, commonAccount.accountId) &&
+				Objects.equals(balance, commonAccount.balance) &&
+				Objects.equals(bankName, commonAccount.bankName) &&
+				Objects.equals(currency, commonAccount.currency);
 
-		return false;
+//		return (this.getAccountId().equals(commonAccount.getAccountId())
+//				&& this.getBalance() == commonAccount.getBalance()
+//				&& this.getBankName().equals(commonAccount.getBankName())
+//				&& this.getCurrency().equals(commonAccount.getCurrency()));
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(accountId, balance, bankName, currency);
 	}
 }

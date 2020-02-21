@@ -23,11 +23,4 @@ public class DanskeAccount extends Account {
     public void setData(Data data) {
         this.data = data;
     }
-
-    @Override
-    public String toString() {
-        return "DanskeAccount{" +
-                "data=" + data +
-                '}';
-    }
 }

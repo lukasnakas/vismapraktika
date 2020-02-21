@@ -23,11 +23,4 @@ public class Data {
 	public void setBalance(Balance[] balance) {
 		this.balance = balance;
 	}
-
-	@Override
-	public String toString() {
-		return "Data{" +
-				"balance=" + Arrays.toString(balance) +
-				'}';
-	}
 }

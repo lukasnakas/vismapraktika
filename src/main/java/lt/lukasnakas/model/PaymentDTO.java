@@ -73,16 +73,4 @@ public class PaymentDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	@Override
-	public String toString() {
-		return "PaymentDTO{" +
-				"senderAccountId='" + senderAccountId + '\'' +
-				", receiverAccountId='" + receiverAccountId + '\'' +
-				", counterpartyId='" + counterpartyId + '\'' +
-				", amount=" + amount +
-				", currency='" + currency + '\'' +
-				", description='" + description + '\'' +
-				'}';
-	}
 }

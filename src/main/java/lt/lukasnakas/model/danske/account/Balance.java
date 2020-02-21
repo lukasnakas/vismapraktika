@@ -67,15 +67,4 @@ public class Balance {
 	public void setAmount(DanskeTransactionAmount amount) {
 		this.amount = amount;
 	}
-
-	@Override
-	public String toString() {
-		return "Balance{" +
-				"accountId='" + accountId + '\'' +
-				", creditDebitIndicator='" + creditDebitIndicator + '\'' +
-				", type='" + type + '\'' +
-				", datetime='" + datetime + '\'' +
-				", amount=" + amount +
-				'}';
-	}
 }
