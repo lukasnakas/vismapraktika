@@ -61,7 +61,9 @@ public class RevolutService implements BankingService {
         }
 
         log("GET", "accounts", responseEntity);
-        return responseEntity.getBody().stream()
+        return Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))
+                .stream()
                 .map(this::convertToCommonAccount)
                 .collect(Collectors.toList());
     }
@@ -87,7 +89,9 @@ public class RevolutService implements BankingService {
         }
 
         log("GET", "transactions", responseEntity);
-        return responseEntity.getBody().stream()
+        return Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
+                .stream()
                 .filter(this::hasCounterparty)
                 .map(this::convertToCommonTransaction)
                 .collect(Collectors.toList());
@@ -127,7 +131,10 @@ public class RevolutService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return convertToCommonTransaction(responseEntity.getBody(), (RevolutPayment) payment);
+        return convertToCommonTransaction(
+                Optional.ofNullable(responseEntity.getBody())
+                        .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")),
+                (RevolutPayment) payment);
     }
 
     private void log(String method, String object, ResponseEntity<?> responseEntity) {

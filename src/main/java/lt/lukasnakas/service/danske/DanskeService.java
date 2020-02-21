@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,10 +56,9 @@ public class DanskeService implements BankingService {
 
         log("GET", "accounts", responseEntity);
 
-        List<CommonAccount> commonAccountList = new ArrayList<>();
-        commonAccountList.add(convertToCommonAccount(responseEntity.getBody()));
-
-        return commonAccountList;
+        return Collections.singletonList(
+                convertToCommonAccount(Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))));
     }
 
     private CommonAccount convertToCommonAccount(DanskeAccount danskeAccount){
@@ -84,7 +82,10 @@ public class DanskeService implements BankingService {
         }
 
         log("GET", "transactions", responseEntity);
-        return responseEntity.getBody().stream()
+
+        return Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
+                .stream()
                 .map(this::convertToCommonTransaction)
                 .collect(Collectors.toList());
     }
@@ -111,7 +112,8 @@ public class DanskeService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return convertToCommonTransaction(responseEntity.getBody());
+        return convertToCommonTransaction(Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")));
     }
 
     private void log(String method, String object, ResponseEntity<?> responseEntity) {

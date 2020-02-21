@@ -5,9 +5,10 @@ import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
-import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.model.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,13 +22,16 @@ public class TransactionService {
 	private final List<BankingService> bankingServices;
 	private final TransactionRepository transactionRepository;
 	private final PaymentRepository paymentRepository;
+	private final ModelMapper modelMapper;
 
 	public TransactionService(List<BankingService> bankingServices,
 							  TransactionRepository transactionRepository,
-							  PaymentRepository paymentRepository) {
+							  PaymentRepository paymentRepository,
+							  ModelMapper modelMapper) {
 		this.bankingServices = bankingServices;
 		this.transactionRepository = transactionRepository;
 		this.paymentRepository = paymentRepository;
+		this.modelMapper = modelMapper;
 	}
 
 	public Map<String, CommonTransaction> getTransactionMap() {
@@ -66,7 +70,8 @@ public class TransactionService {
 				.collect(Collectors.toList());
 	}
 
-	public CommonTransaction postTransaction(Payment payment, String bankName) {
+	public CommonTransaction postTransaction(PaymentDTO paymentDTO, String bankName) {
+		Payment payment = convertToPayment(paymentDTO);
 		List<CommonTransaction> transactionList = getChosenBankingServiceListForPost(payment, bankName);
 
 		if (!transactionList.isEmpty()) {
@@ -79,5 +84,12 @@ public class TransactionService {
 
 	private boolean bankNameMatches(String bankName, String bankingServiceBankName) {
 		return bankName.equalsIgnoreCase(bankingServiceBankName);
+	}
+
+	private Payment convertToPayment(PaymentDTO paymentDTO){
+		System.out.println(paymentDTO);
+		Payment payment = modelMapper.map(paymentDTO, Payment.class);
+		System.out.println(payment);
+		return payment;
 	}
 }

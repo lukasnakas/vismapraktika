@@ -1,7 +1,5 @@
 package lt.lukasnakas.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,17 +11,11 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @JsonProperty("sender_account_id")
     private String senderAccountId;
-    @JsonProperty("receiver_account_id")
     private String receiverAccountId;
-    @JsonProperty("counterparty_id")
     private String counterpartyId;
-    @JsonProperty("amount")
     private double amount;
-    @JsonProperty("currency")
     private String currency;
-    @JsonProperty("description")
     private String description;
 
     public Payment() {

@@ -3,7 +3,7 @@ package lt.lukasnakas.controller;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
-import lt.lukasnakas.model.Transaction;
+import lt.lukasnakas.model.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +38,9 @@ public class TransactionController {
 	}
 
 	@PostMapping(value = "/{bankName}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody Payment payment, @PathVariable String bankName) {
+	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
 		try {
-			return ok(transactionService.postTransaction(payment, bankName));
+			return ok(transactionService.postTransaction(paymentDTO, bankName));
 		} catch (BadRequestException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
