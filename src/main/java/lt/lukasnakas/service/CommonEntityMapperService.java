@@ -31,8 +31,8 @@ public class CommonEntityMapperService {
 
 	public CommonTransaction convertToCommonTransaction(DanskeTransaction danskeTransaction){
 		return new CommonTransaction(danskeTransaction.getId(),
-				danskeTransaction.getAccountId(),
 				null,
+				danskeTransaction.getAccountId(),
 				danskeTransaction.getTransactionAmount().getAmount(),
 				danskeTransaction.getTransactionAmount().getCurrency());
 	}
