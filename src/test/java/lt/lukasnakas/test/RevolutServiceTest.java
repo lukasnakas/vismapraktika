@@ -3,16 +3,12 @@ package lt.lukasnakas.test;
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;
 import lt.lukasnakas.model.*;
-import lt.lukasnakas.model.danske.account.DanskeAccount;
-import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
-import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.service.CommonEntityMapperService;
 import lt.lukasnakas.service.revolut.RevolutService;
 import lt.lukasnakas.service.revolut.RevolutTransactionErrorService;
-import lt.lukasnakas.util.MockedDataGenerator;
-import org.assertj.core.util.Lists;
+import lt.lukasnakas.util.TestDataGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,12 +16,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,12 +49,12 @@ public class RevolutServiceTest {
 	@InjectMocks
 	private RevolutService revolutService;
 
-	private MockedDataGenerator mockedDataGenerator = new MockedDataGenerator();
+	private TestDataGenerator testDataGenerator = new TestDataGenerator();
 
 	@Test
 	public void retrieveAccounts_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<List<RevolutAccount>> responseEntity = mockedDataGenerator.getMockedRevolutAccountResponseEntity();
-		CommonAccount commonAccount = mockedDataGenerator.buildCommonAccount(responseEntity.getBody().get(0));
+		ResponseEntity<List<RevolutAccount>> responseEntity = testDataGenerator.getMockedRevolutAccountResponseEntity();
+		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody().get(0));
 
 		when(revolutService.getResponseEntityForAccounts("")).thenReturn(responseEntity);
 		when(commonEntityMapperService.convertToCommonAccount(responseEntity.getBody().get(0))).thenReturn(commonAccount);
@@ -71,9 +67,9 @@ public class RevolutServiceTest {
 
 	@Test
 	public void retrieveTransactions_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<List<RevolutTransaction>> responseEntity = mockedDataGenerator.getMockedRevolutTransactionResponseEntity();
-		Payment payment = mockedDataGenerator.buildRevolutTransactionPayment();
-		CommonTransaction commonTransaction = mockedDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0), payment);
+		ResponseEntity<List<RevolutTransaction>> responseEntity = testDataGenerator.getMockedRevolutTransactionResponseEntity();
+		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
+		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0), payment);
 
 		when(revolutService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
 		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody().get(0))).thenReturn(commonTransaction);
@@ -87,9 +83,9 @@ public class RevolutServiceTest {
 
 	@Test
 	public void postTransaction_shouldReturnTrue_whenComparingTransactionResponses() {
-		ResponseEntity<RevolutTransaction> responseEntity = mockedDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
-		Payment payment = mockedDataGenerator.buildRevolutTransactionPayment();
-		CommonTransaction expected = mockedDataGenerator.buildCommonTransaction(responseEntity.getBody(), payment);
+		ResponseEntity<RevolutTransaction> responseEntity = testDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
+		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
+		CommonTransaction expected = testDataGenerator.buildCommonTransaction(responseEntity.getBody(), payment);
 
 		when(revolutService.getResponseEntityForTransaction("", payment)).thenReturn(responseEntity);
 		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody(), payment)).thenReturn(expected);
@@ -101,7 +97,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForAccounts_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<RevolutAccount>> expected = mockedDataGenerator.getMockedRevolutAccountResponseEntity();
+		ResponseEntity<List<RevolutAccount>> expected = testDataGenerator.getMockedRevolutAccountResponseEntity();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/accounts";
 
 		when(revolutServiceConfiguration.getUrlAccounts()).thenReturn(url);
@@ -119,7 +115,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForTransactions_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<RevolutTransaction>> expected = mockedDataGenerator.getMockedRevolutTransactionResponseEntity();
+		ResponseEntity<List<RevolutTransaction>> expected = testDataGenerator.getMockedRevolutTransactionResponseEntity();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/transactions";
 
 		when(revolutServiceConfiguration.getUrlAccountTransactions()).thenReturn(url);
@@ -137,15 +133,15 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForTransaction_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<RevolutTransaction> expected = mockedDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
-		Payment payment = mockedDataGenerator.buildDanskeTransactionPayment();
+		ResponseEntity<RevolutTransaction> expected = testDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
+		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/pay";
 
-		when(revolutServiceConfiguration.getUrlAccountTransactions()).thenReturn(url);
+		when(revolutServiceConfiguration.getUrlAccountPayment()).thenReturn(url);
 		when(restTemplate.exchange(
 				Mockito.eq(url),
 				Mockito.eq(HttpMethod.POST),
-				Mockito.any(),
+				Mockito.<HttpEntity<RevolutTransaction>>any(),
 				Mockito.<ParameterizedTypeReference<RevolutTransaction>>any()
 		)).thenReturn(expected);
 
@@ -156,8 +152,8 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getErrorWithFirstMissingParamFromPayment_shouldReturnTrue_whenComparingParamsList() {
-		Payment payment = mockedDataGenerator.buildRevolutTransactionPayment();
-		TransactionError expected = mockedDataGenerator.buildRevolutTransactionError();
+		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
+		TransactionError expected = testDataGenerator.buildRevolutTransactionError();
 
 		when(revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment)).thenReturn(expected);
 

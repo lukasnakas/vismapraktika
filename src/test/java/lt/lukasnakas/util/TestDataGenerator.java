@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Collections;
 import java.util.List;
 
-public class MockedDataGenerator {
+public class TestDataGenerator {
 
 	public ResponseEntity<DanskeAccount> getMockedDanskeAccountResponseEntity() {
 		Balance[] balances = new Balance[1];
