@@ -12,13 +12,9 @@ import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.danske.transaction.DanskeTransactionAmount;
 import lt.lukasnakas.model.revolut.RevolutAccessToken;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
-import lt.lukasnakas.model.revolut.transaction.RevolutCounterparty;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
-import lt.lukasnakas.model.revolut.transaction.RevolutTransactionLegs;
+import lt.lukasnakas.model.revolut.transaction.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.Collections;
 import java.util.List;
@@ -127,11 +123,22 @@ public class TestDataGenerator {
 				789, "GBP", "desc");
 	}
 
+	public RevolutPayment buildInvalidRevolutTransactionPayment() {
+		return new RevolutPayment(null, new RevolutReceiver("123", "456"),
+				"GBP", "ref", 10);
+	}
+
 	public TransactionError buildDanskeTransactionError() {
 		return new TransactionError("amount");
 	}
 
 	public TransactionError buildRevolutTransactionError() {
-		return new TransactionError("sender_account_id");
+		List<String> invalidKeys = Collections.singletonList("sender_account_id");
+		return new TransactionError(invalidKeys);
+	}
+
+	public List<CommonAccount> buildCommonAccountList() {
+		return Collections.singletonList(new CommonAccount("danske","123",
+				10, "EUR"));
 	}
 }

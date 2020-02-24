@@ -1,4 +1,4 @@
-package lt.lukasnakas.test;
+package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.error.TransactionError;

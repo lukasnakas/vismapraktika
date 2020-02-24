@@ -71,11 +71,6 @@ public class CommonAccount {
 				Objects.equals(balance, commonAccount.balance) &&
 				Objects.equals(bankName, commonAccount.bankName) &&
 				Objects.equals(currency, commonAccount.currency);
-
-//		return (this.getAccountId().equals(commonAccount.getAccountId())
-//				&& this.getBalance() == commonAccount.getBalance()
-//				&& this.getBankName().equals(commonAccount.getBankName())
-//				&& this.getCurrency().equals(commonAccount.getCurrency()));
 	}
 
 	@Override

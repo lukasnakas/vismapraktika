@@ -1,4 +1,4 @@
-package lt.lukasnakas.test;
+package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.service.danske.DanskePaymentValidationService;

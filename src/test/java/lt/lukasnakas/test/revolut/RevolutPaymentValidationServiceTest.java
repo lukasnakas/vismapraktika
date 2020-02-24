@@ -1,4 +1,4 @@
-package lt.lukasnakas.test;
+package lt.lukasnakas.test.revolut;
 
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;

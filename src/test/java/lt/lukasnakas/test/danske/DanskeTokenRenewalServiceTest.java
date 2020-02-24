@@ -1,4 +1,4 @@
-package lt.lukasnakas.test;
+package lt.lukasnakas.test.danske;
 
 import javafx.beans.binding.MapBinding;
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;

@@ -17,7 +17,7 @@ public class RevolutTransactionErrorService implements TransactionErrorService {
         return new TransactionError(createMissingParamsList(revolutPayment));
     }
 
-    public List<String> createMissingParamsList(RevolutPayment revolutPayment) {
+    private List<String> createMissingParamsList(RevolutPayment revolutPayment) {
         List<String> missingParamsList = new ArrayList<>();
 
         if (revolutPayment.getAccountId() == null) {
