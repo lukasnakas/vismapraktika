@@ -63,15 +63,4 @@ public class CommonTransaction {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-
-	@Override
-	public String toString() {
-		return "CommonTransaction{" +
-				"id='" + id + '\'' +
-				", senderAccountId='" + senderAccountId + '\'' +
-				", receiverAccountId='" + receiverAccountId + '\'' +
-				", amount=" + amount +
-				", currency='" + currency + '\'' +
-				'}';
-	}
 }

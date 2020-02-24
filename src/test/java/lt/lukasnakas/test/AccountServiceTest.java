@@ -1,7 +1,5 @@
 package lt.lukasnakas.test;
 
-import lt.lukasnakas.exception.AccountNotFoundException;
-import lt.lukasnakas.model.Account;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.repository.AccountRepository;
 import lt.lukasnakas.service.AccountService;
@@ -19,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

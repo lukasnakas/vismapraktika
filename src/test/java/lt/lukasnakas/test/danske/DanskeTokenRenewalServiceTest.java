@@ -1,6 +1,5 @@
 package lt.lukasnakas.test.danske;
 
-import javafx.beans.binding.MapBinding;
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.service.danske.DanskeTokenRenewalService;
@@ -9,17 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

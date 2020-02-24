@@ -1,7 +1,6 @@
 package lt.lukasnakas.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.Transaction;
 
 import java.util.List;
@@ -47,9 +46,7 @@ public class TransactionError extends Transaction {
     }
 
     @Override
-    public String toString() {
-        return "TransactionError{" +
-                "message='" + message + '\'' +
-                '}';
+    public int hashCode() {
+        return Objects.hash(message);
     }
 }

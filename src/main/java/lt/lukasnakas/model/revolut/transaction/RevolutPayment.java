@@ -53,10 +53,12 @@ public class RevolutPayment extends Payment {
         this.receiver = receiver;
     }
 
+    @Override
     public String getCurrency() {
         return currency;
     }
 
+    @Override
     public void setCurrency(String currency) {
         this.currency = currency;
     }

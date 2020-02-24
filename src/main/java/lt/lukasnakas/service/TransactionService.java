@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,13 +33,6 @@ public class TransactionService {
 		this.modelMapper = modelMapper;
 	}
 
-	public Map<String, CommonTransaction> getTransactionMap() {
-		return bankingServices.stream()
-				.map(BankingService::retrieveTransactions)
-				.flatMap(Collection::stream)
-				.collect(Collectors.toMap(CommonTransaction::getId, transaction -> transaction));
-	}
-
 	public List<CommonTransaction> getTransactions() {
 		return (List<CommonTransaction>) transactionRepository.findAll();
 	}
@@ -48,7 +40,7 @@ public class TransactionService {
 	public CommonTransaction getTransactionById(String id) {
 		Optional<CommonTransaction> transaction = transactionRepository.findById(id);
 
-		if(transaction.isPresent()) {
+		if (transaction.isPresent()) {
 			return transaction.get();
 		}
 		throw new TransactionNotFoundException(String.format("Transaction [id: %s] not found", id));
@@ -86,7 +78,7 @@ public class TransactionService {
 		return bankName.equalsIgnoreCase(bankingServiceBankName);
 	}
 
-	private Payment convertToPayment(PaymentDTO paymentDTO){
+	private Payment convertToPayment(PaymentDTO paymentDTO) {
 		return modelMapper.map(paymentDTO, Payment.class);
 	}
 }
