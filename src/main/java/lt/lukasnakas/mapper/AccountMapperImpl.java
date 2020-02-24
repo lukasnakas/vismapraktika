@@ -7,7 +7,7 @@ import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommonAccountMapperImpl implements CommonAccountMapper {
+public class AccountMapperImpl implements AccountMapper {
 
 	@Override
 	public CommonAccount revolutAccountToCommonAccount(RevolutAccount revolutAccount) {
@@ -43,11 +43,33 @@ public class CommonAccountMapperImpl implements CommonAccountMapper {
 
 	@Override
 	public CommonAccount commonAccountDtoToCommonAccount(CommonAccountDTO commonAccountDTO) {
-		return null;
+		if(commonAccountDTO == null) {
+			return null;
+		}
+
+		CommonAccount commonAccount = new CommonAccount();
+
+		commonAccount.setAccountId(commonAccountDTO.getAccountId());
+		commonAccount.setBalance(commonAccountDTO.getBalance());
+		commonAccount.setBankName(commonAccountDTO.getBankName());
+		commonAccount.setCurrency(commonAccountDTO.getCurrency());
+
+		return commonAccount;
 	}
 
 	@Override
 	public CommonAccountDTO commonAccountToCommonAccountDto(CommonAccount commonAccount) {
-		return null;
+		if(commonAccount == null) {
+			return null;
+		}
+
+		CommonAccountDTO commonAccountDTO = new CommonAccountDTO();
+
+		commonAccountDTO.setAccountId(commonAccount.getAccountId());
+		commonAccountDTO.setBalance(commonAccount.getBalance());
+		commonAccountDTO.setBankName(commonAccount.getBankName());
+		commonAccountDTO.setCurrency(commonAccount.getCurrency());
+
+		return commonAccountDTO;
 	}
 }

@@ -1,6 +1,6 @@
 package lt.lukasnakas.service;
 
-import lt.lukasnakas.exception.TransactionExecutionExeption;
+import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
@@ -21,13 +21,16 @@ public class TransactionService {
 	private final List<BankingService> bankingServices;
 	private final TransactionRepository transactionRepository;
 	private final PaymentRepository paymentRepository;
+	private final PaymentMapper paymentMapper;
 
 	public TransactionService(List<BankingService> bankingServices,
 							  TransactionRepository transactionRepository,
-							  PaymentRepository paymentRepository) {
+							  PaymentRepository paymentRepository,
+							  PaymentMapper paymentMapper) {
 		this.bankingServices = bankingServices;
 		this.transactionRepository = transactionRepository;
 		this.paymentRepository = paymentRepository;
+		this.paymentMapper = paymentMapper;
 	}
 
 	public List<CommonTransaction> getTransactions() {
@@ -60,13 +63,13 @@ public class TransactionService {
 				.orElseThrow(() -> new BadRequestException(new TransactionError("bankName").getMessage()));
 	}
 
-//	public CommonTransaction postTransaction(PaymentDTO paymentDTO, String bankName) {
-//		Payment payment = modelMapper.map(paymentDTO, Payment.class);
-//		CommonTransaction transaction = getChosenBankingServiceForPost(payment, bankName);
-//
-//		paymentRepository.save(payment);
-//		return transactionRepository.save(transaction);
-//	}
+	public CommonTransaction postTransaction(PaymentDTO paymentDTO, String bankName) {
+		Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
+		CommonTransaction transaction = getChosenBankingServiceForPost(payment, bankName);
+
+		paymentRepository.save(payment);
+		return transactionRepository.save(transaction);
+	}
 
 	private boolean bankNameMatches(String bankName, String bankingServiceBankName) {
 		return bankName.equalsIgnoreCase(bankingServiceBankName);

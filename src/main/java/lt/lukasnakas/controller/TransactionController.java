@@ -36,14 +36,14 @@ public class TransactionController {
 		}
 	}
 
-//	@PostMapping(value = "/{bankName}")
-//	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
-//		try {
-//			return ok(transactionService.postTransaction(paymentDTO, bankName));
-//		} catch (BadRequestException e) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-//		}
-//	}
+	@PostMapping(value = "/{bankName}")
+	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
+		try {
+			return ok(transactionService.postTransaction(paymentDTO, bankName));
+		} catch (BadRequestException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
 
 	@GetMapping(value = "/update")
 	public ResponseEntity<List<CommonTransaction>> updateAccounts(){

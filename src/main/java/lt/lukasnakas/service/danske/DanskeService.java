@@ -1,7 +1,8 @@
 package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
-import lt.lukasnakas.mapper.CommonAccountMapper;
+import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.AccountRetrievalException;
 import lt.lukasnakas.exception.BadRequestException;
@@ -34,7 +35,8 @@ public class DanskeService implements BankingService {
     private final DanskePaymentValidationService danskePaymentValidationService;
     private final DanskeTransactionErrorService danskeTransactionErrorService;
     private final CommonEntityMapperService commonEntityMapperService;
-    private final CommonAccountMapper commonAccountMapper;
+    private final AccountMapper accountMapper;
+    private final TransactionMapper transactionMapper;
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
 
@@ -43,7 +45,8 @@ public class DanskeService implements BankingService {
                          DanskePaymentValidationService danskePaymentValidationService,
                          DanskeTransactionErrorService danskeTransactionErrorService,
                          CommonEntityMapperService commonEntityMapperService,
-                         CommonAccountMapper commonAccountMapper,
+                         AccountMapper accountMapper,
+                         TransactionMapper transactionMapper,
                          RestTemplate restTemplate,
                          HttpHeaders httpHeaders) {
         this.danskeServiceConfiguration = danskeServiceConfiguration;
@@ -51,7 +54,8 @@ public class DanskeService implements BankingService {
         this.danskePaymentValidationService = danskePaymentValidationService;
         this.danskeTransactionErrorService = danskeTransactionErrorService;
         this.commonEntityMapperService = commonEntityMapperService;
-        this.commonAccountMapper = commonAccountMapper;
+        this.accountMapper = accountMapper;
+        this.transactionMapper = transactionMapper;
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -70,7 +74,7 @@ public class DanskeService implements BankingService {
         log("GET", "accounts", responseEntity);
 
         return Collections.singletonList(
-                commonAccountMapper.danskeAccountToCommonAccount(Optional.ofNullable(responseEntity.getBody())
+                accountMapper.danskeAccountToCommonAccount(Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))));
     }
 
@@ -91,7 +95,7 @@ public class DanskeService implements BankingService {
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
                 .stream()
-                .map(commonEntityMapperService::convertToCommonTransaction)
+                .map(transactionMapper::danskeTransactionToCommonTransaction)
                 .collect(Collectors.toList());
     }
 
@@ -109,7 +113,7 @@ public class DanskeService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return commonEntityMapperService.convertToCommonTransaction(Optional.ofNullable(responseEntity.getBody())
+        return transactionMapper.danskeTransactionToCommonTransaction(Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")));
     }
 

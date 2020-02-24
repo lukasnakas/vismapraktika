@@ -1,7 +1,9 @@
 package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
-import lt.lukasnakas.mapper.CommonAccountMapper;
+import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.PaymentMapper;
+import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.AccountRetrievalException;
 import lt.lukasnakas.exception.BadRequestException;
@@ -12,7 +14,6 @@ import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
-import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.service.BankingService;
 import lt.lukasnakas.service.CommonEntityMapperService;
@@ -37,7 +38,9 @@ public class RevolutService implements BankingService {
     private final RevolutPaymentValidationService revolutPaymentValidationService;
     private final RevolutTransactionErrorService revolutTransactionErrorService;
     private final CommonEntityMapperService commonEntityMapperService;
-    private final CommonAccountMapper commonAccountMapper;
+    private final AccountMapper accountMapper;
+    private final TransactionMapper transactionMapper;
+    private final PaymentMapper paymentMapper;
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
 
@@ -46,7 +49,9 @@ public class RevolutService implements BankingService {
                           RevolutPaymentValidationService revolutPaymentValidationService,
                           RevolutTransactionErrorService revolutTransactionErrorService,
                           CommonEntityMapperService commonEntityMapperService,
-                          CommonAccountMapper commonAccountMapper,
+                          AccountMapper accountMapper,
+                          TransactionMapper transactionMapper,
+                          PaymentMapper paymentMapper,
                           RestTemplate restTemplate,
                           HttpHeaders httpHeaders) {
         this.revolutServiceConfiguration = revolutServiceConfiguration;
@@ -54,7 +59,9 @@ public class RevolutService implements BankingService {
         this.revolutPaymentValidationService = revolutPaymentValidationService;
         this.revolutTransactionErrorService = revolutTransactionErrorService;
         this.commonEntityMapperService = commonEntityMapperService;
-        this.commonAccountMapper = commonAccountMapper;
+        this.accountMapper = accountMapper;
+        this.transactionMapper = transactionMapper;
+        this.paymentMapper = paymentMapper;
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -76,7 +83,7 @@ public class RevolutService implements BankingService {
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))
                 .stream()
-                .map(commonAccountMapper::revolutAccountToCommonAccount)
+                .map(accountMapper::revolutAccountToCommonAccount)
                 .collect(Collectors.toList());
     }
 
@@ -97,8 +104,8 @@ public class RevolutService implements BankingService {
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
                 .stream()
-                .filter(commonEntityMapperService::hasCounterparty)
-                .map(commonEntityMapperService::convertToCommonTransaction)
+                .filter(revolutTransaction -> (revolutTransaction.getLegs()[0].getCounterparty() != null))
+                .map(transactionMapper::revolutTransactionToCommonTransaction)
                 .collect(Collectors.toList());
     }
 
@@ -116,7 +123,7 @@ public class RevolutService implements BankingService {
         }
 
         log("POST", "transaction", responseEntity);
-        return commonEntityMapperService.convertToCommonTransaction(
+        return transactionMapper.revolutTransactionToCommonTransaction(
                 Optional.ofNullable(responseEntity.getBody())
                         .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")),
                 payment);
@@ -181,12 +188,9 @@ public class RevolutService implements BankingService {
     }
 
     public CommonTransaction executeTransactionIfValid(Payment payment) {
-        RevolutReceiver revolutReceiver = new RevolutReceiver(payment.getCounterpartyId(), payment.getReceiverAccountId());
-        RevolutPayment revolutPayment = new RevolutPayment(payment.getSenderAccountId(), revolutReceiver,
-                payment.getCurrency(), payment.getDescription(), payment.getAmount());
+        RevolutPayment revolutPayment = paymentMapper.paymentToRevolutPayment(payment);
 
         if (isPaymentValid(revolutPayment)) {
-            revolutPayment.setGeneratedRequestId();
             return postTransaction(revolutPayment);
         } else {
             TransactionError transactionError = getErrorWithMissingParamsFromPayment(revolutPayment);

@@ -5,7 +5,7 @@ import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 
-public interface CommonAccountMapper {
+public interface AccountMapper {
 
 	CommonAccount revolutAccountToCommonAccount(RevolutAccount revolutAccount);
 
