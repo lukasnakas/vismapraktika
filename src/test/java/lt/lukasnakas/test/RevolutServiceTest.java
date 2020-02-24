@@ -53,7 +53,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void retrieveAccounts_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<List<RevolutAccount>> responseEntity = testDataGenerator.getMockedRevolutAccountResponseEntity();
+		ResponseEntity<List<RevolutAccount>> responseEntity = testDataGenerator.getExpectedRevolutAccountResponseEntity();
 		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody().get(0));
 
 		when(revolutService.getResponseEntityForAccounts("")).thenReturn(responseEntity);
@@ -67,7 +67,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void retrieveTransactions_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<List<RevolutTransaction>> responseEntity = testDataGenerator.getMockedRevolutTransactionResponseEntity();
+		ResponseEntity<List<RevolutTransaction>> responseEntity = testDataGenerator.getExpectedRevolutTransactionResponseEntity();
 		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
 		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0), payment);
 
@@ -83,7 +83,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void postTransaction_shouldReturnTrue_whenComparingTransactionResponses() {
-		ResponseEntity<RevolutTransaction> responseEntity = testDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
+		ResponseEntity<RevolutTransaction> responseEntity = testDataGenerator.getExpectedRevolutTransactionResponseEntityForPost();
 		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
 		CommonTransaction expected = testDataGenerator.buildCommonTransaction(responseEntity.getBody(), payment);
 
@@ -97,7 +97,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForAccounts_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<RevolutAccount>> expected = testDataGenerator.getMockedRevolutAccountResponseEntity();
+		ResponseEntity<List<RevolutAccount>> expected = testDataGenerator.getExpectedRevolutAccountResponseEntity();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/accounts";
 
 		when(revolutServiceConfiguration.getUrlAccounts()).thenReturn(url);
@@ -115,7 +115,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForTransactions_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<RevolutTransaction>> expected = testDataGenerator.getMockedRevolutTransactionResponseEntity();
+		ResponseEntity<List<RevolutTransaction>> expected = testDataGenerator.getExpectedRevolutTransactionResponseEntity();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/transactions";
 
 		when(revolutServiceConfiguration.getUrlAccountTransactions()).thenReturn(url);
@@ -133,7 +133,7 @@ public class RevolutServiceTest {
 
 	@Test
 	public void getResponseEntityForTransaction_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<RevolutTransaction> expected = testDataGenerator.getMockedRevolutTransactionResponseEntityForPost();
+		ResponseEntity<RevolutTransaction> expected = testDataGenerator.getExpectedRevolutTransactionResponseEntityForPost();
 		Payment payment = testDataGenerator.buildRevolutTransactionPayment();
 		String url = "https://sandbox-b2b.revolut.com/api/1.0/pay";
 

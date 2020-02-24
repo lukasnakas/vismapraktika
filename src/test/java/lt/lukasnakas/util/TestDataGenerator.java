@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TestDataGenerator {
 
-	public ResponseEntity<DanskeAccount> getMockedDanskeAccountResponseEntity() {
+	public ResponseEntity<DanskeAccount> getExpectedDanskeAccountResponseEntity() {
 		Balance[] balances = new Balance[1];
 		balances[0] = new Balance("123", "debit", "type", "2020",
 				new DanskeTransactionAmount(55, "EUR"));
@@ -27,7 +27,7 @@ public class TestDataGenerator {
 		return new ResponseEntity<>(danskeAccount, HttpStatus.ACCEPTED);
 	}
 
-	public ResponseEntity<List<RevolutAccount>> getMockedRevolutAccountResponseEntity() {
+	public ResponseEntity<List<RevolutAccount>> getExpectedRevolutAccountResponseEntity() {
 		List<RevolutAccount> revolutAccountList = Collections.singletonList(new RevolutAccount("123",
 				"name", 10, "GBP","state", true,
 				"2002", "2002"));
@@ -62,12 +62,12 @@ public class TestDataGenerator {
 				revolutAccount.getCurrency());
 	}
 
-	public ResponseEntity<List<DanskeTransaction>> getMockedDanskeTransactionResponseEntity() {
+	public ResponseEntity<List<DanskeTransaction>> getExpectedDanskeTransactionResponseEntity() {
 		List<DanskeTransaction> danskeTransactionList = Collections.singletonList(buildDanskeTransaction());
 		return new ResponseEntity<>(danskeTransactionList, HttpStatus.ACCEPTED);
 	}
 
-	public ResponseEntity<List<RevolutTransaction>> getMockedRevolutTransactionResponseEntity() {
+	public ResponseEntity<List<RevolutTransaction>> getExpectedRevolutTransactionResponseEntity() {
 		List<RevolutTransaction> revolutTransactionList = Collections.singletonList(buildRevolutTransaction());
 		return new ResponseEntity<>(revolutTransactionList, HttpStatus.ACCEPTED);
 	}
@@ -93,11 +93,11 @@ public class TestDataGenerator {
 				10, "EUR");
 	}
 
-	public ResponseEntity<DanskeTransaction> getMockedDanskeTransactionResponseEntityForPost() {
+	public ResponseEntity<DanskeTransaction> getExpectedDanskeTransactionResponseEntityForPost() {
 		return new ResponseEntity<>(buildDanskeTransaction(), HttpStatus.ACCEPTED);
 	}
 
-	public ResponseEntity<RevolutTransaction> getMockedRevolutTransactionResponseEntityForPost() {
+	public ResponseEntity<RevolutTransaction> getExpectedRevolutTransactionResponseEntityForPost() {
 		return new ResponseEntity<>(buildRevolutTransaction(), HttpStatus.ACCEPTED);
 	}
 

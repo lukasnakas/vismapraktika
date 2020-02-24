@@ -55,7 +55,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void retrieveAccounts_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<DanskeAccount> responseEntity = testDataGenerator.getMockedDanskeAccountResponseEntity();
+		ResponseEntity<DanskeAccount> responseEntity = testDataGenerator.getExpectedDanskeAccountResponseEntity();
 		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody());
 
 		when(danskeService.getResponseEntityForAccounts()).thenReturn(responseEntity);
@@ -69,7 +69,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void retrieveTransactions_shouldReturnTrue_whenComparingFirstElements() {
-		ResponseEntity<List<DanskeTransaction>> responseEntity = testDataGenerator.getMockedDanskeTransactionResponseEntity();
+		ResponseEntity<List<DanskeTransaction>> responseEntity = testDataGenerator.getExpectedDanskeTransactionResponseEntity();
 		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0));
 
 		when(danskeService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
@@ -83,7 +83,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void postTransaction_shouldReturnTrue_whenComparingTransactionResponses() {
-		ResponseEntity<DanskeTransaction> responseEntity = testDataGenerator.getMockedDanskeTransactionResponseEntityForPost();
+		ResponseEntity<DanskeTransaction> responseEntity = testDataGenerator.getExpectedDanskeTransactionResponseEntityForPost();
 		CommonTransaction expected = testDataGenerator.buildCommonTransaction(responseEntity.getBody());
 		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
 
@@ -97,7 +97,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void getResponseEntityForAccounts_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<DanskeAccount> expected = testDataGenerator.getMockedDanskeAccountResponseEntity();
+		ResponseEntity<DanskeAccount> expected = testDataGenerator.getExpectedDanskeAccountResponseEntity();
 		String url = "https://developers.danskebank.com/_/virtualbank-api/aisp/v3.1/accounts/34289220-ff43-4019-8e79-d3884312f2c3/balances";
 
 		when(danskeServiceConfiguration.getUrlAccountsVirtual()).thenReturn(url);
@@ -115,7 +115,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void getResponseEntityForTransactions_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<DanskeTransaction>> expected = testDataGenerator.getMockedDanskeTransactionResponseEntity();
+		ResponseEntity<List<DanskeTransaction>> expected = testDataGenerator.getExpectedDanskeTransactionResponseEntity();
 		String url = "https://developers.danskebank.com/_/playground-api/v1.0/41aa8b6a-60cc-475f-8348-331d5fc5d4f5" +
 				"/customer/27fc10ec-6d37-491e-ae7f-49927a7ef4e7/account/34289220-ff43-4019-8e79-d3884312f2c3/transaction";
 
@@ -134,7 +134,7 @@ public class DanskeServiceTest {
 
 	@Test
 	public void getResponseEntityForTransaction_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<DanskeTransaction> expected = testDataGenerator.getMockedDanskeTransactionResponseEntityForPost();
+		ResponseEntity<DanskeTransaction> expected = testDataGenerator.getExpectedDanskeTransactionResponseEntityForPost();
 		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
 		String url = "https://developers.danskebank.com/_/playground-api/v1.0/41aa8b6a-60cc-475f-8348-331d5fc5d4f5" +
 				"/customer/27fc10ec-6d37-491e-ae7f-49927a7ef4e7/account/34289220-ff43-4019-8e79-d3884312f2c3/transaction";
