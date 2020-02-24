@@ -14,7 +14,6 @@ import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.service.BankingService;
-import lt.lukasnakas.service.CommonEntityMapperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -34,7 +33,6 @@ public class DanskeService implements BankingService {
     private final DanskeTokenRenewalService danskeTokenRenewalService;
     private final DanskePaymentValidationService danskePaymentValidationService;
     private final DanskeTransactionErrorService danskeTransactionErrorService;
-    private final CommonEntityMapperService commonEntityMapperService;
     private final AccountMapper accountMapper;
     private final TransactionMapper transactionMapper;
     private final RestTemplate restTemplate;
@@ -44,7 +42,6 @@ public class DanskeService implements BankingService {
                          DanskeTokenRenewalService danskeTokenRenewalService,
                          DanskePaymentValidationService danskePaymentValidationService,
                          DanskeTransactionErrorService danskeTransactionErrorService,
-                         CommonEntityMapperService commonEntityMapperService,
                          AccountMapper accountMapper,
                          TransactionMapper transactionMapper,
                          RestTemplate restTemplate,
@@ -53,7 +50,6 @@ public class DanskeService implements BankingService {
         this.danskeTokenRenewalService = danskeTokenRenewalService;
         this.danskePaymentValidationService = danskePaymentValidationService;
         this.danskeTransactionErrorService = danskeTransactionErrorService;
-        this.commonEntityMapperService = commonEntityMapperService;
         this.accountMapper = accountMapper;
         this.transactionMapper = transactionMapper;
         this.restTemplate = restTemplate;

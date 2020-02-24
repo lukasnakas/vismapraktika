@@ -16,7 +16,6 @@ import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.service.BankingService;
-import lt.lukasnakas.service.CommonEntityMapperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -37,7 +36,6 @@ public class RevolutService implements BankingService {
     private final RevolutTokenRenewalService revolutTokenRenewalService;
     private final RevolutPaymentValidationService revolutPaymentValidationService;
     private final RevolutTransactionErrorService revolutTransactionErrorService;
-    private final CommonEntityMapperService commonEntityMapperService;
     private final AccountMapper accountMapper;
     private final TransactionMapper transactionMapper;
     private final PaymentMapper paymentMapper;
@@ -48,7 +46,6 @@ public class RevolutService implements BankingService {
                           RevolutTokenRenewalService revolutTokenRenewalService,
                           RevolutPaymentValidationService revolutPaymentValidationService,
                           RevolutTransactionErrorService revolutTransactionErrorService,
-                          CommonEntityMapperService commonEntityMapperService,
                           AccountMapper accountMapper,
                           TransactionMapper transactionMapper,
                           PaymentMapper paymentMapper,
@@ -58,7 +55,6 @@ public class RevolutService implements BankingService {
         this.revolutTokenRenewalService = revolutTokenRenewalService;
         this.revolutPaymentValidationService = revolutPaymentValidationService;
         this.revolutTransactionErrorService = revolutTransactionErrorService;
-        this.commonEntityMapperService = commonEntityMapperService;
         this.accountMapper = accountMapper;
         this.transactionMapper = transactionMapper;
         this.paymentMapper = paymentMapper;

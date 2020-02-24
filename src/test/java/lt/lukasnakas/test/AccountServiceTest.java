@@ -1,6 +1,7 @@
 package lt.lukasnakas.test;
 
 import lt.lukasnakas.model.CommonAccount;
+import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.repository.AccountRepository;
 import lt.lukasnakas.service.AccountService;
 import lt.lukasnakas.util.TestDataGenerator;
@@ -38,7 +39,7 @@ public class AccountServiceTest {
 		List<CommonAccount> expected = testDataGenerator.buildCommonAccountList();
 
 		when(accountRepository.findAll()).thenReturn(expected);
-		List<CommonAccount> actual = accountService.getAccounts();
+		List<CommonAccountDTO> actual = accountService.getAccounts();
 
 		assertEquals(expected, actual);
 	}
@@ -57,7 +58,7 @@ public class AccountServiceTest {
 
 		when(accountRepository.findById(id)).thenReturn(Optional.ofNullable(expected));
 
-		CommonAccount actual = accountService.getAccountById(id);
+		CommonAccountDTO actual = accountService.getAccountById(id);
 		assertEquals(expected, actual);
 	}
 

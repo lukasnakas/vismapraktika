@@ -13,7 +13,7 @@ public class TransactionMapperImpl implements TransactionMapper {
 
     @Override
     public CommonTransaction danskeTransactionToCommonTransaction(DanskeTransaction danskeTransaction) {
-        if(danskeTransaction == null) {
+        if (danskeTransaction == null) {
             return null;
         }
 
@@ -30,7 +30,7 @@ public class TransactionMapperImpl implements TransactionMapper {
 
     @Override
     public CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction) {
-        if(revolutTransaction == null) {
+        if (revolutTransaction == null) {
             return null;
         }
 
@@ -47,7 +47,7 @@ public class TransactionMapperImpl implements TransactionMapper {
 
     @Override
     public CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction, Payment payment) {
-        if(revolutTransaction == null) {
+        if (revolutTransaction == null) {
             return null;
         }
 
@@ -65,7 +65,7 @@ public class TransactionMapperImpl implements TransactionMapper {
 
     @Override
     public CommonTransaction commonTransactionDtoToCommonTransaction(CommonTransactionDTO commonTransactionDTO) {
-        if(commonTransactionDTO == null) {
+        if (commonTransactionDTO == null) {
             return null;
         }
 
@@ -82,7 +82,7 @@ public class TransactionMapperImpl implements TransactionMapper {
 
     @Override
     public CommonTransactionDTO commonTransactionToCommonTransactionDto(CommonTransaction commonTransaction) {
-        if(commonTransaction == null) {
+        if (commonTransaction == null) {
             return null;
         }
 

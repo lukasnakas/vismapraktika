@@ -1,13 +1,16 @@
 package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
+import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.AccountMapperImpl;
+import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.TransactionMapperImpl;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
-import lt.lukasnakas.service.CommonEntityMapperService;
 import lt.lukasnakas.service.danske.DanskeService;
 import lt.lukasnakas.service.danske.DanskeTransactionErrorService;
 import lt.lukasnakas.util.TestDataGenerator;
@@ -42,9 +45,6 @@ public class DanskeServiceTest {
 	private HttpHeaders httpHeaders;
 
 	@Mock
-	private CommonEntityMapperService commonEntityMapperService;
-
-	@Mock
 	private DanskeTransactionErrorService danskeTransactionErrorService;
 
 	@InjectMocks
@@ -58,7 +58,6 @@ public class DanskeServiceTest {
 		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody());
 
 		when(danskeService.getResponseEntityForAccounts()).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonAccount(responseEntity.getBody())).thenReturn(commonAccount);
 
 		List<CommonAccount> expected = Collections.singletonList(commonAccount);
 		List<CommonAccount> actual = danskeService.retrieveAccounts();
@@ -72,7 +71,6 @@ public class DanskeServiceTest {
 		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0));
 
 		when(danskeService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody().get(0))).thenReturn(commonTransaction);
 
 		List<CommonTransaction> expected = Collections.singletonList(commonTransaction);
 		List<CommonTransaction> actual = danskeService.retrieveTransactions();
@@ -87,7 +85,6 @@ public class DanskeServiceTest {
 		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
 
 		when(danskeService.getResponseEntityForTransaction("", payment)).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody())).thenReturn(expected);
 
 		CommonTransaction actual = danskeService.postTransaction(payment);
 

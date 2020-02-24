@@ -1,11 +1,14 @@
 package lt.lukasnakas.test.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
+import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.AccountMapperImpl;
+import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.TransactionMapperImpl;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.*;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
-import lt.lukasnakas.service.CommonEntityMapperService;
 import lt.lukasnakas.service.revolut.RevolutService;
 import lt.lukasnakas.service.revolut.RevolutTransactionErrorService;
 import lt.lukasnakas.util.TestDataGenerator;
@@ -38,9 +41,6 @@ public class RevolutServiceTest {
 	private RestTemplate restTemplate;
 
 	@Mock
-	private CommonEntityMapperService commonEntityMapperService;
-
-	@Mock
 	private RevolutTransactionErrorService revolutTransactionErrorService;
 
 	@Mock
@@ -57,7 +57,6 @@ public class RevolutServiceTest {
 		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody().get(0));
 
 		when(revolutService.getResponseEntityForAccounts("")).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonAccount(responseEntity.getBody().get(0))).thenReturn(commonAccount);
 
 		List<CommonAccount> expected = Collections.singletonList(commonAccount);
 		List<CommonAccount> actual = revolutService.retrieveAccounts();
@@ -72,8 +71,6 @@ public class RevolutServiceTest {
 		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0), payment);
 
 		when(revolutService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody().get(0))).thenReturn(commonTransaction);
-		when(commonEntityMapperService.hasCounterparty(responseEntity.getBody().get(0))).thenReturn(true);
 
 		List<CommonTransaction> expected = Collections.singletonList(commonTransaction);
 		List<CommonTransaction> actual = revolutService.retrieveTransactions();
@@ -88,7 +85,6 @@ public class RevolutServiceTest {
 		CommonTransaction expected = testDataGenerator.buildCommonTransaction(responseEntity.getBody(), payment);
 
 		when(revolutService.getResponseEntityForTransaction("", payment)).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody(), payment)).thenReturn(expected);
 
 		CommonTransaction actual = revolutService.postTransaction(payment);
 

@@ -1,6 +1,7 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.model.CommonAccount;
+import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,29 +19,29 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(value = "/api/accounts")
 public class AccountController {
 
-	private final AccountService accountService;
+    private final AccountService accountService;
 
-	public AccountController(AccountService accountService) {
-		this.accountService = accountService;
-	}
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
-	@GetMapping(value = "")
-	public ResponseEntity<List<CommonAccount>> getAllAccounts() {
-		return ok(accountService.getAccounts());
-	}
+    @GetMapping(value = "")
+    public ResponseEntity<List<CommonAccountDTO>> getAllAccounts() {
+        return ok(accountService.getAccounts());
+    }
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<CommonAccount> getAccountById(@PathVariable String id) {
-		try {
-			return ok(accountService.getAccountById(id));
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-		}
-	}
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CommonAccountDTO> getAccountById(@PathVariable String id) {
+        try {
+            return ok(accountService.getAccountById(id));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
 
-	@GetMapping(value = "/update")
-	public ResponseEntity<List<CommonAccount>> updateAccounts(){
-		return ok(accountService.updateAccounts());
-	}
+    @GetMapping(value = "/update")
+    public ResponseEntity<List<CommonAccountDTO>> updateAccounts() {
+        return ok(accountService.updateAccounts());
+    }
 
 }

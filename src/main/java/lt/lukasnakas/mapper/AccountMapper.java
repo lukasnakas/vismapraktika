@@ -7,12 +7,12 @@ import lt.lukasnakas.model.revolut.account.RevolutAccount;
 
 public interface AccountMapper {
 
-	CommonAccount revolutAccountToCommonAccount(RevolutAccount revolutAccount);
+    CommonAccount revolutAccountToCommonAccount(RevolutAccount revolutAccount);
 
-	CommonAccount danskeAccountToCommonAccount(DanskeAccount danskeAccount);
+    CommonAccount danskeAccountToCommonAccount(DanskeAccount danskeAccount);
 
-	CommonAccount commonAccountDtoToCommonAccount(CommonAccountDTO commonAccountDTO);
+    CommonAccount commonAccountDtoToCommonAccount(CommonAccountDTO commonAccountDTO);
 
-	CommonAccountDTO commonAccountToCommonAccountDto(CommonAccount commonAccount);
+    CommonAccountDTO commonAccountToCommonAccountDto(CommonAccount commonAccount);
 
 }

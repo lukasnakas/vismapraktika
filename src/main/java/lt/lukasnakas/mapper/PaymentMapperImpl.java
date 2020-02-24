@@ -11,7 +11,7 @@ public class PaymentMapperImpl implements PaymentMapper {
 
     @Override
     public Payment paymentDtoToPayment(PaymentDTO paymentDTO) {
-        if(paymentDTO == null) {
+        if (paymentDTO == null) {
             return null;
         }
 
@@ -30,7 +30,7 @@ public class PaymentMapperImpl implements PaymentMapper {
 
     @Override
     public PaymentDTO paymentToPaymentDto(Payment payment) {
-        if(payment == null) {
+        if (payment == null) {
             return null;
         }
 
@@ -49,7 +49,7 @@ public class PaymentMapperImpl implements PaymentMapper {
 
     @Override
     public RevolutPayment paymentToRevolutPayment(Payment payment) {
-        if(payment == null) {
+        if (payment == null) {
             return null;
         }
 

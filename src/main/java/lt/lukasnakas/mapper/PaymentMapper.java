@@ -6,10 +6,10 @@ import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 
 public interface PaymentMapper {
 
-	Payment paymentDtoToPayment(PaymentDTO paymentDTO);
+    Payment paymentDtoToPayment(PaymentDTO paymentDTO);
 
-	PaymentDTO paymentToPaymentDto(Payment payment);
+    PaymentDTO paymentToPaymentDto(Payment payment);
 
-	RevolutPayment paymentToRevolutPayment(Payment payment);
+    RevolutPayment paymentToRevolutPayment(Payment payment);
 
 }

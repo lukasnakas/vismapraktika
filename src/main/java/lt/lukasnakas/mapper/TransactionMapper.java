@@ -8,14 +8,14 @@ import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 
 public interface TransactionMapper {
 
-	CommonTransaction danskeTransactionToCommonTransaction(DanskeTransaction danskeTransaction);
+    CommonTransaction danskeTransactionToCommonTransaction(DanskeTransaction danskeTransaction);
 
-	CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction);
+    CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction);
 
-	CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction, Payment payment);
+    CommonTransaction revolutTransactionToCommonTransaction(RevolutTransaction revolutTransaction, Payment payment);
 
-	CommonTransaction commonTransactionDtoToCommonTransaction(CommonTransactionDTO commonTransactionDTO);
+    CommonTransaction commonTransactionDtoToCommonTransaction(CommonTransactionDTO commonTransactionDTO);
 
-	CommonTransactionDTO commonTransactionToCommonTransactionDto(CommonTransaction commonTransaction);
+    CommonTransactionDTO commonTransactionToCommonTransactionDto(CommonTransaction commonTransaction);
 
 }
