@@ -115,7 +115,7 @@ public class RevolutService implements BankingService {
         return commonEntityMapperService.convertToCommonTransaction(
                 Optional.ofNullable(responseEntity.getBody())
                         .orElseThrow(() -> new TransactionExecutionExeption("Failed to execute transaction")),
-                (RevolutPayment) payment);
+                payment);
     }
 
     private void log(String method, String object, ResponseEntity<?> responseEntity) {

@@ -2,6 +2,7 @@ package lt.lukasnakas.service;
 
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.CommonTransaction;
+import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
@@ -44,7 +45,8 @@ public class CommonEntityMapperService {
 				revolutTransaction.getLegs()[0].getCurrency());
 	}
 
-	public CommonTransaction convertToCommonTransaction(RevolutTransaction revolutTransaction, RevolutPayment revolutPayment){
+	public CommonTransaction convertToCommonTransaction(RevolutTransaction revolutTransaction, Payment payment){
+		RevolutPayment revolutPayment = (RevolutPayment) payment;
 		return new CommonTransaction(revolutTransaction.getId(),
 				revolutPayment.getAccountId(),
 				revolutPayment.getReceiver().getAccountId(),

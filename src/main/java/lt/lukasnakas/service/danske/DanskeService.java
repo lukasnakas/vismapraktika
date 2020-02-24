@@ -84,7 +84,6 @@ public class DanskeService implements BankingService {
         }
 
         log("GET", "transactions", responseEntity);
-
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new TransactionRetrievalException("Failed to retrieve transactions"))
                 .stream()

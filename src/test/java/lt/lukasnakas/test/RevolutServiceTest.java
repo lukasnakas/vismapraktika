@@ -6,6 +6,7 @@ import lt.lukasnakas.model.*;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
+import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.service.CommonEntityMapperService;
 import lt.lukasnakas.service.revolut.RevolutService;
@@ -76,6 +77,7 @@ public class RevolutServiceTest {
 
 		when(revolutService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
 		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody().get(0))).thenReturn(commonTransaction);
+		when(commonEntityMapperService.hasCounterparty(responseEntity.getBody().get(0))).thenReturn(true);
 
 		List<CommonTransaction> expected = Collections.singletonList(commonTransaction);
 		List<CommonTransaction> actual = revolutService.retrieveTransactions();
@@ -90,7 +92,7 @@ public class RevolutServiceTest {
 		CommonTransaction expected = mockedDataGenerator.buildCommonTransaction(responseEntity.getBody(), payment);
 
 		when(revolutService.getResponseEntityForTransaction("", payment)).thenReturn(responseEntity);
-		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody())).thenReturn(expected);
+		when(commonEntityMapperService.convertToCommonTransaction(responseEntity.getBody(), payment)).thenReturn(expected);
 
 		CommonTransaction actual = revolutService.postTransaction(payment);
 

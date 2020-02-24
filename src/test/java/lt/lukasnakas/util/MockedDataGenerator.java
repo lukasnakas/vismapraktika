@@ -106,9 +106,9 @@ public class MockedDataGenerator {
 				"789", 100, "EUR", "desc");
 	}
 
-	public RevolutPayment buildRevolutTransactionPayment() {
-		return new RevolutPayment("123", new RevolutReceiver("456", "789"),
-				"789", "ref", 100);
+	public Payment buildRevolutTransactionPayment() {
+		return new Payment("123", "789", "456",
+				789, "GBP", "desc");
 	}
 
 	public TransactionError buildDanskeTransactionError() {
