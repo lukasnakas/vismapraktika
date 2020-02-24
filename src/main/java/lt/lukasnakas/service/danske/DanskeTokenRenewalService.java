@@ -40,7 +40,7 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
                 .orElseThrow(() -> new TokenGenerationException("Failed to generate new access token"));
     }
 
-    private ResponseEntity<AccessToken> getAccessTokenResponseEntity() {
+    public ResponseEntity<AccessToken> getAccessTokenResponseEntity() {
         try {
             return restTemplate.postForEntity(
                     danskeServiceConfiguration.getUrlAuth(),
@@ -51,7 +51,7 @@ public class DanskeTokenRenewalService implements TokenRenewalService {
         }
     }
 
-    public MultiValueMap<String, String> getRequestBodyParams() {
+    private MultiValueMap<String, String> getRequestBodyParams() {
         MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
 
         bodyParams.add("ClientId", danskeServiceConfiguration.getClientId());

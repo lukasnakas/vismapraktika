@@ -13,7 +13,8 @@ public class RevolutAccessToken extends AccessToken {
     public RevolutAccessToken() {
     }
 
-    public RevolutAccessToken(String tokenType, String expiresIn) {
+    public RevolutAccessToken(String token, String tokenType, String expiresIn) {
+        super(token);
         this.tokenType = tokenType;
         this.expiresIn = expiresIn;
     }

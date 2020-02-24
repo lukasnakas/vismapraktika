@@ -1,6 +1,7 @@
 package lt.lukasnakas.util;
 
 import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
@@ -9,10 +10,15 @@ import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.account.Data;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.danske.transaction.DanskeTransactionAmount;
+import lt.lukasnakas.model.revolut.RevolutAccessToken;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
-import lt.lukasnakas.model.revolut.transaction.*;
+import lt.lukasnakas.model.revolut.transaction.RevolutCounterparty;
+import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
+import lt.lukasnakas.model.revolut.transaction.RevolutTransactionLegs;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +35,19 @@ public class TestDataGenerator {
 
 	public ResponseEntity<List<RevolutAccount>> getExpectedRevolutAccountResponseEntity() {
 		List<RevolutAccount> revolutAccountList = Collections.singletonList(new RevolutAccount("123",
-				"name", 10, "GBP","state", true,
+				"name", 10, "GBP", "state", true,
 				"2002", "2002"));
 		return new ResponseEntity<>(revolutAccountList, HttpStatus.ACCEPTED);
+	}
+
+	public ResponseEntity<AccessToken> getExpectedDanskeAccessTokenResponseEntity() {
+		AccessToken accessToken = new AccessToken("123456789");
+		return new ResponseEntity<>(accessToken, HttpStatus.ACCEPTED);
+	}
+
+	public ResponseEntity<RevolutAccessToken> getExpectedRevolutAccessTokenResponseEntity() {
+		RevolutAccessToken revolutAccessToken = new RevolutAccessToken("123456789", "bearer", "2020");
+		return new ResponseEntity<>(revolutAccessToken, HttpStatus.ACCEPTED);
 	}
 
 	private RevolutTransaction buildRevolutTransaction() {

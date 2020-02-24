@@ -41,7 +41,7 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
                 .orElseThrow(() -> new TokenGenerationException("Failed to generate new access token"));
     }
 
-    private ResponseEntity<RevolutAccessToken> getRevolutAccessTokenResponseEntity() {
+    public ResponseEntity<RevolutAccessToken> getRevolutAccessTokenResponseEntity() {
         try {
             return restTemplate.postForEntity(
                     revolutServiceConfiguration.getUrlAuth(),
@@ -52,7 +52,7 @@ public class RevolutTokenRenewalService implements TokenRenewalService {
         }
     }
 
-    public MultiValueMap<String, String> getRequestBodyParams() {
+    private MultiValueMap<String, String> getRequestBodyParams() {
         MultiValueMap<String, String> bodyParams = new LinkedMultiValueMap<>();
 
         bodyParams.add("grant_type", revolutServiceConfiguration.getGrantType());

@@ -8,6 +8,4 @@ public interface TokenRenewalService {
     AccessToken generateAccessToken();
 
     AccessToken extractAccessToken(ResponseEntity<? extends AccessToken> responseEntity);
-
-    MultiValueMap<String, String> getRequestBodyParams();
 }
