@@ -2,7 +2,7 @@ package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.model.CommonTransaction;
-import lt.lukasnakas.model.PaymentDTO;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ public class TransactionController {
 		this.transactionService = transactionService;
 	}
 
-	@GetMapping(value = "", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "")
 	public ResponseEntity<List<CommonTransaction>> getAllTransactions() {
 		return ok(transactionService.getTransactions());
 	}
 
-	@GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<CommonTransaction> getTransactionById(@PathVariable String id) {
 		try {
 			return ok(transactionService.getTransactionById(id));
@@ -36,16 +36,16 @@ public class TransactionController {
 		}
 	}
 
-	@PostMapping(value = "/{bankName}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
-		try {
-			return ok(transactionService.postTransaction(paymentDTO, bankName));
-		} catch (BadRequestException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
+//	@PostMapping(value = "/{bankName}")
+//	public ResponseEntity<CommonTransaction> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
+//		try {
+//			return ok(transactionService.postTransaction(paymentDTO, bankName));
+//		} catch (BadRequestException e) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		}
+//	}
 
-	@GetMapping(value = "/update", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "/update")
 	public ResponseEntity<List<CommonTransaction>> updateAccounts(){
 		return ok(transactionService.updateTransactions());
 	}

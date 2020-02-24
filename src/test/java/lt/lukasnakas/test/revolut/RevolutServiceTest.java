@@ -1,7 +1,7 @@
 package lt.lukasnakas.test.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.*;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;

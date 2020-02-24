@@ -1,4 +1,4 @@
-package lt.lukasnakas.model;
+package lt.lukasnakas.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

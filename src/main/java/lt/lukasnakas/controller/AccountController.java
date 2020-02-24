@@ -24,12 +24,12 @@ public class AccountController {
 		this.accountService = accountService;
 	}
 
-	@GetMapping(value = "", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "")
 	public ResponseEntity<List<CommonAccount>> getAllAccounts() {
 		return ok(accountService.getAccounts());
 	}
 
-	@GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<CommonAccount> getAccountById(@PathVariable String id) {
 		try {
 			return ok(accountService.getAccountById(id));
@@ -38,7 +38,7 @@ public class AccountController {
 		}
 	}
 
-	@GetMapping(value = "/update", consumes = "application/json", produces = "application/json")
+	@GetMapping(value = "/update")
 	public ResponseEntity<List<CommonAccount>> updateAccounts(){
 		return ok(accountService.updateAccounts());
 	}

@@ -1,7 +1,8 @@
 package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.mapper.CommonAccountMapper;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.AccountRetrievalException;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionExecutionExeption;
@@ -36,6 +37,7 @@ public class RevolutService implements BankingService {
     private final RevolutPaymentValidationService revolutPaymentValidationService;
     private final RevolutTransactionErrorService revolutTransactionErrorService;
     private final CommonEntityMapperService commonEntityMapperService;
+    private final CommonAccountMapper commonAccountMapper;
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
 
@@ -44,6 +46,7 @@ public class RevolutService implements BankingService {
                           RevolutPaymentValidationService revolutPaymentValidationService,
                           RevolutTransactionErrorService revolutTransactionErrorService,
                           CommonEntityMapperService commonEntityMapperService,
+                          CommonAccountMapper commonAccountMapper,
                           RestTemplate restTemplate,
                           HttpHeaders httpHeaders) {
         this.revolutServiceConfiguration = revolutServiceConfiguration;
@@ -51,6 +54,7 @@ public class RevolutService implements BankingService {
         this.revolutPaymentValidationService = revolutPaymentValidationService;
         this.revolutTransactionErrorService = revolutTransactionErrorService;
         this.commonEntityMapperService = commonEntityMapperService;
+        this.commonAccountMapper = commonAccountMapper;
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -72,7 +76,7 @@ public class RevolutService implements BankingService {
         return Optional.ofNullable(responseEntity.getBody())
                 .orElseThrow(() -> new AccountRetrievalException("Failed to retrieve accounts"))
                 .stream()
-                .map(commonEntityMapperService::convertToCommonAccount)
+                .map(commonAccountMapper::revolutAccountToCommonAccount)
                 .collect(Collectors.toList());
     }
 

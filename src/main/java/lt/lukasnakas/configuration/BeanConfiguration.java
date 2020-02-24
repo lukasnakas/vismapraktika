@@ -1,6 +1,5 @@
 package lt.lukasnakas.configuration;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -17,11 +16,6 @@ public class BeanConfiguration {
 	@Bean
 	public HttpHeaders httpHeaders() {
 		return new HttpHeaders();
-	}
-
-	@Bean
-	public ModelMapper modelMapper() {
-        return new ModelMapper();
 	}
 
 }

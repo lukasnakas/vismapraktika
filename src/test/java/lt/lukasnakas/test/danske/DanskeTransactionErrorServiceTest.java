@@ -1,6 +1,6 @@
 package lt.lukasnakas.test.danske;
 
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.service.danske.DanskeTransactionErrorService;
 import lt.lukasnakas.util.TestDataGenerator;

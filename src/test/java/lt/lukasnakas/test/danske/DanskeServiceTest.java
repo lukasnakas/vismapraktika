@@ -1,7 +1,7 @@
 package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;

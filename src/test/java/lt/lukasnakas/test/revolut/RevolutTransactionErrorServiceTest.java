@@ -1,6 +1,6 @@
 package lt.lukasnakas.test.revolut;
 
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.service.revolut.RevolutTransactionErrorService;
 import lt.lukasnakas.util.TestDataGenerator;

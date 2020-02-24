@@ -1,14 +1,14 @@
 package lt.lukasnakas.service;
 
-import lt.lukasnakas.error.TransactionError;
+import lt.lukasnakas.exception.TransactionExecutionExeption;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
-import lt.lukasnakas.model.PaymentDTO;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,16 +21,13 @@ public class TransactionService {
 	private final List<BankingService> bankingServices;
 	private final TransactionRepository transactionRepository;
 	private final PaymentRepository paymentRepository;
-	private final ModelMapper modelMapper;
 
 	public TransactionService(List<BankingService> bankingServices,
 							  TransactionRepository transactionRepository,
-							  PaymentRepository paymentRepository,
-							  ModelMapper modelMapper) {
+							  PaymentRepository paymentRepository) {
 		this.bankingServices = bankingServices;
 		this.transactionRepository = transactionRepository;
 		this.paymentRepository = paymentRepository;
-		this.modelMapper = modelMapper;
 	}
 
 	public List<CommonTransaction> getTransactions() {
@@ -55,30 +52,24 @@ public class TransactionService {
 		return (List<CommonTransaction>) transactionRepository.saveAll(commonTransactionList);
 	}
 
-	private List<CommonTransaction> getChosenBankingServiceListForPost(Payment payment, String bankName) {
+	private CommonTransaction getChosenBankingServiceForPost(Payment payment, String bankName) {
 		return bankingServices.stream()
 				.filter(bankingService -> bankNameMatches(bankName, bankingService.getBankName()))
 				.map(bankingService -> bankingService.executeTransactionIfValid(payment))
-				.collect(Collectors.toList());
+				.findAny()
+				.orElseThrow(() -> new BadRequestException(new TransactionError("bankName").getMessage()));
 	}
 
-	public CommonTransaction postTransaction(PaymentDTO paymentDTO, String bankName) {
-		Payment payment = convertToPayment(paymentDTO);
-		List<CommonTransaction> transactionList = getChosenBankingServiceListForPost(payment, bankName);
-
-		if (!transactionList.isEmpty()) {
-			paymentRepository.save(payment);
-			return transactionRepository.save(transactionList.get(0));
-		} else {
-			throw new BadRequestException(new TransactionError("bankName").getMessage());
-		}
-	}
+//	public CommonTransaction postTransaction(PaymentDTO paymentDTO, String bankName) {
+//		Payment payment = modelMapper.map(paymentDTO, Payment.class);
+//		CommonTransaction transaction = getChosenBankingServiceForPost(payment, bankName);
+//
+//		paymentRepository.save(payment);
+//		return transactionRepository.save(transaction);
+//	}
 
 	private boolean bankNameMatches(String bankName, String bankingServiceBankName) {
 		return bankName.equalsIgnoreCase(bankingServiceBankName);
 	}
 
-	private Payment convertToPayment(PaymentDTO paymentDTO) {
-		return modelMapper.map(paymentDTO, Payment.class);
-	}
 }

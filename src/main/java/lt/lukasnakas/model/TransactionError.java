@@ -1,7 +1,6 @@
-package lt.lukasnakas.error;
+package lt.lukasnakas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lt.lukasnakas.model.Transaction;
 
 import java.util.List;
 import java.util.Objects;
