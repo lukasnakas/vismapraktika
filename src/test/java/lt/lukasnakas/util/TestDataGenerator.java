@@ -22,56 +22,121 @@ import java.util.List;
 public class TestDataGenerator {
 
 	public ResponseEntity<DanskeAccount> getExpectedDanskeAccountResponseEntity() {
+		DanskeTransactionAmount danskeTransactionAmount = new DanskeTransactionAmount();
+		danskeTransactionAmount.setAmount(55);
+		danskeTransactionAmount.setCurrency("EUR");
+
+
 		Balance[] balances = new Balance[1];
-		balances[0] = new Balance("123", "debit", "type", "2020",
-				new DanskeTransactionAmount(55, "EUR"));
-		DanskeAccount danskeAccount = new DanskeAccount("456", new Data(balances));
+		balances[0] = new Balance();
+		balances[0].setAccountId("123");
+		balances[0].setCreditDebitIndicator("debit");
+		balances[0].setType("type");
+		balances[0].setDatetime("2020");
+		balances[0].setAmount(danskeTransactionAmount);
+
+		Data data = new Data();
+		data.setBalance(balances);
+
+		DanskeAccount danskeAccount = new DanskeAccount();
+		danskeAccount.setId("456");
+		danskeAccount.setData(data);
+
 		return new ResponseEntity<>(danskeAccount, HttpStatus.ACCEPTED);
 	}
 
 	public ResponseEntity<List<RevolutAccount>> getExpectedRevolutAccountResponseEntity() {
-		List<RevolutAccount> revolutAccountList = Collections.singletonList(new RevolutAccount("123",
-				"name", 10, "GBP", "state", true,
-				"2002", "2002"));
+		RevolutAccount revolutAccount = new RevolutAccount();
+		revolutAccount.setId("123");
+		revolutAccount.setName("name");
+		revolutAccount.setBalance(10);
+		revolutAccount.setCurrency("GBP");
+		revolutAccount.setState("state");
+		revolutAccount.setPublicAccount(true);
+		revolutAccount.setCreatedAt("2020");
+		revolutAccount.setUpdatedAt("2020");
+
+		List<RevolutAccount> revolutAccountList = Collections.singletonList(revolutAccount);
 		return new ResponseEntity<>(revolutAccountList, HttpStatus.ACCEPTED);
 	}
 
 	public ResponseEntity<AccessToken> getExpectedDanskeAccessTokenResponseEntity() {
-		AccessToken accessToken = new AccessToken("123456789");
+		AccessToken accessToken = new AccessToken();
+		accessToken.setToken("123456789");
+
 		return new ResponseEntity<>(accessToken, HttpStatus.ACCEPTED);
 	}
 
 	public ResponseEntity<RevolutAccessToken> getExpectedRevolutAccessTokenResponseEntity() {
-		RevolutAccessToken revolutAccessToken = new RevolutAccessToken("123456789", "bearer", "2020");
+		RevolutAccessToken revolutAccessToken = new RevolutAccessToken();
+		revolutAccessToken.setToken("123456789");
+		revolutAccessToken.setTokenType("bearer");
+		revolutAccessToken.setExpiresIn("2020");
+
 		return new ResponseEntity<>(revolutAccessToken, HttpStatus.ACCEPTED);
 	}
 
 	private RevolutTransaction buildRevolutTransaction() {
-		RevolutCounterparty revolutCounterparty = new RevolutCounterparty("type", "123");
+		RevolutCounterparty revolutCounterparty = new RevolutCounterparty();
+		revolutCounterparty.setAccountType("type");
+		revolutCounterparty.setAccountId("123");
+
 		RevolutTransactionLegs[] revolutTransactionLegs = new RevolutTransactionLegs[1];
-		revolutTransactionLegs[0] = new RevolutTransactionLegs("123", "456", revolutCounterparty,
-				10, "GBP", "desc", 100);
-		return new RevolutTransaction("123", "type", "456", "2020", "ref",
-				revolutTransactionLegs, "active", "2020", "2020");
+		revolutTransactionLegs[0] = new RevolutTransactionLegs();
+		revolutTransactionLegs[0].setId("123");
+		revolutTransactionLegs[0].setAccountId("456");
+		revolutTransactionLegs[0].setCounterparty(revolutCounterparty);
+		revolutTransactionLegs[0].setAmount(10);
+		revolutTransactionLegs[0].setCurrency("GBP");
+		revolutTransactionLegs[0].setDescription("desc");
+		revolutTransactionLegs[0].setBalance(100);
+
+		RevolutTransaction revolutTransaction = new RevolutTransaction();
+		revolutTransaction.setId("123");
+		revolutTransaction.setType("type");
+		revolutTransaction.setRequestId("456");
+		revolutTransaction.setCreatedAt("2020");
+		revolutTransaction.setUpdatedAt("2020");
+		revolutTransaction.setCompletedAt("2020");
+		revolutTransaction.setLegs(revolutTransactionLegs);
+		revolutTransaction.setReference("ref");
+		revolutTransaction.setState("active");
+
+		return revolutTransaction;
 	}
 
 	private DanskeTransaction buildDanskeTransaction() {
-		return new DanskeTransaction("123", "456", "debit",
-				new DanskeTransactionAmount(5, "EUR"));
+		DanskeTransactionAmount danskeTransactionAmount = new DanskeTransactionAmount();
+		danskeTransactionAmount.setAmount(5);
+		danskeTransactionAmount.setCurrency("EUR");
+
+		DanskeTransaction danskeTransaction = new DanskeTransaction();
+		danskeTransaction.setId("123");
+		danskeTransaction.setAccountId("456");
+		danskeTransaction.setCreditDebitIndicator("debit");
+		danskeTransaction.setTransactionAmount(danskeTransactionAmount);
+
+		return danskeTransaction;
 	}
 
 	public CommonAccount buildCommonAccount(DanskeAccount danskeAccount) {
-		return new CommonAccount("Danske",
-				danskeAccount.getData().getBalance()[0].getAccountId(),
-				danskeAccount.getData().getBalance()[0].getAmount().getAmount(),
-				danskeAccount.getData().getBalance()[0].getAmount().getCurrency());
+		CommonAccount commonAccount = new CommonAccount();
+		commonAccount.setBankName("Danske");
+		commonAccount.setAccountId(danskeAccount.getData().getBalance()[0].getAccountId());
+		commonAccount.setCurrency(danskeAccount.getData().getBalance()[0].getAmount().getCurrency());
+		commonAccount.setBalance(danskeAccount.getData().getBalance()[0].getAmount().getAmount());
+
+		return commonAccount;
 	}
 
 	public CommonAccount buildCommonAccount(RevolutAccount revolutAccount) {
-		return new CommonAccount("Danske",
-				revolutAccount.getId(),
-				revolutAccount.getBalance(),
-				revolutAccount.getCurrency());
+		CommonAccount commonAccount = new CommonAccount();
+		commonAccount.setBankName("Revolut");
+		commonAccount.setAccountId(revolutAccount.getId());
+		commonAccount.setCurrency(revolutAccount.getCurrency());
+		commonAccount.setBalance(revolutAccount.getBalance());
+
+		return commonAccount;
 	}
 
 	public ResponseEntity<List<DanskeTransaction>> getExpectedDanskeTransactionResponseEntity() {
@@ -85,24 +150,36 @@ public class TestDataGenerator {
 	}
 
 	public CommonTransaction buildCommonTransaction(DanskeTransaction danskeTransaction) {
-		return new CommonTransaction(danskeTransaction.getId(),
-				danskeTransaction.getAccountId(),
-				null,
-				danskeTransaction.getTransactionAmount().getAmount(),
-				danskeTransaction.getTransactionAmount().getCurrency());
+		CommonTransaction commonTransaction = new CommonTransaction();
+		commonTransaction.setId(danskeTransaction.getId());
+		commonTransaction.setSenderAccountId(null);
+		commonTransaction.setReceiverAccountId(danskeTransaction.getAccountId());
+		commonTransaction.setAmount(danskeTransaction.getTransactionAmount().getAmount());
+		commonTransaction.setCurrency(danskeTransaction.getTransactionAmount().getCurrency());
+
+		return commonTransaction;
 	}
 
 	public CommonTransaction buildCommonTransaction(RevolutTransaction revolutTransaction, Payment payment) {
-		return new CommonTransaction(revolutTransaction.getId(),
-				payment.getSenderAccountId(),
-				payment.getReceiverAccountId(),
-				payment.getAmount(),
-				payment.getCurrency());
+		CommonTransaction commonTransaction = new CommonTransaction();
+		commonTransaction.setId(revolutTransaction.getId());
+		commonTransaction.setSenderAccountId(payment.getSenderAccountId());
+		commonTransaction.setReceiverAccountId(payment.getReceiverAccountId());
+		commonTransaction.setAmount(payment.getAmount());
+		commonTransaction.setCurrency(payment.getCurrency());
+
+		return commonTransaction;
 	}
 
 	public CommonTransaction buildCommonTransaction() {
-		return new CommonTransaction("123", "456", "789",
-				10, "EUR");
+		CommonTransaction commonTransaction = new CommonTransaction();
+		commonTransaction.setId("123");
+		commonTransaction.setSenderAccountId("456");
+		commonTransaction.setReceiverAccountId("789");
+		commonTransaction.setAmount(10);
+		commonTransaction.setCurrency("EUR");
+
+		return commonTransaction;
 	}
 
 	public ResponseEntity<DanskeTransaction> getExpectedDanskeTransactionResponseEntityForPost() {
@@ -113,19 +190,31 @@ public class TestDataGenerator {
 		return new ResponseEntity<>(buildRevolutTransaction(), HttpStatus.ACCEPTED);
 	}
 
-	public Payment buildDanskeTransactionPayment() {
-		return new Payment("123", "456",
-				"789", 100, "EUR", "desc");
-	}
+	public Payment buildTransactionPayment() {
+		Payment payment = new Payment();
+		payment.setSenderAccountId("123");
+		payment.setReceiverAccountId("456");
+		payment.setCounterpartyId("789");
+		payment.setAmount(100);
+		payment.setCurrency("EUR");
+		payment.setDescription("desc");
 
-	public Payment buildRevolutTransactionPayment() {
-		return new Payment("123", "789", "456",
-				789, "GBP", "desc");
+		return payment;
 	}
 
 	public RevolutPayment buildInvalidRevolutTransactionPayment() {
-		return new RevolutPayment(null, new RevolutReceiver("123", "456"),
-				"GBP", "ref", 10);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId(null);
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		return revolutPayment;
 	}
 
 	public TransactionError buildDanskeTransactionError() {
@@ -138,7 +227,12 @@ public class TestDataGenerator {
 	}
 
 	public List<CommonAccount> buildCommonAccountList() {
-		return Collections.singletonList(new CommonAccount("danske","123",
-				10, "EUR"));
+		CommonAccount commonAccount = new CommonAccount();
+		commonAccount.setBankName("danske");
+		commonAccount.setAccountId("123");
+		commonAccount.setCurrency("EUR");
+		commonAccount.setBalance(10);
+
+		return Collections.singletonList(commonAccount);
 	}
 }

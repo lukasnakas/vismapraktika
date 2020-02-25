@@ -21,7 +21,7 @@ public class DanskeTransactionErrorServiceTest {
 
 	@Test
 	public void getErrorWithMissingParamsFromPayment_shouldReturnTrue_whenErrorsMatch() {
-		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
+		Payment payment = testDataGenerator.buildTransactionPayment();
 
 		TransactionError expected = testDataGenerator.buildDanskeTransactionError();
 		TransactionError actual = danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);

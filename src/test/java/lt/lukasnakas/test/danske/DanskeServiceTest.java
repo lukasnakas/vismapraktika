@@ -47,6 +47,12 @@ public class DanskeServiceTest {
 	@Mock
 	private DanskeTransactionErrorService danskeTransactionErrorService;
 
+	@Mock
+	private TransactionMapper transactionMapper;
+
+	@Mock
+	private AccountMapper accountMapper;
+
 	@InjectMocks
 	private DanskeService danskeService;
 
@@ -58,6 +64,7 @@ public class DanskeServiceTest {
 		CommonAccount commonAccount = testDataGenerator.buildCommonAccount(responseEntity.getBody());
 
 		when(danskeService.getResponseEntityForAccounts()).thenReturn(responseEntity);
+		when(accountMapper.danskeAccountToCommonAccount(responseEntity.getBody())).thenReturn(commonAccount);
 
 		List<CommonAccount> expected = Collections.singletonList(commonAccount);
 		List<CommonAccount> actual = danskeService.retrieveAccounts();
@@ -71,6 +78,7 @@ public class DanskeServiceTest {
 		CommonTransaction commonTransaction = testDataGenerator.buildCommonTransaction(responseEntity.getBody().get(0));
 
 		when(danskeService.getResponseEntityForTransactions("")).thenReturn(responseEntity);
+		when(transactionMapper.danskeTransactionToCommonTransaction(responseEntity.getBody().get(0))).thenReturn(commonTransaction);
 
 		List<CommonTransaction> expected = Collections.singletonList(commonTransaction);
 		List<CommonTransaction> actual = danskeService.retrieveTransactions();
@@ -82,9 +90,10 @@ public class DanskeServiceTest {
 	public void postTransaction_shouldReturnTrue_whenComparingTransactionResponses() {
 		ResponseEntity<DanskeTransaction> responseEntity = testDataGenerator.getExpectedDanskeTransactionResponseEntityForPost();
 		CommonTransaction expected = testDataGenerator.buildCommonTransaction(responseEntity.getBody());
-		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
+		Payment payment = testDataGenerator.buildTransactionPayment();
 
 		when(danskeService.getResponseEntityForTransaction("", payment)).thenReturn(responseEntity);
+		when(transactionMapper.danskeTransactionToCommonTransaction(responseEntity.getBody())).thenReturn(expected);
 
 		CommonTransaction actual = danskeService.postTransaction(payment);
 
@@ -92,65 +101,8 @@ public class DanskeServiceTest {
 	}
 
 	@Test
-	public void getResponseEntityForAccounts_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<DanskeAccount> expected = testDataGenerator.getExpectedDanskeAccountResponseEntity();
-		String url = "https://developers.danskebank.com/_/virtualbank-api/aisp/v3.1/accounts/34289220-ff43-4019-8e79-d3884312f2c3/balances";
-
-		when(danskeServiceConfiguration.getUrlAccountsVirtual()).thenReturn(url);
-		when(restTemplate.exchange(
-				Mockito.eq(url),
-				Mockito.eq(HttpMethod.GET),
-				Mockito.any(),
-				Mockito.<ParameterizedTypeReference<DanskeAccount>>any()
-		)).thenReturn(expected);
-
-		ResponseEntity<DanskeAccount> actual = danskeService.getResponseEntityForAccounts();
-
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void getResponseEntityForTransactions_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<List<DanskeTransaction>> expected = testDataGenerator.getExpectedDanskeTransactionResponseEntity();
-		String url = "https://developers.danskebank.com/_/playground-api/v1.0/41aa8b6a-60cc-475f-8348-331d5fc5d4f5" +
-				"/customer/27fc10ec-6d37-491e-ae7f-49927a7ef4e7/account/34289220-ff43-4019-8e79-d3884312f2c3/transaction";
-
-		when(danskeServiceConfiguration.getUrlAccountTransactions()).thenReturn(url);
-		when(restTemplate.exchange(
-				Mockito.eq(url),
-				Mockito.eq(HttpMethod.GET),
-				Mockito.any(),
-				Mockito.<ParameterizedTypeReference<List<DanskeTransaction>>>any()
-		)).thenReturn(expected);
-
-		ResponseEntity<List<DanskeTransaction>> actual = danskeService.getResponseEntityForTransactions("");
-
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void getResponseEntityForTransaction_shouldReturnTrue_whenComparingResponseEntities() {
-		ResponseEntity<DanskeTransaction> expected = testDataGenerator.getExpectedDanskeTransactionResponseEntityForPost();
-		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
-		String url = "https://developers.danskebank.com/_/playground-api/v1.0/41aa8b6a-60cc-475f-8348-331d5fc5d4f5" +
-				"/customer/27fc10ec-6d37-491e-ae7f-49927a7ef4e7/account/34289220-ff43-4019-8e79-d3884312f2c3/transaction";
-
-		when(danskeServiceConfiguration.getUrlAccountTransactions()).thenReturn(url);
-		when(restTemplate.exchange(
-				Mockito.eq(url),
-				Mockito.eq(HttpMethod.POST),
-				Mockito.any(),
-				Mockito.<ParameterizedTypeReference<DanskeTransaction>>any()
-		)).thenReturn(expected);
-
-		ResponseEntity<DanskeTransaction> actual = danskeService.getResponseEntityForTransaction("", payment);
-
-		assertEquals(expected, actual);
-	}
-
-	@Test
 	public void getErrorWithFirstMissingParamFromPayment_shouldReturnTrue_whenComparingParamsList() {
-		Payment payment = testDataGenerator.buildDanskeTransactionPayment();
+		Payment payment = testDataGenerator.buildTransactionPayment();
 		TransactionError expected = testDataGenerator.buildDanskeTransactionError();
 
 		when(danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment)).thenReturn(expected);

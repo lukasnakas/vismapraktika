@@ -19,73 +19,150 @@ public class RevolutPaymentValidationServiceTest {
 
 	@Test
 	public void isValid_shouldReturnTrue() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
-				"EUR", "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertTrue(actual);
 	}
 
 	@Test
 	public void isValidNoAmount_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
-				"EUR", "ref", 0);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(0);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNegativeAmount_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
-				"EUR", "ref", -100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(-10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoCurrency_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
-				null, "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency(null);
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoAccountId_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment(null, new RevolutReceiver("789", "123456"),
-				"EUR", "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId(null);
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoRevolutReceiver_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", null,
-				"EUR", "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(null);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoRevolutReceiverCounterpartyId_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver(null,
-				"123456"), "EUR", "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId(null);
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoRevolutReceiverAccountId_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789",
-				null), "EUR", "ref", 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId(null);
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference("ref");
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
 	@Test
 	public void isValidNoReference_shouldReturnFalse() {
-		RevolutPayment payment = new RevolutPayment("123", new RevolutReceiver("789", "123456"),
-				"EUR", null, 100);
-		boolean actual = revolutPaymentValidationService.isValid(payment);
+		RevolutReceiver revolutReceiver = new RevolutReceiver();
+		revolutReceiver.setAccountId("123");
+		revolutReceiver.setCounterPartyId("456");
+
+		RevolutPayment revolutPayment = new RevolutPayment();
+		revolutPayment.setAccountId("123");
+		revolutPayment.setReceiver(revolutReceiver);
+		revolutPayment.setCurrency("GBP");
+		revolutPayment.setReference(null);
+		revolutPayment.setAmount(10);
+
+		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
 		assertFalse(actual);
 	}
 
