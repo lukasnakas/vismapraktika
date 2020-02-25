@@ -1,5 +1,6 @@
 package lt.lukasnakas.controller;
 
+import lt.lukasnakas.exception.AccountNotFoundException;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.service.AccountService;
@@ -34,8 +35,8 @@ public class AccountController {
     public ResponseEntity<CommonAccountDTO> getAccountById(@PathVariable String id) {
         try {
             return ok(accountService.getAccountById(id));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AccountNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

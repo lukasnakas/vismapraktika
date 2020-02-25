@@ -1,6 +1,7 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
+import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.dto.PaymentDTO;
@@ -32,8 +33,8 @@ public class TransactionController {
     public ResponseEntity<CommonTransactionDTO> getTransactionById(@PathVariable String id) {
         try {
             return ok(transactionService.getTransactionById(id));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (TransactionNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
