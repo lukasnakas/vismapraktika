@@ -1,5 +1,7 @@
 package lt.lukasnakas.model.dto;
 
+import java.util.Objects;
+
 public class CommonAccountDTO {
 
 	private String accountId;
@@ -37,5 +39,28 @@ public class CommonAccountDTO {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(accountId, balance, currency, bankName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof CommonAccountDTO)){
+			return false;
+		}
+
+		CommonAccountDTO commonAccountDTO = (CommonAccountDTO) obj;
+
+		return Objects.equals(accountId, commonAccountDTO.accountId) &&
+				Objects.equals(balance, commonAccountDTO.balance) &&
+				Objects.equals(bankName, commonAccountDTO.bankName) &&
+				Objects.equals(currency, commonAccountDTO.currency);
 	}
 }

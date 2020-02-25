@@ -2,6 +2,8 @@ package lt.lukasnakas.model.revolut.transaction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class RevolutReceiver {
 
     @JsonProperty("counterparty_id")
@@ -26,5 +28,25 @@ public class RevolutReceiver {
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof RevolutReceiver)) {
+            return false;
+        }
+
+        RevolutReceiver revolutReceiver = (RevolutReceiver) obj;
+
+        return Objects.equals(counterPartyId, revolutReceiver.counterPartyId) &&
+                Objects.equals(accountId, revolutReceiver.accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(counterPartyId, accountId);
     }
 }

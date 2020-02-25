@@ -2,6 +2,7 @@ package lt.lukasnakas.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class CommonTransaction {
@@ -54,5 +55,29 @@ public class CommonTransaction {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, senderAccountId, receiverAccountId, amount, currency);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof CommonTransaction)){
+			return false;
+		}
+
+		CommonTransaction commonTransaction = (CommonTransaction) obj;
+
+		return Objects.equals(id, commonTransaction.id) &&
+				Objects.equals(senderAccountId, commonTransaction.senderAccountId) &&
+				Objects.equals(receiverAccountId, commonTransaction.receiverAccountId) &&
+				Objects.equals(amount, commonTransaction.amount) &&
+				Objects.equals(currency, commonTransaction.currency);
 	}
 }

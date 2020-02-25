@@ -2,8 +2,11 @@ package lt.lukasnakas.model.revolut.transaction;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RevolutPayment extends Payment {
@@ -78,5 +81,29 @@ public class RevolutPayment extends Payment {
     @Override
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId, receiver, currency, reference, amount);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if(!(obj instanceof RevolutPayment)){
+            return false;
+        }
+
+        RevolutPayment revolutPayment = (RevolutPayment) obj;
+
+        return Objects.equals(accountId, revolutPayment.accountId) &&
+                Objects.equals(receiver, revolutPayment.receiver) &&
+                Objects.equals(currency, revolutPayment.currency) &&
+                Objects.equals(amount, revolutPayment.amount) &&
+                Objects.equals(reference, revolutPayment.reference);
     }
 }

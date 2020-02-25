@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Payment {
@@ -75,5 +76,30 @@ public class Payment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if(!(obj instanceof Payment)){
+            return false;
+        }
+
+        Payment payment = (Payment) obj;
+
+        return Objects.equals(senderAccountId, payment.senderAccountId) &&
+                Objects.equals(receiverAccountId, payment.receiverAccountId) &&
+                Objects.equals(counterpartyId, payment.counterpartyId) &&
+                Objects.equals(amount, payment.amount) &&
+                Objects.equals(description, payment.description) &&
+                Objects.equals(currency, payment.currency);
     }
 }

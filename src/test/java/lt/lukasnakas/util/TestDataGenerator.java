@@ -161,12 +161,25 @@ public class TestDataGenerator {
 	}
 
 	public CommonTransaction buildCommonTransaction(RevolutTransaction revolutTransaction, Payment payment) {
+		RevolutPayment revolutPayment = (RevolutPayment) payment;
+
 		CommonTransaction commonTransaction = new CommonTransaction();
 		commonTransaction.setId(revolutTransaction.getId());
-		commonTransaction.setSenderAccountId(payment.getSenderAccountId());
-		commonTransaction.setReceiverAccountId(payment.getReceiverAccountId());
-		commonTransaction.setAmount(payment.getAmount());
-		commonTransaction.setCurrency(payment.getCurrency());
+		commonTransaction.setSenderAccountId(revolutPayment.getAccountId());
+		commonTransaction.setReceiverAccountId(revolutPayment.getReceiver().getAccountId());
+		commonTransaction.setAmount(revolutPayment.getAmount());
+		commonTransaction.setCurrency(revolutPayment.getCurrency());
+
+		return commonTransaction;
+	}
+
+	public CommonTransaction buildCommonTransaction(RevolutTransaction revolutTransaction) {
+		CommonTransaction commonTransaction = new CommonTransaction();
+		commonTransaction.setId(revolutTransaction.getId());
+		commonTransaction.setSenderAccountId(revolutTransaction.getLegs()[0].getAccountId());
+		commonTransaction.setReceiverAccountId(revolutTransaction.getLegs()[0].getCounterparty().getAccountId());
+		commonTransaction.setAmount(revolutTransaction.getLegs()[0].getAmount());
+		commonTransaction.setCurrency(revolutTransaction.getLegs()[0].getCurrency());
 
 		return commonTransaction;
 	}

@@ -1,5 +1,7 @@
 package lt.lukasnakas.model.dto;
 
+import java.util.Objects;
+
 public class CommonTransactionDTO {
 
 	private String id;
@@ -46,5 +48,29 @@ public class CommonTransactionDTO {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, senderAccountId, receiverAccountId, amount, currency);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof CommonTransactionDTO)){
+			return false;
+		}
+
+		CommonTransactionDTO commonTransactionDTO = (CommonTransactionDTO) obj;
+
+		return Objects.equals(id, commonTransactionDTO.id) &&
+				Objects.equals(senderAccountId, commonTransactionDTO.senderAccountId) &&
+				Objects.equals(receiverAccountId, commonTransactionDTO.receiverAccountId) &&
+				Objects.equals(amount, commonTransactionDTO.amount) &&
+				Objects.equals(currency, commonTransactionDTO.currency);
 	}
 }

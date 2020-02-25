@@ -2,6 +2,8 @@ package lt.lukasnakas.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class PaymentDTO {
 
 	private long id;
@@ -72,5 +74,30 @@ public class PaymentDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof PaymentDTO)){
+			return false;
+		}
+
+		PaymentDTO paymentDTO = (PaymentDTO) obj;
+
+		return Objects.equals(senderAccountId, paymentDTO.senderAccountId) &&
+				Objects.equals(receiverAccountId, paymentDTO.receiverAccountId) &&
+				Objects.equals(counterpartyId, paymentDTO.counterpartyId) &&
+				Objects.equals(amount, paymentDTO.amount) &&
+				Objects.equals(description, paymentDTO.description) &&
+				Objects.equals(currency, paymentDTO.currency);
 	}
 }
