@@ -14,11 +14,6 @@ public class DanskeTransactionAmount {
     public DanskeTransactionAmount() {
     }
 
-    public DanskeTransactionAmount(double amount, String currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
-
     public double getAmount() {
         return amount;
     }

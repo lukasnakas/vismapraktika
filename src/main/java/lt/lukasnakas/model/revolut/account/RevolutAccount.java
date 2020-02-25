@@ -23,18 +23,6 @@ public class RevolutAccount extends Account {
     public RevolutAccount() {
     }
 
-    public RevolutAccount(String id, String name, double balance, String currency, String state,
-                          boolean publicAccount, String createdAt, String updatedAt) {
-        super(id);
-        this.name = name;
-        this.balance = balance;
-        this.currency = currency;
-        this.state = state;
-        this.publicAccount = publicAccount;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
     public String getName() {
         return name;
     }

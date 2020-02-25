@@ -12,11 +12,6 @@ public class RevolutReceiver {
     public RevolutReceiver() {
     }
 
-    public RevolutReceiver(String counterPartyId, String accountId) {
-        this.counterPartyId = counterPartyId;
-        this.accountId = accountId;
-    }
-
     public String getCounterPartyId() {
         return counterPartyId;
     }

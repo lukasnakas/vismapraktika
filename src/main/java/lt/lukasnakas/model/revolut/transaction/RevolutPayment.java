@@ -24,15 +24,6 @@ public class RevolutPayment extends Payment {
     public RevolutPayment() {
     }
 
-    public RevolutPayment(String accountId, RevolutReceiver receiver, String currency, String reference,
-                          double amount) {
-        this.accountId = accountId;
-        this.receiver = receiver;
-        this.currency = currency;
-        this.reference = reference;
-        this.amount = amount;
-    }
-
     public void setGeneratedRequestId() {
         this.requestId = RandomStringUtils.randomAlphanumeric(40);
     }

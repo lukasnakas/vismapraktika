@@ -10,10 +10,6 @@ public class Data {
 	public Data() {
 	}
 
-	public Data(Balance[] balance) {
-		this.balance = balance;
-	}
-
 	public Balance[] getBalance() {
 		return balance;
 	}

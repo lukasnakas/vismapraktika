@@ -16,14 +16,6 @@ public class CommonTransaction {
 	public CommonTransaction() {
 	}
 
-	public CommonTransaction(String id, String senderAccountId, String receiverAccountId, double amount, String currency) {
-		this.id = id;
-		this.senderAccountId = senderAccountId;
-		this.receiverAccountId = receiverAccountId;
-		this.amount = amount;
-		this.currency = currency;
-	}
-
 	public String getId() {
 		return id;
 	}

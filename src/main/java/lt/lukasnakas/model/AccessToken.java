@@ -10,10 +10,6 @@ public class AccessToken {
     public AccessToken() {
     }
 
-    public AccessToken(String token) {
-        this.token = token;
-    }
-
     public String getToken() {
         return token;
     }

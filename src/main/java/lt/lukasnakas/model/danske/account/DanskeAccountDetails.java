@@ -16,13 +16,6 @@ public class DanskeAccountDetails {
     public DanskeAccountDetails() {
     }
 
-    public DanskeAccountDetails(String identification, String schemeName, String name, String secondaryIdentification) {
-        this.identification = identification;
-        this.schemeName = schemeName;
-        this.name = name;
-        this.secondaryIdentification = secondaryIdentification;
-    }
-
     public String getIdentification() {
         return identification;
     }

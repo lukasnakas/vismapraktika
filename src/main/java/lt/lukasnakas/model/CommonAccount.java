@@ -16,13 +16,6 @@ public class CommonAccount {
 	public CommonAccount() {
 	}
 
-	public CommonAccount(String bankName, String accountId, double balance, String currency) {
-		this.bankName = bankName;
-		this.accountId = accountId;
-		this.balance = balance;
-		this.currency = currency;
-	}
-
 	public String getBankName() {
 		return bankName;
 	}

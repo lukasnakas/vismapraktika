@@ -19,15 +19,6 @@ public class Balance {
 	public Balance() {
 	}
 
-	public Balance(String accountId, String creditDebitIndicator, String type, String datetime,
-				   DanskeTransactionAmount amount) {
-		this.accountId = accountId;
-		this.creditDebitIndicator = creditDebitIndicator;
-		this.type = type;
-		this.datetime = datetime;
-		this.amount = amount;
-	}
-
 	public String getAccountId() {
 		return accountId;
 	}

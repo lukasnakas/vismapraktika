@@ -11,11 +11,6 @@ public class DanskeAccount extends Account {
     public DanskeAccount() {
     }
 
-    public DanskeAccount(String id, Data data) {
-        super(id);
-        this.data = data;
-    }
-
     public Data getData() {
         return data;
     }

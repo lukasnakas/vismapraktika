@@ -12,10 +12,6 @@ public abstract class Account {
     public Account() {
     }
 
-    public Account(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return id;
     }

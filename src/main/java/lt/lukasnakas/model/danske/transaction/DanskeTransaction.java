@@ -17,13 +17,6 @@ public class DanskeTransaction extends Transaction {
     public DanskeTransaction() {
     }
 
-    public DanskeTransaction(String id, String accountId, String creditDebitIndicator, DanskeTransactionAmount transactionAmount) {
-        super(id);
-        this.accountId = accountId;
-        this.creditDebitIndicator = creditDebitIndicator;
-        this.transactionAmount = transactionAmount;
-    }
-
     public String getAccountId() {
         return accountId;
     }

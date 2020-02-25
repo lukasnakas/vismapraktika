@@ -22,17 +22,6 @@ public class RevolutTransactionLegs {
     public RevolutTransactionLegs() {
     }
 
-    public RevolutTransactionLegs(String id, String accountId, RevolutCounterparty counterparty,
-                                  double amount, String currency, String description, double balance) {
-        this.id = id;
-        this.accountId = accountId;
-        this.counterparty = counterparty;
-        this.amount = amount;
-        this.currency = currency;
-        this.description = description;
-        this.balance = balance;
-    }
-
     public String getId() {
         return id;
     }

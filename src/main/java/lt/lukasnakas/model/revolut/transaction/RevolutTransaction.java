@@ -27,19 +27,6 @@ public class RevolutTransaction extends Transaction {
     public RevolutTransaction() {
     }
 
-    public RevolutTransaction(String id, String type, String requestId, String updatedAt, String reference,
-                              RevolutTransactionLegs[] legs, String state, String createdAt, String completedAt) {
-        super(id);
-        this.type = type;
-        this.requestId = requestId;
-        this.updatedAt = updatedAt;
-        this.reference = reference;
-        this.legs = legs;
-        this.state = state;
-        this.createdAt = createdAt;
-        this.completedAt = completedAt;
-    }
-
     public String getType() {
         return type;
     }

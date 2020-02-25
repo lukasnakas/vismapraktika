@@ -21,16 +21,6 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String senderAccountId, String receiverAccountId, String counterpartyId, double amount,
-                   String currency, String description) {
-        this.senderAccountId = senderAccountId;
-        this.receiverAccountId = receiverAccountId;
-        this.counterpartyId = counterpartyId;
-        this.amount = amount;
-        this.currency = currency;
-        this.description = description;
-    }
-
     public long getId() {
         return id;
     }

@@ -10,10 +10,6 @@ public abstract class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return id;
     }
