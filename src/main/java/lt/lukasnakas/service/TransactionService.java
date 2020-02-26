@@ -1,16 +1,13 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.jms.Producer;
-import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.CommonTransaction;
-import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.dto.PaymentDTO;
-import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +20,15 @@ import java.util.stream.Collectors;
 public class TransactionService {
     private final List<BankingService> bankingServices;
     private final TransactionRepository transactionRepository;
-    private final PaymentRepository paymentRepository;
-    private final PaymentMapper paymentMapper;
     private final TransactionMapper transactionMapper;
     private final Producer producer;
 
     public TransactionService(List<BankingService> bankingServices,
                               TransactionRepository transactionRepository,
-                              PaymentRepository paymentRepository,
-                              PaymentMapper paymentMapper,
                               TransactionMapper transactionMapper,
                               Producer producer) {
         this.bankingServices = bankingServices;
         this.transactionRepository = transactionRepository;
-        this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
         this.transactionMapper = transactionMapper;
         this.producer = producer;
     }
@@ -78,11 +69,6 @@ public class TransactionService {
 
     public PaymentDTO postTransaction(PaymentDTO paymentDTO) {
         return producer.send(paymentDTO);
-//        CommonTransaction transaction = getChosenBankingServiceForPost(paymentDTO);
-//        Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
-//
-//        paymentRepository.save(payment);
-//        return transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
     }
 
     private boolean bankNameMatches(String bankName, String bankingServiceBankName) {

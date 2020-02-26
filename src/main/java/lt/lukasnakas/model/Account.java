@@ -9,9 +9,6 @@ public abstract class Account {
     @JsonAlias("AccountId")
     private String id;
 
-    public Account() {
-    }
-
     public String getId() {
         return id;
     }

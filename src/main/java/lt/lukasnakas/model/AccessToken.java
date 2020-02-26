@@ -7,9 +7,6 @@ public class AccessToken {
     @JsonAlias({"access_token", "accessToken"})
     private String token;
 
-    public AccessToken() {
-    }
-
     public String getToken() {
         return token;
     }

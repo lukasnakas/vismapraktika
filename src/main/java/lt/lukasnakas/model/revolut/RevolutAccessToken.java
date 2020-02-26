@@ -10,9 +10,6 @@ public class RevolutAccessToken extends AccessToken {
     @JsonProperty("expires_in")
     private String expiresIn;
 
-    public RevolutAccessToken() {
-    }
-
     public String getTokenType() {
         return tokenType;
     }

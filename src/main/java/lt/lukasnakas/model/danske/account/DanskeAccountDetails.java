@@ -13,9 +13,6 @@ public class DanskeAccountDetails {
     @JsonProperty("SecondaryIdentification")
     private String secondaryIdentification;
 
-    public DanskeAccountDetails() {
-    }
-
     public String getIdentification() {
         return identification;
     }

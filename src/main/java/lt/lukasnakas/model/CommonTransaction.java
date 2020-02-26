@@ -14,9 +14,6 @@ public class CommonTransaction {
 	private double amount;
 	private String currency;
 
-	public CommonTransaction() {
-	}
-
 	public String getId() {
 		return id;
 	}

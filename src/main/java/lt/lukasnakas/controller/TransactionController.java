@@ -2,7 +2,6 @@ package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
-import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;

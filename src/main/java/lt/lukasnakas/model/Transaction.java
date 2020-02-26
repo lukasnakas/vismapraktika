@@ -7,9 +7,6 @@ public abstract class Transaction {
     @JsonProperty("id")
     private String id;
 
-    public Transaction() {
-    }
-
     public String getId() {
         return id;
     }

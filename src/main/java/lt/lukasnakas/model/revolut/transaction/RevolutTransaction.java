@@ -24,9 +24,6 @@ public class RevolutTransaction extends Transaction {
     @JsonProperty("state")
     private String state;
 
-    public RevolutTransaction() {
-    }
-
     public String getType() {
         return type;
     }

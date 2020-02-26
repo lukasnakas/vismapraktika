@@ -20,9 +20,6 @@ public class Payment {
     private String description;
     private String bankName;
 
-    public Payment() {
-    }
-
     public long getId() {
         return id;
     }

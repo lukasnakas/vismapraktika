@@ -20,9 +20,6 @@ public class RevolutAccount extends Account {
     @JsonProperty("updated_at")
     private String updatedAt;
 
-    public RevolutAccount() {
-    }
-
     public String getName() {
         return name;
     }

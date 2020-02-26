@@ -16,9 +16,6 @@ public class Balance {
 	@JsonProperty("Amount")
 	private DanskeTransactionAmount amount;
 
-	public Balance() {
-	}
-
 	public String getAccountId() {
 		return accountId;
 	}

@@ -11,9 +11,6 @@ public class DanskeTransactionAmount {
     @JsonProperty("Currency")
     private String currency;
 
-    public DanskeTransactionAmount() {
-    }
-
     public double getAmount() {
         return amount;
     }

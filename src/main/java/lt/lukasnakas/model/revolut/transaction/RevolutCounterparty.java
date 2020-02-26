@@ -9,9 +9,6 @@ public class RevolutCounterparty {
     @JsonProperty("account_id")
     private String accountId;
 
-    public RevolutCounterparty() {
-    }
-
     public String getAccountType() {
         return accountType;
     }

@@ -7,9 +7,6 @@ public class Data {
 	@JsonProperty("Balance")
 	private Balance[] balance;
 
-	public Data() {
-	}
-
 	public Balance[] getBalance() {
 		return balance;
 	}

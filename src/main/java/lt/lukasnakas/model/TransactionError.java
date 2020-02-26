@@ -10,9 +10,6 @@ public class TransactionError extends Transaction {
 
     private String message;
 
-    public TransactionError() {
-    }
-
     public TransactionError(String invalidKey) {
         this.message = "Invalid or missing param: " + invalidKey;
     }

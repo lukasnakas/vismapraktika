@@ -19,9 +19,6 @@ public class RevolutTransactionLegs {
     @JsonProperty("balance")
     private double balance;
 
-    public RevolutTransactionLegs() {
-    }
-
     public String getId() {
         return id;
     }

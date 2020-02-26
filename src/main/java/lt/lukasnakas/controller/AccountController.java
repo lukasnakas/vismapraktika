@@ -1,7 +1,6 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.AccountNotFoundException;
-import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.service.AccountService;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,6 @@ package lt.lukasnakas.model.revolut.transaction;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -23,9 +22,6 @@ public class RevolutPayment extends Payment {
     private String requestId;
     @JsonProperty("amount")
     private double amount;
-
-    public RevolutPayment() {
-    }
 
     public void setGeneratedRequestId() {
         this.requestId = RandomStringUtils.randomAlphanumeric(40);

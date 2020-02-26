@@ -14,9 +14,6 @@ public class DanskeTransaction extends Transaction {
     @JsonProperty("Amount")
     private DanskeTransactionAmount transactionAmount;
 
-    public DanskeTransaction() {
-    }
-
     public String getAccountId() {
         return accountId;
     }

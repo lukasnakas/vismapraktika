@@ -13,9 +13,6 @@ public class CommonAccount {
 	private String currency;
 	private String bankName;
 
-	public CommonAccount() {
-	}
-
 	public String getBankName() {
 		return bankName;
 	}
