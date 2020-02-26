@@ -2,6 +2,7 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.AccountRetrievalException;
@@ -13,6 +14,7 @@ import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.BankingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,7 @@ public class DanskeService implements BankingService {
     private final DanskeTransactionErrorService danskeTransactionErrorService;
     private final AccountMapper accountMapper;
     private final TransactionMapper transactionMapper;
+    private final PaymentMapper paymentMapper;
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
 
@@ -44,6 +47,7 @@ public class DanskeService implements BankingService {
                          DanskeTransactionErrorService danskeTransactionErrorService,
                          AccountMapper accountMapper,
                          TransactionMapper transactionMapper,
+                         PaymentMapper paymentMapper,
                          RestTemplate restTemplate,
                          HttpHeaders httpHeaders) {
         this.danskeServiceConfiguration = danskeServiceConfiguration;
@@ -52,6 +56,7 @@ public class DanskeService implements BankingService {
         this.danskeTransactionErrorService = danskeTransactionErrorService;
         this.accountMapper = accountMapper;
         this.transactionMapper = transactionMapper;
+        this.paymentMapper = paymentMapper;
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -179,7 +184,8 @@ public class DanskeService implements BankingService {
         return danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public CommonTransaction executeTransactionIfValid(Payment payment) {
+    public CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO) {
+        Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
         if (isPaymentValid(payment)) {
             return postTransaction(payment);
         } else {

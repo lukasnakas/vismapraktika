@@ -23,6 +23,7 @@ public class PaymentMapperTest {
         paymentDTO.setCurrency("EUR");
         paymentDTO.setCounterpartyId("789");
         paymentDTO.setAmount(100);
+        paymentDTO.setBankName("danske");
 
         Payment expected = new Payment();
         expected.setSenderAccountId("123");
@@ -31,6 +32,7 @@ public class PaymentMapperTest {
         expected.setCurrency("EUR");
         expected.setCounterpartyId("789");
         expected.setAmount(100);
+        expected.setBankName("danske");
 
         Payment actual = paymentMapper.paymentDtoToPayment(paymentDTO);
 
@@ -46,6 +48,7 @@ public class PaymentMapperTest {
         payment.setCurrency("EUR");
         payment.setCounterpartyId("789");
         payment.setAmount(100);
+        payment.setBankName("danske");
 
         PaymentDTO expected = new PaymentDTO();
         expected.setSenderAccountId("123");
@@ -54,6 +57,7 @@ public class PaymentMapperTest {
         expected.setCurrency("EUR");
         expected.setCounterpartyId("789");
         expected.setAmount(100);
+        expected.setBankName("danske");
 
         PaymentDTO actual = paymentMapper.paymentToPaymentDto(payment);
 

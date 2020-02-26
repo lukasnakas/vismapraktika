@@ -24,6 +24,7 @@ public class PaymentMapperImpl implements PaymentMapper {
         payment.setCurrency(paymentDTO.getCurrency());
         payment.setCounterpartyId(paymentDTO.getCounterpartyId());
         payment.setAmount(paymentDTO.getAmount());
+        payment.setBankName(paymentDTO.getBankName());
 
         return payment;
     }
@@ -43,6 +44,7 @@ public class PaymentMapperImpl implements PaymentMapper {
         paymentDTO.setCurrency(payment.getCurrency());
         paymentDTO.setCounterpartyId(payment.getCounterpartyId());
         paymentDTO.setAmount(payment.getAmount());
+        paymentDTO.setBankName(payment.getBankName());
 
         return paymentDTO;
     }
@@ -64,6 +66,28 @@ public class PaymentMapperImpl implements PaymentMapper {
         revolutPayment.setCurrency(payment.getCurrency());
         revolutPayment.setReference(payment.getDescription());
         revolutPayment.setAmount(payment.getAmount());
+        revolutPayment.setGeneratedRequestId();
+
+        return revolutPayment;
+    }
+
+    @Override
+    public RevolutPayment paymentDtoToRevolutPayment(PaymentDTO paymentDTO) {
+        if (paymentDTO == null) {
+            return null;
+        }
+
+        RevolutReceiver revolutReceiver = new RevolutReceiver();
+        RevolutPayment revolutPayment = new RevolutPayment();
+
+        revolutReceiver.setCounterPartyId(paymentDTO.getCounterpartyId());
+        revolutReceiver.setAccountId(paymentDTO.getReceiverAccountId());
+
+        revolutPayment.setAccountId(paymentDTO.getSenderAccountId());
+        revolutPayment.setReceiver(revolutReceiver);
+        revolutPayment.setCurrency(paymentDTO.getCurrency());
+        revolutPayment.setReference(paymentDTO.getDescription());
+        revolutPayment.setAmount(paymentDTO.getAmount());
         revolutPayment.setGeneratedRequestId();
 
         return revolutPayment;

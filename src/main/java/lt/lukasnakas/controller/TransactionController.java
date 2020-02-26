@@ -38,10 +38,10 @@ public class TransactionController {
         }
     }
 
-    @PostMapping(value = "/{bankName}")
-    public ResponseEntity<CommonTransactionDTO> addTransaction(@RequestBody PaymentDTO paymentDTO, @PathVariable String bankName) {
+    @PostMapping(value = "")
+    public ResponseEntity<PaymentDTO> addTransaction(@RequestBody PaymentDTO paymentDTO) {
         try {
-            return ok(transactionService.postTransaction(paymentDTO, bankName));
+            return ok(transactionService.postTransaction(paymentDTO));
         } catch (BadRequestException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

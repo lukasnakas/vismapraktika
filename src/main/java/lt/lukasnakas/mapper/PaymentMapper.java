@@ -12,4 +12,6 @@ public interface PaymentMapper {
 
     RevolutPayment paymentToRevolutPayment(Payment payment);
 
+    RevolutPayment paymentDtoToRevolutPayment(PaymentDTO paymentDTO);
+
 }

@@ -18,6 +18,7 @@ public class Payment {
     private double amount;
     private String currency;
     private String description;
+    private String bankName;
 
     public Payment() {
     }
@@ -78,9 +79,17 @@ public class Payment {
         this.description = description;
     }
 
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency);
+        return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency, bankName);
     }
 
     @Override
@@ -100,6 +109,7 @@ public class Payment {
                 Objects.equals(counterpartyId, payment.counterpartyId) &&
                 Objects.equals(amount, payment.amount) &&
                 Objects.equals(description, payment.description) &&
-                Objects.equals(currency, payment.currency);
+                Objects.equals(currency, payment.currency) &&
+                Objects.equals(bankName, payment.bankName);
     }
 }

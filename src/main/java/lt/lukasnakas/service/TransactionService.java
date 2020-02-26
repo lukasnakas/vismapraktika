@@ -1,5 +1,6 @@
 package lt.lukasnakas.service;
 
+import lt.lukasnakas.jms.Producer;
 import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.TransactionError;
@@ -11,7 +12,6 @@ import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,20 +26,20 @@ public class TransactionService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final TransactionMapper transactionMapper;
-    private final JmsTemplate jmsTemplate;
+    private final Producer producer;
 
     public TransactionService(List<BankingService> bankingServices,
                               TransactionRepository transactionRepository,
                               PaymentRepository paymentRepository,
                               PaymentMapper paymentMapper,
                               TransactionMapper transactionMapper,
-                              JmsTemplate jmsTemplate) {
+                              Producer producer) {
         this.bankingServices = bankingServices;
         this.transactionRepository = transactionRepository;
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
         this.transactionMapper = transactionMapper;
-        this.jmsTemplate = jmsTemplate;
+        this.producer = producer;
     }
 
     public List<CommonTransactionDTO> getTransactions() {
@@ -68,23 +68,21 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    private CommonTransaction getChosenBankingServiceForPost(Payment payment, String bankName) {
+    public CommonTransaction getChosenBankingServiceForPost(PaymentDTO paymentDTO) {
         return bankingServices.stream()
-                .filter(bankingService -> bankNameMatches(bankName, bankingService.getBankName()))
-                .map(bankingService -> bankingService.executeTransactionIfValid(payment))
+                .filter(bankingService -> bankNameMatches(paymentDTO.getBankName(), bankingService.getBankName()))
+                .map(bankingService -> bankingService.executeTransactionIfValid(paymentDTO))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException(new TransactionError("bankName").getMessage()));
     }
 
-    public CommonTransactionDTO postTransaction(PaymentDTO paymentDTO, String bankName) {
-        Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
-
-        jmsTemplate.convertAndSend("inbound.queue", paymentDTO);
-
-        CommonTransaction transaction = getChosenBankingServiceForPost(payment, bankName);
-
-        paymentRepository.save(payment);
-        return transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
+    public PaymentDTO postTransaction(PaymentDTO paymentDTO) {
+        return producer.send(paymentDTO);
+//        CommonTransaction transaction = getChosenBankingServiceForPost(paymentDTO);
+//        Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
+//
+//        paymentRepository.save(payment);
+//        return transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
     }
 
     private boolean bankNameMatches(String bankName, String bankingServiceBankName) {

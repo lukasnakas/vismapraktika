@@ -1,6 +1,7 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.model.*;
+import lt.lukasnakas.model.dto.PaymentDTO;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface BankingService {
 
     CommonTransaction postTransaction(Payment payment);
 
-    CommonTransaction executeTransactionIfValid(Payment payment);
+    CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO);
 
     boolean isPaymentValid(Payment payment);
 

@@ -12,6 +12,7 @@ import lt.lukasnakas.exception.TransactionRetrievalException;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
@@ -183,8 +184,8 @@ public class RevolutService implements BankingService {
         return revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public CommonTransaction executeTransactionIfValid(Payment payment) {
-        RevolutPayment revolutPayment = paymentMapper.paymentToRevolutPayment(payment);
+    public CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO) {
+        RevolutPayment revolutPayment = paymentMapper.paymentDtoToRevolutPayment(paymentDTO);
 
         if (isPaymentValid(revolutPayment)) {
             return postTransaction(revolutPayment);

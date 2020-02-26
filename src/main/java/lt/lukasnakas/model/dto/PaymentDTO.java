@@ -1,11 +1,15 @@
 package lt.lukasnakas.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentDTO {
 
+	@JsonIgnore
 	private long id;
 	@JsonProperty("sender_account_id")
 	private String senderAccountId;
@@ -19,6 +23,10 @@ public class PaymentDTO {
 	private String currency;
 	@JsonProperty("description")
 	private String description;
+	@JsonProperty("bankName")
+	private String bankName;
+	@JsonProperty("paymentStatus")
+	private String status;
 
 	public long getId() {
 		return id;
@@ -76,9 +84,25 @@ public class PaymentDTO {
 		this.description = description;
 	}
 
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency);
+		return Objects.hash(senderAccountId, receiverAccountId, counterpartyId, amount, description, currency, bankName);
 	}
 
 	@Override
@@ -98,6 +122,7 @@ public class PaymentDTO {
 				Objects.equals(counterpartyId, paymentDTO.counterpartyId) &&
 				Objects.equals(amount, paymentDTO.amount) &&
 				Objects.equals(description, paymentDTO.description) &&
-				Objects.equals(currency, paymentDTO.currency);
+				Objects.equals(currency, paymentDTO.currency) &&
+				Objects.equals(bankName, paymentDTO.bankName);
 	}
 }
