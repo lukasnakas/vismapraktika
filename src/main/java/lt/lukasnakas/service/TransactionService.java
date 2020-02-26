@@ -11,6 +11,7 @@ import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -25,17 +26,20 @@ public class TransactionService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final TransactionMapper transactionMapper;
+    private final JmsTemplate jmsTemplate;
 
     public TransactionService(List<BankingService> bankingServices,
                               TransactionRepository transactionRepository,
                               PaymentRepository paymentRepository,
                               PaymentMapper paymentMapper,
-                              TransactionMapper transactionMapper) {
+                              TransactionMapper transactionMapper,
+                              JmsTemplate jmsTemplate) {
         this.bankingServices = bankingServices;
         this.transactionRepository = transactionRepository;
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
         this.transactionMapper = transactionMapper;
+        this.jmsTemplate = jmsTemplate;
     }
 
     public List<CommonTransactionDTO> getTransactions() {
@@ -74,6 +78,9 @@ public class TransactionService {
 
     public CommonTransactionDTO postTransaction(PaymentDTO paymentDTO, String bankName) {
         Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
+
+        jmsTemplate.convertAndSend("inbound.queue", paymentDTO);
+
         CommonTransaction transaction = getChosenBankingServiceForPost(payment, bankName);
 
         paymentRepository.save(payment);
