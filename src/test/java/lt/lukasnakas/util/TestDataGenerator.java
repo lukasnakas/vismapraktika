@@ -215,6 +215,18 @@ public class TestDataGenerator {
 		return payment;
 	}
 
+	public Payment buildInvalidTransactionPayment() {
+		Payment payment = new Payment();
+		payment.setSenderAccountId("123");
+		payment.setReceiverAccountId("456");
+		payment.setCounterpartyId("789");
+		payment.setAmount(0);
+		payment.setCurrency("EUR");
+		payment.setDescription("desc");
+
+		return payment;
+	}
+
 	public RevolutPayment buildInvalidRevolutTransactionPayment() {
 		RevolutReceiver revolutReceiver = new RevolutReceiver();
 		revolutReceiver.setAccountId("123");
@@ -231,7 +243,7 @@ public class TestDataGenerator {
 	}
 
 	public TransactionError buildDanskeTransactionError() {
-		return new TransactionError("amount");
+		return new TransactionError(Collections.singletonList("amount"));
 	}
 
 	public TransactionError buildRevolutTransactionError() {

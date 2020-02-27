@@ -12,15 +12,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
-
-    private final List<BankingService> bankingServices;
+    private final List<IAccountService> accountServices;
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 
-    public AccountService(List<BankingService> bankingServices,
+    public AccountService(List<IAccountService> accountServices,
                           AccountRepository accountRepository,
                           AccountMapper accountMapper) {
-        this.bankingServices = bankingServices;
+        this.accountServices = accountServices;
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
     }
@@ -39,8 +38,8 @@ public class AccountService {
     }
 
     public List<CommonAccountDTO> updateAccounts() {
-        List<CommonAccount> commonAccountList = bankingServices.stream()
-                .map(BankingService::retrieveAccounts)
+        List<CommonAccount> commonAccountList = accountServices.stream()
+                .map(IAccountService::retrieveAccounts)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 

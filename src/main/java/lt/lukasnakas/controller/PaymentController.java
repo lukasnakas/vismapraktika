@@ -1,6 +1,8 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
+import lt.lukasnakas.exception.InvalidIdException;
+import lt.lukasnakas.exception.PaymentNotFoundException;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.PaymentService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,17 @@ public class PaymentController {
 	@GetMapping
 	public ResponseEntity<List<PaymentDTO>> getPayments() {
 		return ok(paymentService.getPayments());
+	}
+
+	@GetMapping(value = "{id}")
+	public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable String id) {
+		try {
+			return ok(paymentService.getPaymentById(id));
+		} catch (InvalidIdException e){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (PaymentNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
 	}
 
 	@PostMapping

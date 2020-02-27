@@ -1,21 +1,34 @@
 package lt.lukasnakas.test.revolut;
 
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.model.revolut.transaction.RevolutReceiver;
 import lt.lukasnakas.service.revolut.RevolutPaymentValidationService;
+import lt.lukasnakas.util.TestDataGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RevolutPaymentValidationServiceTest {
 
 	@InjectMocks
 	private RevolutPaymentValidationService revolutPaymentValidationService;
+
+	private TestDataGenerator testDataGenerator = new TestDataGenerator();
+
+	@Test
+	public void getErrorWithMissingParamsFromPayment_shouldReturnTrue_when() {
+		RevolutPayment revolutPayment = testDataGenerator.buildInvalidRevolutTransactionPayment();
+
+		TransactionError expected = testDataGenerator.buildRevolutTransactionError();
+		TransactionError actual = revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(revolutPayment);
+
+		assertEquals(expected, actual);
+	}
 
 	@Test
 	public void isValid_shouldReturnTrue() {

@@ -1,7 +1,9 @@
 package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.model.Payment;
+import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.service.danske.DanskePaymentValidationService;
+import lt.lukasnakas.util.TestDataGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +16,18 @@ public class DanskePaymentValidationServiceTest {
 
 	@InjectMocks
 	private DanskePaymentValidationService danskePaymentValidationService;
+
+	private TestDataGenerator testDataGenerator = new TestDataGenerator();
+
+	@Test
+	public void getErrorWithMissingParamsFromPayment_shouldReturnTrue_whenErrorsMatch() {
+		Payment payment = testDataGenerator.buildInvalidTransactionPayment();
+
+		TransactionError expected = testDataGenerator.buildDanskeTransactionError();
+		TransactionError actual = danskePaymentValidationService.getErrorWithMissingParamsFromPayment(payment);
+
+		assertEquals(expected, actual);
+	}
 
 	@Test
 	public void isValid_shouldReturnTrue() {
