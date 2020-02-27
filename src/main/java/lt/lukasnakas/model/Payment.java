@@ -19,6 +19,7 @@ public class Payment {
     private String currency;
     private String description;
     private String bankName;
+    private String paymentStatus;
 
     public long getId() {
         return id;
@@ -82,6 +83,14 @@ public class Payment {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     @Override

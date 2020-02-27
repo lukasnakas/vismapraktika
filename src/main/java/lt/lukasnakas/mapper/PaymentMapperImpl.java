@@ -25,6 +25,7 @@ public class PaymentMapperImpl implements PaymentMapper {
         payment.setCounterpartyId(paymentDTO.getCounterpartyId());
         payment.setAmount(paymentDTO.getAmount());
         payment.setBankName(paymentDTO.getBankName());
+        payment.setPaymentStatus(paymentDTO.getStatus());
 
         return payment;
     }
@@ -45,6 +46,7 @@ public class PaymentMapperImpl implements PaymentMapper {
         paymentDTO.setCounterpartyId(payment.getCounterpartyId());
         paymentDTO.setAmount(payment.getAmount());
         paymentDTO.setBankName(payment.getBankName());
+        paymentDTO.setStatus(payment.getPaymentStatus());
 
         return paymentDTO;
     }

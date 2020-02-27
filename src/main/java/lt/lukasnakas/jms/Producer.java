@@ -18,7 +18,6 @@ public class Producer {
 	public PaymentDTO send(PaymentDTO paymentDTO) {
 		LOGGER.info("sending message='{}'", paymentDTO);
 		jmsTemplate.convertAndSend("inbound.queue", paymentDTO);
-		paymentDTO.setStatus("IN_QUEUE");
 		return paymentDTO;
 	}
 

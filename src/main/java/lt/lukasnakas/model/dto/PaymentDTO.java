@@ -9,7 +9,6 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentDTO {
 
-	@JsonIgnore
 	private long id;
 	@JsonProperty("sender_account_id")
 	private String senderAccountId;

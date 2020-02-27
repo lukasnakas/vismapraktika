@@ -41,6 +41,7 @@ public class Consumer {
 
         CommonTransaction transaction = transactionService.getChosenBankingServiceForPost(paymentDTO);
         Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
+        payment.setPaymentStatus("COMPLETED");
 
         paymentRepository.save(payment);
         transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
