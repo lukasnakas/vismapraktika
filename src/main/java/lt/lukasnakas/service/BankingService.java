@@ -12,7 +12,7 @@ public interface BankingService {
 
     CommonTransaction postTransaction(Payment payment);
 
-    CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO);
+    CommonTransaction executePaymentIfValid(PaymentDTO paymentDTO);
 
     boolean isPaymentValid(Payment payment);
 

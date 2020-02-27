@@ -1,13 +1,10 @@
 package lt.lukasnakas.controller;
 
-import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
-import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jms.JmsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,7 +21,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping(value = "")
+    @GetMapping
     public ResponseEntity<List<CommonTransactionDTO>> getAllTransactions() {
         return ok(transactionService.getTransactions());
     }
@@ -38,19 +35,8 @@ public class TransactionController {
         }
     }
 
-    @PostMapping(value = "")
-    public ResponseEntity<PaymentDTO> addTransaction(@RequestBody PaymentDTO paymentDTO) {
-        try {
-            return ok(transactionService.postTransaction(paymentDTO));
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (JmsException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getCause().getMessage());
-        }
-    }
-
     @GetMapping(value = "/update")
-    public ResponseEntity<List<CommonTransactionDTO>> updateAccounts() {
+    public ResponseEntity<List<CommonTransactionDTO>> updateTransactions() {
         return ok(transactionService.updateTransactions());
     }
 }

@@ -1,7 +1,6 @@
 package lt.lukasnakas.jms;
 
 import lt.lukasnakas.mapper.PaymentMapper;
-import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.PaymentStatus;
@@ -23,18 +22,15 @@ public class Consumer {
     private final TransactionService transactionService;
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
-    private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
 
     public Consumer(TransactionService transactionService,
                     PaymentMapper paymentMapper,
                     PaymentRepository paymentRepository,
-                    TransactionMapper transactionMapper,
                     TransactionRepository transactionRepository) {
         this.transactionService = transactionService;
         this.paymentMapper = paymentMapper;
         this.paymentRepository = paymentRepository;
-        this.transactionMapper = transactionMapper;
         this.transactionRepository = transactionRepository;
     }
 
@@ -42,12 +38,12 @@ public class Consumer {
     public void receive(PaymentDTO paymentDTO) {
         LOGGER.info("received message='{}' from queue='{}'", paymentDTO, PAYMENT_QUEUE);
 
-        CommonTransaction transaction;
+        CommonTransaction commonTransaction;
         Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
 
         try {
-            transaction = transactionService.getChosenBankingServiceForPost(paymentDTO);
-            transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
+            commonTransaction = transactionService.getExecutedPaymentAsCommonTransaction(paymentDTO);
+            transactionRepository.save(commonTransaction);
             payment.setPaymentStatus(PaymentStatus.COMPLETED.getValue());
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

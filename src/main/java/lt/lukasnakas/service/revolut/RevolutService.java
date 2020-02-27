@@ -184,7 +184,7 @@ public class RevolutService implements BankingService {
         return revolutTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO) {
+    public CommonTransaction executePaymentIfValid(PaymentDTO paymentDTO) {
         RevolutPayment revolutPayment = paymentMapper.paymentDtoToRevolutPayment(paymentDTO);
 
         if (isPaymentValid(revolutPayment)) {

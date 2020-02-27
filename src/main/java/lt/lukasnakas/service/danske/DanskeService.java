@@ -184,7 +184,7 @@ public class DanskeService implements BankingService {
         return danskeTransactionErrorService.getErrorWithMissingParamsFromPayment(payment);
     }
 
-    public CommonTransaction executeTransactionIfValid(PaymentDTO paymentDTO) {
+    public CommonTransaction executePaymentIfValid(PaymentDTO paymentDTO) {
         Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
         if (isPaymentValid(payment)) {
             return postTransaction(payment);

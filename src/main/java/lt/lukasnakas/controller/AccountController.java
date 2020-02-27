@@ -25,7 +25,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping(value = "")
+    @GetMapping
     public ResponseEntity<List<CommonAccountDTO>> getAllAccounts() {
         return ok(accountService.getAccounts());
     }
