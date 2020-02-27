@@ -30,9 +30,7 @@ public class TransactionService {
     }
 
     public List<CommonTransactionDTO> getTransactions() {
-        return ((List<CommonTransaction>) transactionRepository.findAll()).stream()
-                .map(transactionMapper::commonTransactionToCommonTransactionDto)
-                .collect(Collectors.toList());
+        return getMappedTransactions(transactionRepository.findAll());
     }
 
     public CommonTransactionDTO getTransactionById(String id) {
@@ -50,7 +48,11 @@ public class TransactionService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        return ((List<CommonTransaction>) transactionRepository.saveAll(commonTransactionList)).stream()
+        return getMappedTransactions((List<CommonTransaction>) transactionRepository.saveAll(commonTransactionList));
+    }
+
+    private List<CommonTransactionDTO> getMappedTransactions(List<CommonTransaction> commonTransactionList) {
+        return commonTransactionList.stream()
                 .map(transactionMapper::commonTransactionToCommonTransactionDto)
                 .collect(Collectors.toList());
     }

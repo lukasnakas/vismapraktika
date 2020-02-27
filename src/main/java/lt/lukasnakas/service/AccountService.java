@@ -26,9 +26,7 @@ public class AccountService {
     }
 
     public List<CommonAccountDTO> getAccounts() {
-        return ((List<CommonAccount>) accountRepository.findAll()).stream()
-                .map(accountMapper::commonAccountToCommonAccountDto)
-                .collect(Collectors.toList());
+        return getMappedAccounts(accountRepository.findAll());
     }
 
     public CommonAccountDTO getAccountById(String id) {
@@ -46,7 +44,11 @@ public class AccountService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        return ((List<CommonAccount>) accountRepository.saveAll(commonAccountList)).stream()
+        return getMappedAccounts((List<CommonAccount>) accountRepository.saveAll(commonAccountList));
+    }
+
+    private List<CommonAccountDTO> getMappedAccounts(List<CommonAccount> commonAccountList) {
+        return commonAccountList.stream()
                 .map(accountMapper::commonAccountToCommonAccountDto)
                 .collect(Collectors.toList());
     }

@@ -30,7 +30,7 @@ public class PaymentService {
 	}
 
 	public List<PaymentDTO> getPayments() {
-		return ((List<Payment>) paymentRepository.findAll()).stream()
+		return paymentRepository.findAll().stream()
 				.map(paymentMapper::paymentToPaymentDto)
 				.collect(Collectors.toList());
 	}
