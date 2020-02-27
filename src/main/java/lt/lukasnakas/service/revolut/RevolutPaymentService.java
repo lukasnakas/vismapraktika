@@ -89,13 +89,21 @@ public class RevolutPaymentService implements IPaymentService {
 		return revolutServiceConfiguration.getName();
 	}
 
+	public boolean isPaymentBodyValid(PaymentDTO paymentDTO) {
+		return revolutPaymentValidationService.isValid(paymentDTO);
+	}
+
+	public TransactionError getTransactionErrorWithMissingParams(PaymentDTO paymentDTO) {
+		return revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(paymentDTO);
+	}
+
 	public CommonTransaction executePaymentIfValid(PaymentDTO paymentDTO) {
 		RevolutPayment revolutPayment = paymentMapper.paymentDtoToRevolutPayment(paymentDTO);
 
-		if (revolutPaymentValidationService.isValid(revolutPayment)) {
+		if (revolutPaymentValidationService.isValid(paymentDTO)) {
 			return postPayment(revolutPayment);
 		} else {
-			TransactionError transactionError = revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(revolutPayment);
+			TransactionError transactionError = revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(paymentDTO);
 			throw new BadRequestException(transactionError.getMessage());
 		}
 	}

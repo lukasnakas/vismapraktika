@@ -1,6 +1,7 @@
 package lt.lukasnakas.controller;
 
 import lt.lukasnakas.exception.BadRequestException;
+import lt.lukasnakas.exception.BankTypeNotSupportedException;
 import lt.lukasnakas.exception.InvalidIdException;
 import lt.lukasnakas.exception.PaymentNotFoundException;
 import lt.lukasnakas.model.dto.PaymentDTO;
@@ -45,16 +46,13 @@ public class PaymentController {
 	public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO) {
 		try {
 			return ok(paymentService.postTransaction(paymentDTO));
+		} catch (BankTypeNotSupportedException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 		} catch (BadRequestException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (JmsException e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getCause().getMessage());
 		}
-	}
-
-	@GetMapping(value = "{id}/status")
-	public ResponseEntity<PaymentDTO> checkPaymentStatus(@PathVariable String id) {
-		return ok(paymentService.getPaymentStatus(id));
 	}
 
 }

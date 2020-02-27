@@ -17,8 +17,8 @@ import static lt.lukasnakas.configuration.JmsConfiguration.PAYMENT_QUEUE;
 
 @Service
 public class Consumer {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
+
     private final IPaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
     private final TransactionRepository transactionRepository;

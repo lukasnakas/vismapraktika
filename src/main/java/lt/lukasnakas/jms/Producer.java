@@ -11,6 +11,7 @@ import static lt.lukasnakas.configuration.JmsConfiguration.PAYMENT_QUEUE;
 @Service
 public class Producer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
+
 	private final JmsTemplate jmsTemplate;
 
 	public Producer(JmsTemplate jmsTemplate) {

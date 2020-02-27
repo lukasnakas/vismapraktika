@@ -1,7 +1,9 @@
 package lt.lukasnakas.service.revolut;
 
+import lt.lukasnakas.mapper.IPaymentMapper;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
 import lt.lukasnakas.service.IPaymentValidationService;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,15 @@ import java.util.List;
 @Service
 public class RevolutPaymentValidationService implements IPaymentValidationService {
 
-    public boolean isValid(Payment payment) {
-        return areRevolutPaymentParamsNotNull((RevolutPayment) payment);
+    private final IPaymentMapper paymentMapper;
+
+    public RevolutPaymentValidationService(IPaymentMapper paymentMapper) {
+        this.paymentMapper = paymentMapper;
+    }
+
+    public boolean isValid(PaymentDTO paymentDTO) {
+        RevolutPayment revolutPayment = paymentMapper.paymentDtoToRevolutPayment(paymentDTO);
+        return areRevolutPaymentParamsNotNull(revolutPayment);
     }
 
     private boolean areRevolutPaymentParamsNotNull(RevolutPayment revolutPayment) {
@@ -26,8 +35,8 @@ public class RevolutPaymentValidationService implements IPaymentValidationServic
                 && revolutPayment.getAmount() > 0;
     }
 
-    public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
-        RevolutPayment revolutPayment = (RevolutPayment) payment;
+    public TransactionError getErrorWithMissingParamsFromPayment(PaymentDTO paymentDTO) {
+        RevolutPayment revolutPayment = paymentMapper.paymentDtoToRevolutPayment(paymentDTO);
         return new TransactionError(createMissingParamsList(revolutPayment));
     }
 

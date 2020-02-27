@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.ErrorHandler;
 
 public class DefaultErrorHandler implements ErrorHandler {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultErrorHandler.class);
 
 	@Override

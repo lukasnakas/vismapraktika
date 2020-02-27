@@ -2,6 +2,7 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.IPaymentValidationService;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +12,22 @@ import java.util.List;
 @Service
 public class DanskePaymentValidationService implements IPaymentValidationService {
 
-    public boolean isValid(Payment payment) {
-        return areParamsNotNull(payment);
+    public boolean isValid(PaymentDTO paymentDTO) {
+        return areParamsNotNull(paymentDTO);
     }
 
-    private boolean areParamsNotNull(Payment payment) {
-        return payment.getAmount() != 0;
+    private boolean areParamsNotNull(PaymentDTO paymentDTO) {
+        return paymentDTO.getAmount() != 0;
     }
 
-    public TransactionError getErrorWithMissingParamsFromPayment(Payment payment) {
-        return new TransactionError(createMissingParamsList(payment));
+    public TransactionError getErrorWithMissingParamsFromPayment(PaymentDTO paymentDTO) {
+        return new TransactionError(createMissingParamsList(paymentDTO));
     }
 
-    private List<String> createMissingParamsList(Payment payment) {
+    private List<String> createMissingParamsList(PaymentDTO paymentDTO) {
         List<String> missingParamsList = new ArrayList<>();
 
-        if (payment.getAmount() == 0) {
+        if (paymentDTO.getAmount() == 0) {
             missingParamsList.add("amount");
         }
 

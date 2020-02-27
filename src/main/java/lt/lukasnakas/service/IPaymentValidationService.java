@@ -1,7 +1,7 @@
 package lt.lukasnakas.service;
 
-import lt.lukasnakas.model.Payment;
+import lt.lukasnakas.model.dto.PaymentDTO;
 
 public interface IPaymentValidationService {
-    boolean isValid(Payment payment);
+    boolean isValid(PaymentDTO paymentDTO);
 }

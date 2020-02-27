@@ -25,7 +25,7 @@ public class RevolutPaymentValidationServiceTest {
 		RevolutPayment revolutPayment = testDataGenerator.buildInvalidRevolutTransactionPayment();
 
 		TransactionError expected = testDataGenerator.buildRevolutTransactionError();
-		TransactionError actual = revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(revolutPayment);
+		TransactionError actual = revolutPaymentValidationService.getErrorWithMissingParamsFromPayment(testDataGenerator.buildPaymentDTO(revolutPayment));
 
 		assertEquals(expected, actual);
 	}
@@ -43,7 +43,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertTrue(actual);
 	}
 
@@ -60,7 +60,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(0);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -77,7 +77,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(-10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -94,7 +94,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -111,7 +111,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -124,7 +124,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -141,7 +141,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -158,7 +158,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference("ref");
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 
@@ -175,7 +175,7 @@ public class RevolutPaymentValidationServiceTest {
 		revolutPayment.setReference(null);
 		revolutPayment.setAmount(10);
 
-		boolean actual = revolutPaymentValidationService.isValid(revolutPayment);
+		boolean actual = revolutPaymentValidationService.isValid(testDataGenerator.buildPaymentDTO(revolutPayment));
 		assertFalse(actual);
 	}
 

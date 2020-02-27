@@ -1,6 +1,7 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.exception.BadRequestException;
+import lt.lukasnakas.exception.BankTypeNotSupportedException;
 import lt.lukasnakas.exception.InvalidIdException;
 import lt.lukasnakas.exception.PaymentNotFoundException;
 import lt.lukasnakas.jms.Producer;
@@ -50,21 +51,19 @@ public class PaymentService {
 
 	public PaymentDTO postTransaction(PaymentDTO paymentDTO) {
 		if(paymentDTO.getBankName() != null) {
-			paymentDTO.setStatus(PaymentStatus.IN_QUEUE.getValue());
-			Payment payment = paymentRepository.save(paymentMapper.paymentDtoToPayment(paymentDTO));
-			return producer.send(paymentMapper.paymentToPaymentDto(payment));
+			IPaymentService paymentService = getPaymentServiceByBankName(paymentDTO.getBankName());
+
+			if(paymentService.isPaymentBodyValid(paymentDTO)) {
+				paymentDTO.setStatus(PaymentStatus.IN_QUEUE.getValue());
+				Payment payment = paymentRepository.save(paymentMapper.paymentDtoToPayment(paymentDTO));
+
+				return producer.send(paymentMapper.paymentToPaymentDto(payment));
+			} else {
+				throw new BadRequestException(paymentService.getTransactionErrorWithMissingParams(paymentDTO).getMessage());
+			}
 		} else {
 			throw new BadRequestException(new TransactionError("bankName").getMessage());
 		}
-	}
-
-	public PaymentDTO getPaymentStatus(String id) {
-		long paymentId = parseStringToLong(id);
-
-		Payment payment = paymentRepository.findById(paymentId)
-				.orElseThrow(() -> new PaymentNotFoundException(String.format("Payment [id: %s] not found", id)));
-
-		return paymentMapper.paymentToPaymentDto(payment);
 	}
 
 	public CommonTransaction getExecutedPaymentAsCommonTransaction(PaymentDTO paymentDTO) {
@@ -77,6 +76,13 @@ public class PaymentService {
 
 	private boolean bankNameMatches(String bankNameFromJson, String bankNameFromService) {
 		return bankNameFromJson.equalsIgnoreCase(bankNameFromService);
+	}
+
+	private IPaymentService getPaymentServiceByBankName(String bankName) {
+		return paymentServices.stream()
+				.filter(paymentService -> bankNameMatches(bankName, paymentService.getBankName()))
+				.findAny()
+				.orElseThrow(() -> new BankTypeNotSupportedException(String.format("Bank '%s' not supported", bankName)));
 	}
 
 	private long parseStringToLong(String id) {

@@ -2,6 +2,7 @@ package lt.lukasnakas.test.danske;
 
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.danske.DanskePaymentValidationService;
 import lt.lukasnakas.util.TestDataGenerator;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ public class DanskePaymentValidationServiceTest {
 
 	@Test
 	public void getErrorWithMissingParamsFromPayment_shouldReturnTrue_whenErrorsMatch() {
-		Payment payment = testDataGenerator.buildInvalidTransactionPayment();
+		PaymentDTO payment = testDataGenerator.buildInvalidTransactionPaymentDto();
 
 		TransactionError expected = testDataGenerator.buildDanskeTransactionError();
 		TransactionError actual = danskePaymentValidationService.getErrorWithMissingParamsFromPayment(payment);
@@ -31,7 +32,7 @@ public class DanskePaymentValidationServiceTest {
 
 	@Test
 	public void isValid_shouldReturnTrue() {
-		Payment payment = new Payment();
+		PaymentDTO payment = new PaymentDTO();
 		payment.setSenderAccountId(null);
 		payment.setReceiverAccountId(null);
 		payment.setCounterpartyId(null);
@@ -45,7 +46,7 @@ public class DanskePaymentValidationServiceTest {
 
 	@Test
 	public void isValidNoAmount_shouldReturnFalse() {
-		Payment payment = new Payment();
+		PaymentDTO payment = new PaymentDTO();
 		payment.setSenderAccountId(null);
 		payment.setReceiverAccountId(null);
 		payment.setCounterpartyId(null);

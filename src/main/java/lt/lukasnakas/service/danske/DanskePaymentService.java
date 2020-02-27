@@ -86,12 +86,21 @@ public class DanskePaymentService implements IPaymentService {
 		return danskeServiceConfiguration.getName();
 	}
 
+	public boolean isPaymentBodyValid(PaymentDTO paymentDTO) {
+		return danskePaymentValidationService.isValid(paymentDTO);
+	}
+
+	public TransactionError getTransactionErrorWithMissingParams(PaymentDTO paymentDTO) {
+		return danskePaymentValidationService.getErrorWithMissingParamsFromPayment(paymentDTO);
+	}
+
 	public CommonTransaction executePaymentIfValid(PaymentDTO paymentDTO) {
 		Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
-		if (danskePaymentValidationService.isValid(payment)) {
+
+		if (danskePaymentValidationService.isValid(paymentDTO)) {
 			return postPayment(payment);
 		} else {
-			TransactionError transactionError = danskePaymentValidationService.getErrorWithMissingParamsFromPayment(payment);
+			TransactionError transactionError = danskePaymentValidationService.getErrorWithMissingParamsFromPayment(paymentDTO);
 			throw new BadRequestException(transactionError.getMessage());
 		}
 	}

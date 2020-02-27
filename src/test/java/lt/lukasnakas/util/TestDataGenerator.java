@@ -10,6 +10,7 @@ import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.account.Data;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.danske.transaction.DanskeTransactionAmount;
+import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.model.revolut.RevolutAccessToken;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.model.revolut.transaction.*;
@@ -227,6 +228,18 @@ public class TestDataGenerator {
 		return payment;
 	}
 
+	public PaymentDTO buildInvalidTransactionPaymentDto() {
+		PaymentDTO payment = new PaymentDTO();
+		payment.setSenderAccountId("123");
+		payment.setReceiverAccountId("456");
+		payment.setCounterpartyId("789");
+		payment.setAmount(0);
+		payment.setCurrency("EUR");
+		payment.setDescription("desc");
+
+		return payment;
+	}
+
 	public RevolutPayment buildInvalidRevolutTransactionPayment() {
 		RevolutReceiver revolutReceiver = new RevolutReceiver();
 		revolutReceiver.setAccountId("123");
@@ -240,6 +253,19 @@ public class TestDataGenerator {
 		revolutPayment.setAmount(10);
 
 		return revolutPayment;
+	}
+
+	public PaymentDTO buildPaymentDTO(RevolutPayment revolutPayment) {
+		PaymentDTO paymentDTO = new PaymentDTO();
+
+		paymentDTO.setSenderAccountId(revolutPayment.getAccountId());
+		paymentDTO.setReceiverAccountId(revolutPayment.getReceiver().getAccountId());
+		paymentDTO.setCounterpartyId(revolutPayment.getReceiver().getCounterPartyId());
+		paymentDTO.setAmount(revolutPayment.getAmount());
+		paymentDTO.setCurrency(revolutPayment.getCurrency());
+		paymentDTO.setDescription(revolutPayment.getReference());
+
+		return paymentDTO;
 	}
 
 	public TransactionError buildDanskeTransactionError() {
