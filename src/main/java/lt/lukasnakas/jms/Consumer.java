@@ -1,6 +1,6 @@
 package lt.lukasnakas.jms;
 
-import lt.lukasnakas.mapper.PaymentMapper;
+import lt.lukasnakas.mapper.IPaymentMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.PaymentStatus;
@@ -19,12 +19,12 @@ import static lt.lukasnakas.configuration.JmsConfiguration.PAYMENT_QUEUE;
 public class Consumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
-    private final PaymentMapper paymentMapper;
+    private final IPaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
     private final TransactionRepository transactionRepository;
     private final PaymentService paymentService;
 
-    public Consumer(PaymentMapper paymentMapper,
+    public Consumer(IPaymentMapper paymentMapper,
                     PaymentRepository paymentRepository,
                     TransactionRepository transactionRepository,
                     PaymentService paymentService) {

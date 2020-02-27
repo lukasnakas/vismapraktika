@@ -4,14 +4,13 @@ import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.InvalidIdException;
 import lt.lukasnakas.exception.PaymentNotFoundException;
 import lt.lukasnakas.jms.Producer;
-import lt.lukasnakas.mapper.PaymentMapper;
+import lt.lukasnakas.mapper.IPaymentMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.PaymentStatus;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +20,12 @@ import java.util.stream.Collectors;
 public class PaymentService {
 	private final List<IPaymentService> paymentServices;
 	private final PaymentRepository paymentRepository;
-	private final PaymentMapper paymentMapper;
+	private final IPaymentMapper paymentMapper;
 	private final Producer producer;
 
 	public PaymentService(List<IPaymentService> paymentServices,
 						  PaymentRepository paymentRepository,
-						  PaymentMapper paymentMapper,
+						  IPaymentMapper paymentMapper,
 						  Producer producer) {
 		this.paymentServices = paymentServices;
 		this.paymentRepository = paymentRepository;

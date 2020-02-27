@@ -2,7 +2,7 @@ package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.exception.AccountRetrievalException;
-import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.IAccountMapper;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.service.IAccountService;
@@ -24,13 +24,13 @@ public class RevolutAccountService implements IAccountService {
 
 	private final RevolutServiceConfiguration revolutServiceConfiguration;
 	private final RevolutTokenRenewalService revolutTokenRenewalService;
-	private final AccountMapper accountMapper;
+	private final IAccountMapper accountMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public RevolutAccountService(RevolutServiceConfiguration revolutServiceConfiguration,
 								 RevolutTokenRenewalService revolutTokenRenewalService,
-								 AccountMapper accountMapper,
+								 IAccountMapper accountMapper,
 								 RestTemplate restTemplate,
 								 HttpHeaders httpHeaders) {
 		this.revolutServiceConfiguration = revolutServiceConfiguration;

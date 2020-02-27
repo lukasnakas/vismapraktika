@@ -4,7 +4,7 @@ import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.exception.TokenGenerationException;
 import lt.lukasnakas.model.AccessToken;
 import lt.lukasnakas.model.revolut.RevolutAccessToken;
-import lt.lukasnakas.service.TokenRenewalService;
+import lt.lukasnakas.service.ITokenRenewalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 @Service
-public class RevolutTokenRenewalService implements TokenRenewalService {
+public class RevolutTokenRenewalService implements ITokenRenewalService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RevolutTokenRenewalService.class);
 
     private final RevolutServiceConfiguration revolutServiceConfiguration;

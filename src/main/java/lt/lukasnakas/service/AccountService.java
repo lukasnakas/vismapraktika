@@ -1,7 +1,7 @@
 package lt.lukasnakas.service;
 
 import lt.lukasnakas.exception.AccountNotFoundException;
-import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.IAccountMapper;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.dto.CommonAccountDTO;
 import lt.lukasnakas.repository.AccountRepository;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class AccountService {
     private final List<IAccountService> accountServices;
     private final AccountRepository accountRepository;
-    private final AccountMapper accountMapper;
+    private final IAccountMapper accountMapper;
 
     public AccountService(List<IAccountService> accountServices,
                           AccountRepository accountRepository,
-                          AccountMapper accountMapper) {
+                          IAccountMapper accountMapper) {
         this.accountServices = accountServices;
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;

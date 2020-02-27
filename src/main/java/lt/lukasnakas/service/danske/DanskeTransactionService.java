@@ -2,7 +2,7 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.exception.TransactionRetrievalException;
-import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.service.ITransactionService;
@@ -24,13 +24,13 @@ public class DanskeTransactionService implements ITransactionService {
 
 	private final DanskeServiceConfiguration danskeServiceConfiguration;
 	private final DanskeTokenRenewalService danskeTokenRenewalService;
-	private final TransactionMapper transactionMapper;
+	private final ITransactionMapper transactionMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public DanskeTransactionService(DanskeServiceConfiguration danskeServiceConfiguration,
 									DanskeTokenRenewalService danskeTokenRenewalService,
-									TransactionMapper transactionMapper,
+									ITransactionMapper transactionMapper,
 									RestTemplate restTemplate,
 									HttpHeaders httpHeaders) {
 		this.danskeServiceConfiguration = danskeServiceConfiguration;

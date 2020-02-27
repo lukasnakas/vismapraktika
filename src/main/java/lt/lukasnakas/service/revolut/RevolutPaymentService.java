@@ -3,8 +3,8 @@ package lt.lukasnakas.service.revolut;
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionExecutionExeption;
-import lt.lukasnakas.mapper.PaymentMapper;
-import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.IPaymentMapper;
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
@@ -28,16 +28,16 @@ public class RevolutPaymentService implements IPaymentService {
 	private final RevolutServiceConfiguration revolutServiceConfiguration;
 	private final RevolutTokenRenewalService revolutTokenRenewalService;
 	private final RevolutPaymentValidationService revolutPaymentValidationService;
-	private final TransactionMapper transactionMapper;
-	private final PaymentMapper paymentMapper;
+	private final ITransactionMapper transactionMapper;
+	private final IPaymentMapper paymentMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public RevolutPaymentService(RevolutServiceConfiguration revolutServiceConfiguration,
 								 RevolutTokenRenewalService revolutTokenRenewalService,
 								 RevolutPaymentValidationService revolutPaymentValidationService,
-								 TransactionMapper transactionMapper,
-								 PaymentMapper paymentMapper,
+								 ITransactionMapper transactionMapper,
+								 IPaymentMapper paymentMapper,
 								 RestTemplate restTemplate,
 								 HttpHeaders httpHeaders) {
 		this.revolutServiceConfiguration = revolutServiceConfiguration;

@@ -1,14 +1,13 @@
 package lt.lukasnakas.test.mapper;
 
+import lt.lukasnakas.mapper.IAccountMapper;
 import lt.lukasnakas.mapper.AccountMapper;
-import lt.lukasnakas.mapper.AccountMapperImpl;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.danske.account.Balance;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.model.danske.account.Data;
 import lt.lukasnakas.model.danske.transaction.DanskeTransactionAmount;
 import lt.lukasnakas.model.dto.CommonAccountDTO;
-import lt.lukasnakas.model.dto.CommonTransactionDTO;
 import lt.lukasnakas.model.revolut.account.RevolutAccount;
 import lt.lukasnakas.util.TestDataGenerator;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AccountMapperTest {
 
     private TestDataGenerator testDataGenerator = new TestDataGenerator();
-    private AccountMapper accountMapper = new AccountMapperImpl();
+    private IAccountMapper accountMapper = new AccountMapper();
 
     @Test
     public void revolutAccountToCommonAccount_shouldReturnTrue_whenCommonAccountsMatch() {

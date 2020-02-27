@@ -2,6 +2,6 @@ package lt.lukasnakas.service;
 
 import lt.lukasnakas.model.Payment;
 
-public interface PaymentValidationService {
+public interface IPaymentValidationService {
     boolean isValid(Payment payment);
 }

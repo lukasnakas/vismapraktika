@@ -1,9 +1,8 @@
 package lt.lukasnakas.test.mapper;
 
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
-import lt.lukasnakas.mapper.TransactionMapperImpl;
 import lt.lukasnakas.model.CommonTransaction;
-import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.danske.transaction.DanskeTransaction;
 import lt.lukasnakas.model.danske.transaction.DanskeTransactionAmount;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TransactionMapperTest {
 
     private TestDataGenerator testDataGenerator = new TestDataGenerator();
-    private TransactionMapper transactionMapper = new TransactionMapperImpl();
+    private ITransactionMapper transactionMapper = new TransactionMapper();
 
     @Test
     public void danskeTransactionToCommonTransaction_shouldReturnTrue_whenCommonTransactionsMatch() {

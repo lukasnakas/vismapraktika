@@ -2,15 +2,14 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
-import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
-import lt.lukasnakas.service.PaymentValidationService;
+import lt.lukasnakas.service.IPaymentValidationService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DanskePaymentValidationService implements PaymentValidationService {
+public class DanskePaymentValidationService implements IPaymentValidationService {
 
     public boolean isValid(Payment payment) {
         return areParamsNotNull(payment);

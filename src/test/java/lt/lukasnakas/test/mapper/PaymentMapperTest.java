@@ -1,7 +1,7 @@
 package lt.lukasnakas.test.mapper;
 
+import lt.lukasnakas.mapper.IPaymentMapper;
 import lt.lukasnakas.mapper.PaymentMapper;
-import lt.lukasnakas.mapper.PaymentMapperImpl;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaymentMapperTest {
 
-    private PaymentMapper paymentMapper = new PaymentMapperImpl();
+    private IPaymentMapper paymentMapper = new PaymentMapper();
 
     @Test
     public void paymentDtoToPayment_shouldReturnTrue_whenPaymentsMatch() {

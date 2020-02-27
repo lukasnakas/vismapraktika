@@ -2,7 +2,7 @@ package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.configuration.RevolutServiceConfiguration;
 import lt.lukasnakas.exception.TransactionRetrievalException;
-import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.revolut.transaction.RevolutTransaction;
 import lt.lukasnakas.service.ITransactionService;
@@ -24,13 +24,13 @@ public class RevolutTransactionService implements ITransactionService {
 
 	private final RevolutServiceConfiguration revolutServiceConfiguration;
 	private final RevolutTokenRenewalService revolutTokenRenewalService;
-	private final TransactionMapper transactionMapper;
+	private final ITransactionMapper transactionMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public RevolutTransactionService(RevolutServiceConfiguration revolutServiceConfiguration,
 									 RevolutTokenRenewalService revolutTokenRenewalService,
-									 TransactionMapper transactionMapper,
+									 ITransactionMapper transactionMapper,
 									 RestTemplate restTemplate,
 									 HttpHeaders httpHeaders) {
 		this.revolutServiceConfiguration = revolutServiceConfiguration;

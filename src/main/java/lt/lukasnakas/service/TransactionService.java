@@ -1,6 +1,6 @@
 package lt.lukasnakas.service;
 
-import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.exception.TransactionNotFoundException;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.dto.CommonTransactionDTO;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class TransactionService {
     private final List<ITransactionService> transactionServices;
     private final TransactionRepository transactionRepository;
-    private final TransactionMapper transactionMapper;
+    private final ITransactionMapper transactionMapper;
 
     public TransactionService(List<ITransactionService> transactionServices,
                               TransactionRepository transactionRepository,
-                              TransactionMapper transactionMapper) {
+                              ITransactionMapper transactionMapper) {
         this.transactionServices = transactionServices;
         this.transactionRepository = transactionRepository;
         this.transactionMapper = transactionMapper;

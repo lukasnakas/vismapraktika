@@ -2,7 +2,7 @@ package lt.lukasnakas.service.danske;
 
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.exception.AccountRetrievalException;
-import lt.lukasnakas.mapper.AccountMapper;
+import lt.lukasnakas.mapper.IAccountMapper;
 import lt.lukasnakas.model.CommonAccount;
 import lt.lukasnakas.model.danske.account.DanskeAccount;
 import lt.lukasnakas.service.IAccountService;
@@ -23,12 +23,12 @@ public class DanskeAccountService implements IAccountService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DanskeAccountService.class);
 
 	private final DanskeServiceConfiguration danskeServiceConfiguration;
-	private final AccountMapper accountMapper;
+	private final IAccountMapper accountMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public DanskeAccountService(DanskeServiceConfiguration danskeServiceConfiguration,
-								AccountMapper accountMapper,
+								IAccountMapper accountMapper,
 								RestTemplate restTemplate,
 								HttpHeaders httpHeaders) {
 		this.danskeServiceConfiguration = danskeServiceConfiguration;

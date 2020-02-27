@@ -3,8 +3,8 @@ package lt.lukasnakas.service.danske;
 import lt.lukasnakas.configuration.DanskeServiceConfiguration;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionExecutionExeption;
-import lt.lukasnakas.mapper.PaymentMapper;
-import lt.lukasnakas.mapper.TransactionMapper;
+import lt.lukasnakas.mapper.IPaymentMapper;
+import lt.lukasnakas.mapper.ITransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
@@ -27,16 +27,16 @@ public class DanskePaymentService implements IPaymentService {
 	private final DanskeServiceConfiguration danskeServiceConfiguration;
 	private final DanskeTokenRenewalService danskeTokenRenewalService;
 	private final DanskePaymentValidationService danskePaymentValidationService;
-	private final TransactionMapper transactionMapper;
-	private final PaymentMapper paymentMapper;
+	private final ITransactionMapper transactionMapper;
+	private final IPaymentMapper paymentMapper;
 	private final RestTemplate restTemplate;
 	private final HttpHeaders httpHeaders;
 
 	public DanskePaymentService(DanskeServiceConfiguration danskeServiceConfiguration,
 								DanskeTokenRenewalService danskeTokenRenewalService,
 								DanskePaymentValidationService danskePaymentValidationService,
-								TransactionMapper transactionMapper,
-								PaymentMapper paymentMapper,
+								ITransactionMapper transactionMapper,
+								IPaymentMapper paymentMapper,
 								RestTemplate restTemplate,
 								HttpHeaders httpHeaders) {
 		this.danskeServiceConfiguration = danskeServiceConfiguration;
