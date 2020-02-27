@@ -7,6 +7,7 @@ import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.JmsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,6 +44,8 @@ public class TransactionController {
             return ok(transactionService.postTransaction(paymentDTO));
         } catch (BadRequestException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (JmsException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getCause().getMessage());
         }
     }
 

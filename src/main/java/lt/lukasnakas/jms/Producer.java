@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import static lt.lukasnakas.configuration.JmsConfiguration.PAYMENT_QUEUE;
+
 @Service
 public class Producer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
@@ -16,8 +18,8 @@ public class Producer {
 	}
 
 	public PaymentDTO send(PaymentDTO paymentDTO) {
-		LOGGER.info("sending message='{}'", paymentDTO);
-		jmsTemplate.convertAndSend("inbound.queue", paymentDTO);
+		LOGGER.info("sending message='{}' to queue='{}'", paymentDTO, PAYMENT_QUEUE);
+		jmsTemplate.convertAndSend(PAYMENT_QUEUE, paymentDTO);
 		return paymentDTO;
 	}
 

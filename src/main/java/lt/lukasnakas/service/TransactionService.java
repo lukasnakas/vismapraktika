@@ -4,6 +4,7 @@ import lt.lukasnakas.jms.Producer;
 import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.Payment;
+import lt.lukasnakas.model.PaymentStatus;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.exception.BadRequestException;
 import lt.lukasnakas.exception.TransactionNotFoundException;
@@ -78,7 +79,7 @@ public class TransactionService {
 
     public PaymentDTO postTransaction(PaymentDTO paymentDTO) {
         if(paymentDTO.getBankName() != null) {
-            paymentDTO.setStatus("IN_QUEUE");
+            paymentDTO.setStatus(PaymentStatus.IN_QUEUE.getValue());
             Payment payment = paymentRepository.save(paymentMapper.paymentDtoToPayment(paymentDTO));
             return producer.send(paymentMapper.paymentToPaymentDto(payment));
         } else {

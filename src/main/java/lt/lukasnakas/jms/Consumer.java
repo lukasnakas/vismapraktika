@@ -4,6 +4,7 @@ import lt.lukasnakas.mapper.PaymentMapper;
 import lt.lukasnakas.mapper.TransactionMapper;
 import lt.lukasnakas.model.CommonTransaction;
 import lt.lukasnakas.model.Payment;
+import lt.lukasnakas.model.PaymentStatus;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.repository.PaymentRepository;
 import lt.lukasnakas.repository.TransactionRepository;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
+
+import static lt.lukasnakas.configuration.JmsConfiguration.PAYMENT_QUEUE;
 
 @Service
 public class Consumer {
@@ -35,16 +38,23 @@ public class Consumer {
         this.transactionRepository = transactionRepository;
     }
 
-    @JmsListener(destination = "inbound.queue")
+    @JmsListener(destination = PAYMENT_QUEUE)
     public void receive(PaymentDTO paymentDTO) {
-        LOGGER.info("received message='{}'", paymentDTO);
+        LOGGER.info("received message='{}' from queue='{}'", paymentDTO, PAYMENT_QUEUE);
 
-        CommonTransaction transaction = transactionService.getChosenBankingServiceForPost(paymentDTO);
+        CommonTransaction transaction;
         Payment payment = paymentMapper.paymentDtoToPayment(paymentDTO);
-        payment.setPaymentStatus("COMPLETED");
+
+        try {
+            transaction = transactionService.getChosenBankingServiceForPost(paymentDTO);
+            transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
+            payment.setPaymentStatus(PaymentStatus.COMPLETED.getValue());
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            payment.setPaymentStatus(PaymentStatus.FAILED.getValue());
+        }
 
         paymentRepository.save(payment);
-        transactionMapper.commonTransactionToCommonTransactionDto(transactionRepository.save(transaction));
     }
 
 }
