@@ -1,7 +1,6 @@
 package lt.lukasnakas.service.revolut;
 
 import lt.lukasnakas.mapper.IPaymentMapper;
-import lt.lukasnakas.model.Payment;
 import lt.lukasnakas.model.TransactionError;
 import lt.lukasnakas.model.dto.PaymentDTO;
 import lt.lukasnakas.model.revolut.transaction.RevolutPayment;
